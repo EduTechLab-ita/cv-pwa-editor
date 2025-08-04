@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v2.0 - EduTechLab Italia</title>
+  <title>CV PWA Editor v2.1 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -38,8 +38,14 @@
       }
       
       /* Hide tutto tranne il CV */
-      header, .fixed, nav, button {
+      header, .fixed, nav, button, .page-indicator {
         display: none !important;
+      }
+      
+      /* Ensure links are clickable in print */
+      .cv-preview a {
+        color: #0066cc !important;
+        text-decoration: underline !important;
       }
     }
     
@@ -70,6 +76,54 @@
       font-size: 12px;
       z-index: 1000;
     }
+
+    /* Photo preview styles */
+    .photo-preview {
+      width: 120px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 2px solid #e5e7eb;
+    }
+
+    .photo-upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .photo-upload-area:hover {
+      border-color: #6366f1;
+    }
+
+    .photo-upload-area.dragover {
+      border-color: #4f46e5;
+      background-color: #f8fafc;
+    }
+
+    /* Profile photo in CV */
+    .cv-profile-photo {
+      width: 3.5cm;
+      height: 4.5cm;
+      object-fit: cover;
+      border-radius: 4px;
+      float: right;
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* Link styling */
+    .clickable-link {
+      color: #0066cc;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .clickable-link:hover {
+      color: #0052a3;
+    }
   </style>
 </head>
 
@@ -86,12 +140,57 @@
         Trash2: '🗑️', FileText: '📄', Wifi: '📶', WifiOff: '📵', 
         RotateCw: '🔄', Settings: '⚙️', Share2: '🔗', Palette: '🎨',
         Upload: '📤', User: '👤', Globe: '🌐', Calendar: '📅', 
-        Shield: '🛡️', Heart: '❤️'
+        Shield: '🛡️', Heart: '❤️', Image: '🖼️', Camera: '📷'
       };
       
       return <span className={`inline-flex items-center justify-center ${className}`} style={{fontSize: `${size}px`}} {...props}>
         {icons[name] || '🔧'}
       </span>;
+    };
+
+    // Utility function to detect and convert URLs to clickable links
+    const linkifyText = (text) => {
+      if (!text) return text;
+      
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.split(urlRegex).map((part, index) => {
+        if (urlRegex.test(part)) {
+          return (
+            <a 
+              key={index} 
+              href={part} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="clickable-link"
+            >
+              {part}
+            </a>
+          );
+        }
+        return part;
+      });
+    };
+
+    // Utility function for date formatting
+    const formatDate = (dateString, format = 'italian') => {
+      if (!dateString) return dateString;
+      
+      // Se è già formattato o contiene testo, restituisci così com'è
+      if (dateString.includes('/') || dateString.includes('oggi') || dateString.includes('presente')) {
+        return dateString;
+      }
+      
+      // Altrimenti applica il formato richiesto
+      switch (format) {
+        case 'italian':
+          return dateString; // Mantieni formato italiano MM/AAAA
+        case 'iso':
+          return dateString.replace(/(\d{2})\/(\d{4})/, '$2-$1'); // MM/AAAA -> AAAA-MM
+        case 'full':
+          return dateString; // Per ora mantieni così
+        default:
+          return dateString;
+      }
     };
 
     const CVEditor = () => {
@@ -103,6 +202,13 @@
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
 
+      // Advanced settings
+      const [advancedSettings, setAdvancedSettings] = useState({
+        showPhoto: true,
+        dateFormat: 'italian',
+        privacyConsent: true
+      });
+
       // Template iniziale PULITO per tutti gli utenti
       const [cvData, setCvData] = useState({
         personalInfo: {
@@ -112,7 +218,8 @@
           phone: '(+39) 123 456 7890',
           email: 'tuaemail@esempio.com',
           address: 'Via Esempio 123, 12345 Città (Prov)',
-          website: ''
+          website: '',
+          photo: '' // Base64 encoded photo
         },
         profile: 'Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera. Questo è uno spazio importante per presentarti in modo efficace ai potenziali datori di lavoro.',
         workExperience: [
@@ -202,6 +309,7 @@
       // Carica i dati salvati al mount
       useEffect(() => {
         const savedData = localStorage.getItem('cvData');
+        const savedSettings = localStorage.getItem('advancedSettings');
         const hasVisited = localStorage.getItem('hasVisited');
         
         if (savedData) {

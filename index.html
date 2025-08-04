@@ -100,7 +100,6 @@
       const [showInstallPrompt, setShowInstallPrompt] = useState(false);
       const [showWelcome, setShowWelcome] = useState(false);
       const [deferredPrompt, setDeferredPrompt] = useState(null);
-      const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
 
@@ -267,30 +266,95 @@
       }, []);
 
       const registerServiceWorker = async () => {
-        try {
-          const registration = await navigator.serviceWorker.register('./sw.js');
-          console.log('SW registered successfully:', registration);
-          
-          // Listener per il controllerchange - COMMENTED OUT
-          // navigator.serviceWorker.addEventListener('controllerchange', () => {
-          //   console.log('New service worker has taken control, reloading...');
-          //   window.location.reload();
-          // });
+        if ('serviceWorker' in navigator) {
+          try {
+            const registration = await navigator.serviceWorker.register('./sw.js');
+            console.log('SW registered successfully:', registration);
+            
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('🔄 Nuovo aggiornamento disponibile, applicando automaticamente...');
+                    
+                    // AGGIORNAMENTO AUTOMATICO SILENZIOSO
+                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    
+                    // Piccolo delay e poi reload con notifica
+                    setTimeout(() => {
+                      // Salva in sessionStorage che c'è stato un aggiornamento
+                      sessionStorage.setItem('appUpdated', 'true');
+                      window.location.reload();
+                    }, 100);
+                  }
+                });
+              }
+            });
 
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  setIsUpdateAvailable(true);
-                }
-              });
-            }
-          });
-        } catch (error) {
-          console.error('SW registration failed:', error);
+          } catch (error) {
+            console.error('SW registration failed:', error);
+          }
         }
       };
+
+      // Funzione per mostrare notifica discreta dopo aggiornamento
+      const showUpdateNotification = () => {
+        // Crea elemento toast
+        const toast = document.createElement('div');
+        toast.innerHTML = `
+          <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+          ">
+            ✨ App aggiornata alla versione più recente
+          </div>
+          <style>
+            @keyframes slideIn {
+              from { transform: translateX(100%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+              from { transform: translateX(0); opacity: 1; }
+              to { transform: translateX(100%); opacity: 0; }
+            }
+          </style>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Rimuovi dopo 4 secondi con animazione
+        setTimeout(() => {
+          toast.firstElementChild.style.animation = 'slideOut 0.3s ease-in';
+          setTimeout(() => {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 300);
+        }, 4000);
+      };
+
+      // Controlla se c'è stato un aggiornamento al caricamento della pagina
+      window.addEventListener('load', () => {
+        if (sessionStorage.getItem('appUpdated') === 'true') {
+          sessionStorage.removeItem('appUpdated');
+          // Aspetta un po' prima di mostrare la notifica
+          setTimeout(() => {
+            showUpdateNotification();
+          }, 1000);
+        }
+      });
 
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -316,22 +380,6 @@
         }
       };
 
-      const updateApp = () => {
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistration().then((registration) => {
-            if (registration && registration.waiting) {
-              console.log('Sending SKIP_WAITING message to service worker');
-              setIsUpdateAvailable(false);
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-              
-              // Aggiungi un piccolo delay per permettere al SW di attivarsi
-              setTimeout(() => {
-                window.location.reload();
-              }, 100);
-            }
-          });
-        }
-      };
 
       // Salva automaticamente i dati E aggiorna timestamp
       useEffect(() => {
@@ -2128,25 +2176,6 @@
             </div>
           )}
 
-          {isUpdateAvailable && (
-            <div className="fixed top-4 left-4 bg-green-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
-              <div className="flex items-start space-x-3">
-                <LucideIcon name="RotateCw" size={24} className="flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h4 className="font-semibold">Aggiornamento disponibile</h4>
-                  <p className="text-sm text-green-100 mt-1">
-                    È disponibile una nuova versione dell'app.
-                  </p>
-                  <button
-                    onClick={updateApp}
-                    className="bg-white text-green-600 px-3 py-1 rounded text-sm font-medium mt-2"
-                  >
-                    Aggiorna ora
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Header */}
           <header className="bg-white shadow-sm border-b">

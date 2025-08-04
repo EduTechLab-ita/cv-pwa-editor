@@ -1,5 +1,5 @@
 // Service Worker per CV PWA Editor - EduTechLab Italia
-// Versione: 1.0.0
+// Versione: 2.0.0
 
 const CACHE_NAME = 'cv-pwa-editor-v1.0.0';
 const STATIC_CACHE = 'cv-static-v1.0.0';

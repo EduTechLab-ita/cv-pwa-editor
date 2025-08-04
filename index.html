@@ -8,8 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor - EduTechLab Italia</title>
-  <meta name="description" content="Editor professionale per Curriculum Vitae con funzionalità offline - Sviluppato da EduTechLab Italia">
+  <title>CV PWA Editor v2.0 - EduTechLab Italia</title>
+  <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcyIiBoZWlnaHQ9IjcyIiByeD0iMTYiIGZpbGw9IiMwMDNkN2EiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZmZmZmZmIj4KPHA+PHBhdGggZD0iTTIwLDE4SDRWNEgyME0yMCwySDRBMiwyIDAgMCwwIDIsNFYxOEEyLDIgMCAwLDAgNCwyMEgyMEEyLDIgMCAwLDAgMjIsMThWNEEyLDIgMCAwLDAgMjAsMlpNMTIsMTRMMTAuNSwxMi41TDcsMTZIMTdMMTMuNSwxMS41TDEyLDE0WiIgLz48L3A+Cjwvc3ZnPgo8L3N2Zz4K">
@@ -18,7 +18,7 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
   <style>
     /* Print Styles per PDF */
     @media print {
@@ -57,6 +57,19 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #a1a1a1;
     }
+
+    /* Page count indicator */
+    .page-indicator {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      background: rgba(0, 61, 122, 0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      z-index: 1000;
+    }
   </style>
 </head>
 
@@ -64,15 +77,16 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useEffect } = React;
-    const { Save, Eye, Download, Edit3, Plus, Trash2, FileText, Wifi, WifiOff, RotateCw, Settings, Share2, Palette } = lucide;
-
-    // Icone Lucide simulate (fallback se CDN non funziona)
+    const { useState, useEffect, useRef } = React;
+    
+    // Icone Lucide simulate
     const LucideIcon = ({ name, size = 16, className = "", ...props }) => {
       const icons = {
         Save: '💾', Eye: '👁️', Download: '⬇️', Edit3: '✏️', Plus: '➕', 
         Trash2: '🗑️', FileText: '📄', Wifi: '📶', WifiOff: '📵', 
-        RotateCw: '🔄', Settings: '⚙️', Share2: '🔗', Palette: '🎨'
+        RotateCw: '🔄', Settings: '⚙️', Share2: '🔗', Palette: '🎨',
+        Upload: '📤', User: '👤', Globe: '🌐', Calendar: '📅', 
+        Shield: '🛡️', Heart: '❤️'
       };
       
       return <span className={`inline-flex items-center justify-center ${className}`} style={{fontSize: `${size}px`}} {...props}>
@@ -88,8 +102,9 @@
       const [deferredPrompt, setDeferredPrompt] = useState(null);
       const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
       const [isInstalled, setIsInstalled] = useState(false);
+      const [pageCount, setPageCount] = useState(1);
 
-      // Template iniziale PULITO - NESSUN DATO PERSONALE
+      // Template iniziale PULITO per tutti gli utenti
       const [cvData, setCvData] = useState({
         personalInfo: {
           name: 'Il Tuo Nome',
@@ -97,7 +112,8 @@
           birthDate: 'GG/MM/AAAA',
           phone: '(+39) 123 456 7890',
           email: 'tuaemail@esempio.com',
-          address: 'Via Esempio 123, 12345 Città (Prov)'
+          address: 'Via Esempio 123, 12345 Città (Prov)',
+          website: ''
         },
         profile: 'Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera. Questo è uno spazio importante per presentarti in modo efficace ai potenziali datori di lavoro.',
         workExperience: [
@@ -171,11 +187,18 @@
             ]
           }
         },
-        formatore: []
+        formatore: [],
+        altreCapacita: '',
+        trattamentoDati: {
+          enabled: true,
+          text: 'Autorizzo il trattamento dei miei dati personali presenti nel CV ai sensi dell\'art. 13 d. lgs. 30 giugno 2003 n. 196 - "Codice in materia di protezione dei dati personali" e dell\'art. 13 GDPR 679/16 - "Regolamento europeo sulla protezione dei dati personali".'
+        },
+        lastUpdated: new Date().toISOString() // NUOVO CAMPO
       });
 
       const [activeTab, setActiveTab] = useState('edit');
       const [editingSection, setEditingSection] = useState('personalInfo');
+      const previewRef = useRef(null);
 
       // Carica i dati salvati al mount
       useEffect(() => {
@@ -184,7 +207,14 @@
         
         if (savedData) {
           try {
-            setCvData(JSON.parse(savedData));
+            const parsed = JSON.parse(savedData);
+            // Assicurati che i nuovi campi esistano
+            if (!parsed.personalInfo.website) parsed.personalInfo.website = '';
+            if (!parsed.altreCapacita) parsed.altreCapacita = '';
+            if (!parsed.trattamentoDati) parsed.trattamentoDati = { enabled: true, text: 'Autorizzo il trattamento dei miei dati personali...' };
+            if (!parsed.lastUpdated) parsed.lastUpdated = new Date().toISOString();
+            
+            setCvData(parsed);
           } catch (error) {
             console.error('Errore nel caricamento dati salvati:', error);
           }
@@ -197,22 +227,33 @@
         }
       }, []);
 
+      // Calcola pagine quando cambia il contenuto
+      useEffect(() => {
+        if (previewRef.current && activeTab === 'preview') {
+          const calculatePages = () => {
+            const element = previewRef.current;
+            const height = element.scrollHeight;
+            const pageHeight = 1056; // A4 height at 72 DPI (297mm)
+            const calculatedPages = Math.ceil(height / pageHeight);
+            setPageCount(calculatedPages);
+          };
+          
+          setTimeout(calculatePages, 500); // Delay per rendering
+        }
+      }, [cvData, activeTab]);
+
       // PWA Setup e Service Worker Registration
       useEffect(() => {
-        // Registra Service Worker
         if ('serviceWorker' in navigator) {
           registerServiceWorker();
         }
 
-        // Gestione eventi PWA
         setupPWAEventListeners();
 
-        // Controlla se è già installata
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
           setIsInstalled(true);
         }
 
-        // Gestione stato online/offline
         const handleOnline = () => setIsOnline(true);
         const handleOffline = () => setIsOnline(false);
         
@@ -225,13 +266,11 @@
         };
       }, []);
 
-      // Registrazione Service Worker
       const registerServiceWorker = async () => {
         try {
           const registration = await navigator.serviceWorker.register('./sw.js');
           console.log('SW registered successfully:', registration);
 
-          // Controlla aggiornamenti
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
             if (newWorker) {
@@ -247,16 +286,13 @@
         }
       };
 
-      // Setup event listeners per PWA
       const setupPWAEventListeners = () => {
-        // Prompt installazione
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           setDeferredPrompt(e);
           setShowInstallPrompt(true);
         });
 
-        // App installata
         window.addEventListener('appinstalled', () => {
           setIsInstalled(true);
           setShowInstallPrompt(false);
@@ -264,7 +300,6 @@
         });
       };
 
-      // Installa PWA
       const installPWA = async () => {
         if (deferredPrompt) {
           deferredPrompt.prompt();
@@ -275,7 +310,6 @@
         }
       };
 
-      // Aggiorna l'app
       const updateApp = () => {
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistration().then((registration) => {
@@ -287,9 +321,13 @@
         }
       };
 
-      // Salva automaticamente i dati
+      // Salva automaticamente i dati E aggiorna timestamp
       useEffect(() => {
-        localStorage.setItem('cvData', JSON.stringify(cvData));
+        const dataToSave = {
+          ...cvData,
+          lastUpdated: new Date().toISOString()
+        };
+        localStorage.setItem('cvData', JSON.stringify(dataToSave));
       }, [cvData]);
 
       const updatePersonalInfo = (field, value) => {
@@ -309,6 +347,24 @@
         }));
       };
 
+      const updateAltreCapacita = (value) => {
+        setCvData(prev => ({
+          ...prev,
+          altreCapacita: value
+        }));
+      };
+
+      const updateTrattamentoDati = (field, value) => {
+        setCvData(prev => ({
+          ...prev,
+          trattamentoDati: {
+            ...prev.trattamentoDati,
+            [field]: value
+          }
+        }));
+      };
+
+      // Funzioni esistenti per work experience, education, ecc.
       const addWorkExperience = () => {
         const newWork = {
           id: Date.now(),
@@ -429,12 +485,17 @@
         
         const exportData = {
           meta: {
-            version: '1.0.0',
+            version: '2.0.0',
             exported: new Date().toISOString(),
-            app: 'CV PWA Editor',
-            author: 'EduTechLab Italia'
+            app: 'CV PWA Editor v2.0',
+            author: 'EduTechLab Italia - Fabio Rizzotto',
+            copyright: '© 2025 EduTechLab Italia - App gratuita',
+            website: 'https://edutechlab-ita.github.io/'
           },
-          data: cvData
+          data: {
+            ...cvData,
+            lastUpdated: new Date().toISOString()
+          }
         };
         
         const dataStr = JSON.stringify(exportData, null, 2);
@@ -446,7 +507,6 @@
         link.click();
         URL.revokeObjectURL(url);
         
-        // Notifica successo
         alert('✅ Backup esportato con successo! Conserva questo file per importare i tuoi dati in futuro.');
       };
 
@@ -463,15 +523,12 @@
         reader.onload = (e) => {
           try {
             const imported = JSON.parse(e.target.result);
-            
-            // Verifica formato dati
-            const importedData = imported.data || imported; // Supporta sia il nuovo formato che quello legacy
+            const importedData = imported.data || imported;
             
             if (!importedData.personalInfo || !importedData.personalInfo.name) {
               throw new Error('File JSON non valido: mancano le informazioni personali');
             }
             
-            // Conferma importazione
             const confirmImport = window.confirm(
               `🔄 Importare i dati di "${importedData.personalInfo.name}"?\n\n` +
               `⚠️ ATTENZIONE: Tutti i dati attuali verranno sostituiti.\n\n` +
@@ -479,10 +536,14 @@
             );
             
             if (confirmImport) {
+              // Assicurati che i nuovi campi esistano nei dati importati
+              if (!importedData.personalInfo.website) importedData.personalInfo.website = '';
+              if (!importedData.altreCapacita) importedData.altreCapacita = '';
+              if (!importedData.trattamentoDati) importedData.trattamentoDati = { enabled: true, text: 'Autorizzo il trattamento...' };
+              if (!importedData.lastUpdated) importedData.lastUpdated = new Date().toISOString();
+              
               setCvData(importedData);
               alert('✅ Dati importati con successo!');
-              
-              // Reset la sezione editing per mostrare i nuovi dati
               setEditingSection('personalInfo');
             }
           } catch (error) {
@@ -491,8 +552,6 @@
           }
         };
         reader.readAsText(file);
-        
-        // Reset input file
         event.target.value = '';
       };
 
@@ -504,7 +563,6 @@
         );
         
         if (confirmReset) {
-          // Ripristina template iniziale PULITO
           const templateData = {
             personalInfo: {
               name: 'Il Tuo Nome',
@@ -512,9 +570,10 @@
               birthDate: 'GG/MM/AAAA',
               phone: '(+39) 123 456 7890',
               email: 'tuaemail@esempio.com',
-              address: 'Via Esempio 123, 12345 Città (Prov)'
+              address: 'Via Esempio 123, 12345 Città (Prov)',
+              website: ''
             },
-            profile: 'Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera. Questo è uno spazio importante per presentarti in modo efficace ai potenziali datori di lavoro.',
+            profile: 'Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera.',
             workExperience: [
               {
                 id: Date.now(),
@@ -522,7 +581,7 @@
                 endDate: 'MM/AAAA o "Ad oggi"',
                 title: 'Titolo della Posizione',
                 company: 'Nome Azienda, Città',
-                description: 'Descrivi qui le tue responsabilità, risultati ottenuti e competenze sviluppate in questo ruolo.',
+                description: 'Descrivi qui le tue responsabilità, risultati ottenuti e competenze sviluppate.',
                 isNew: false
               }
             ],
@@ -532,14 +591,20 @@
                 date: 'AAAA',
                 title: 'Titolo di Studio o Certificazione',
                 institution: 'Nome Istituzione, Città',
-                description: 'Descrizione del percorso formativo e delle competenze acquisite.',
+                description: 'Descrizione del percorso formativo.',
                 level: '',
                 isNew: false,
                 link: ''
               }
             ],
-            skills: cvData.skills, // Mantieni la struttura skills
-            formatore: []
+            skills: cvData.skills,
+            formatore: [],
+            altreCapacita: '',
+            trattamentoDati: {
+              enabled: true,
+              text: 'Autorizzo il trattamento dei miei dati personali presenti nel CV ai sensi dell\'art. 13 d. lgs. 30 giugno 2003 n. 196 - "Codice in materia di protezione dei dati personali" e dell\'art. 13 GDPR 679/16 - "Regolamento europeo sulla protezione dei dati personali".'
+            },
+            lastUpdated: new Date().toISOString()
           };
           
           setCvData(templateData);
@@ -550,8 +615,8 @@
 
       const shareCV = async () => {
         const shareData = {
-          title: `CV di ${cvData.personalInfo.name}`,
-          text: 'Ecco il mio Curriculum Vitae creato con CV PWA Editor',
+          title: `CV Europass di ${cvData.personalInfo.name}`,
+          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v2.0',
           url: window.location.href
         };
         
@@ -562,12 +627,10 @@
             console.log('Condivisione annullata');
           }
         } else {
-          // Fallback: copia link negli appunti
           try {
             await navigator.clipboard.writeText(window.location.href);
             alert('🔗 Link copiato negli appunti! Condividilo per far vedere il tuo CV.');
           } catch (error) {
-            // Fallback del fallback
             prompt('📋 Copia questo link per condividere:', window.location.href);
           }
         }
@@ -638,6 +701,19 @@
                 className="w-full p-2 border rounded-md"
               />
             </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                <LucideIcon name="Globe" size={14} className="inline mr-1" />
+                Sito Web (opzionale)
+              </label>
+              <input
+                type="url"
+                value={cvData.personalInfo.website}
+                onChange={(e) => updatePersonalInfo('website', e.target.value)}
+                className="w-full p-2 border rounded-md"
+                placeholder="https://tuosito.com"
+              />
+            </div>
           </div>
         </div>
       );
@@ -660,6 +736,28 @@
         </div>
       );
 
+      const AltreCapacitaEditor = () => (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-blue-800">
+            <LucideIcon name="Heart" size={20} className="inline mr-2" />
+            Altre Capacità e Competenze
+          </h3>
+          <div>
+            <label className="block text-sm font-medium mb-1">Interessi, Hobby e Capacità Personali</label>
+            <textarea
+              value={cvData.altreCapacita}
+              onChange={(e) => updateAltreCapacita(e.target.value)}
+              className="w-full p-3 border rounded-md h-32"
+              placeholder="Descrivi i tuoi interessi, hobby, capacità artistiche, musicali o manuali, passioni tecnologiche, ecc..."
+            />
+          </div>
+          <div className="text-sm text-gray-500">
+            💡 <strong>Suggerimento:</strong> Includi passioni come musica, arte, sport, tecnologia, o altre competenze personali che possono arricchire il tuo profilo professionale.
+          </div>
+        </div>
+      );
+
+      // [Continua con tutti gli altri editor esistenti...]
       const WorkExperienceEditor = () => (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
@@ -841,7 +939,6 @@
         <div className="space-y-8">
           <h3 className="text-lg font-semibold text-blue-800">Competenze</h3>
           
-          {/* Competenze Specialistiche */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4">
               <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">⭐ Specialistiche</span>
@@ -861,7 +958,6 @@
             />
           </div>
 
-          {/* Competenze Digitali */}
           <div className="bg-gray-50 border rounded-lg p-6">
             <h4 className="font-semibold text-blue-800 mb-4">Competenze Digitali (DigiCompEU)</h4>
             <div className="space-y-3">
@@ -908,7 +1004,6 @@
             </div>
           </div>
 
-          {/* Piattaforme e Software */}
           <div className="bg-gray-50 border rounded-lg p-6">
             <h4 className="font-semibold text-blue-800 mb-4">Software e Piattaforme</h4>
             <div className="space-y-2">
@@ -975,7 +1070,6 @@
             </div>
           </div>
 
-          {/* Lingue */}
           <div className="bg-gray-50 border rounded-lg p-6">
             <h4 className="font-semibold text-blue-800 mb-4">Competenze Linguistiche</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1166,10 +1260,10 @@
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-blue-800">Impostazioni Avanzate</h3>
             
-            {/* Tab Navigation */}
             <div className="flex space-x-4 border-b">
               {[
                 { id: 'export', label: 'Export & Condivisione', icon: <LucideIcon name="Download" size={16} /> },
+                { id: 'privacy', label: 'Privacy & Trattamento Dati', icon: <LucideIcon name="Shield" size={16} /> },
                 { id: 'templates', label: 'Template', icon: <LucideIcon name="Palette" size={16} /> },
                 { id: 'settings', label: 'Impostazioni', icon: <LucideIcon name="Settings" size={16} /> }
               ].map((tab) => (
@@ -1246,21 +1340,6 @@
                       </label>
                     </div>
                   </div>
-                  
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <div className="flex items-start space-x-3">
-                      <span className="text-yellow-500 text-xl">💡</span>
-                      <div>
-                        <h5 className="font-semibold text-yellow-800 mb-1">Consigli per il Backup</h5>
-                        <ul className="text-sm text-yellow-700 space-y-1">
-                          <li>• Esporta regolarmente i tuoi dati per sicurezza</li>
-                          <li>• Conserva i backup in un posto sicuro (cloud, email, ecc.)</li>
-                          <li>• Il file JSON contiene tutti i tuoi dati e può essere riutilizzato</li>
-                          <li>• Puoi condividere il backup per trasferire il CV su altri dispositivi</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div>
@@ -1282,9 +1361,61 @@
                       <span>Scarica PDF</span>
                     </button>
                   </div>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Condividi il link dell'app o scarica il PDF per inviare il tuo CV.
-                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Privacy & Trattamento Dati */}
+            {activeSettingsTab === 'privacy' && (
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-semibold mb-4">
+                    <LucideIcon name="Shield" size={20} className="inline mr-2" />
+                    Trattamento Dati Personali
+                  </h4>
+                  
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="enablePrivacy"
+                        checked={cvData.trattamentoDati.enabled}
+                        onChange={(e) => updateTrattamentoDati('enabled', e.target.checked)}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <label htmlFor="enablePrivacy" className="font-semibold text-blue-800 cursor-pointer">
+                          Includi clausola trattamento dati nel CV
+                        </label>
+                        <p className="text-sm text-blue-700 mt-1">
+                          Se abilitato, verrà inclusa la clausola per il trattamento dei dati personali secondo GDPR
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Testo Clausola Privacy</label>
+                    <textarea
+                      value={cvData.trattamentoDati.text}
+                      onChange={(e) => updateTrattamentoDati('text', e.target.value)}
+                      className="w-full p-3 border rounded-md h-32"
+                      placeholder="Inserisci il testo della clausola per il trattamento dei dati personali..."
+                    />
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-2">
+                      <span className="text-yellow-500">⚠️</span>
+                      <div className="text-sm">
+                        <p className="font-semibold text-yellow-800">Informazione Importante</p>
+                        <p className="text-yellow-700 mt-1">
+                          La clausola privacy è obbligatoria per legge in Italia ed Europa (GDPR). 
+                          Consigliamo di mantenerla sempre attiva quando invii il CV a potenziali datori di lavoro.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -1297,7 +1428,7 @@
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-6 border-2 border-blue-500 bg-blue-50 rounded-lg ring-2 ring-blue-200">
                       <div className="flex items-center space-x-4">
-                        <div className="text-4xl">📄</div>
+                        <div className="text-4xl">🇪🇺</div>
                         <div className="flex-1">
                           <h5 className="font-semibold">Europass Standard</h5>
                           <p className="text-sm text-gray-600">Template ufficiale Europass EU</p>
@@ -1321,24 +1452,6 @@
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <div className="flex">
-                      <div className="flex-shrink-0">
-                        <span className="text-yellow-400">⚠️</span>
-                      </div>
-                      <div className="ml-3">
-                        <h3 className="text-sm font-medium text-yellow-800">
-                          Templates in sviluppo
-                        </h3>
-                        <div className="mt-2 text-sm text-yellow-700">
-                          <p>
-                            Al momento è attivo solo il template Europass. Altri template saranno disponibili nelle prossime versioni.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}
@@ -1347,20 +1460,30 @@
             {activeSettingsTab === 'settings' && (
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-semibold mb-4">Preferenze App</h4>
-                  <div className="space-y-4">
-                    <label className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded" defaultChecked />
-                      <span>Salvataggio automatico</span>
-                    </label>
-                    <label className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded" defaultChecked />
-                      <span>Notifiche aggiornamenti</span>
-                    </label>
-                    <label className="flex items-center space-x-3">
-                      <input type="checkbox" className="rounded" />
-                      <span>Modalità scura (prossimamente)</span>
-                    </label>
+                  <h4 className="font-semibold mb-4">Informazioni CV</h4>
+                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                    <p><strong>Ultima Modifica:</strong> {new Date(cvData.lastUpdated).toLocaleString('it-IT')}</p>
+                    <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
+                    <p><strong>Versione App:</strong> 2.0.0</p>
+                    <p><strong>Template:</strong> Europass Standard</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-4">Informazioni App</h4>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="text-center">
+                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v2.0</h5>
+                      <p className="text-sm text-blue-700 mb-2">
+                        Editor professionale per Curriculum Vitae Europass
+                      </p>
+                      <div className="text-xs text-blue-600 space-y-1">
+                        <p><strong>© 2025 EduTechLab Italia</strong></p>
+                        <p>Sviluppato da <strong>Fabio Rizzotto</strong></p>
+                        <p>Applicazione <strong>gratuita</strong> e open source</p>
+                        <p>Progressive Web App (PWA)</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -1405,17 +1528,6 @@
                     </div>
                   </div>
                 </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Informazioni App</h4>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                    <p><strong>Versione:</strong> 1.0.0</p>
-                    <p><strong>Ultima Modifica:</strong> {new Date().toLocaleString()}</p>
-                    <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
-                    <p><strong>Creato da:</strong> EduTechLab Italia</p>
-                    <p><strong>Tipo:</strong> Progressive Web App (PWA)</p>
-                  </div>
-                </div>
               </div>
             )}
           </div>
@@ -1430,11 +1542,15 @@
             <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
               <div className="text-center">
                 <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor!</h2>
-                <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v2.0!</h2>
+                <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae Europass</p>
               </div>
               
               <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <span className="text-green-500">✅</span>
+                  <span className="text-sm">Template Europass ufficiale con logo UE</span>
+                </div>
                 <div className="flex items-center space-x-3">
                   <span className="text-green-500">✅</span>
                   <span className="text-sm">Funziona completamente offline</span>
@@ -1449,11 +1565,11 @@
                 </div>
                 <div className="flex items-center space-x-3">
                   <span className="text-green-500">✅</span>
-                  <span className="text-sm">Installabile come app</span>
+                  <span className="text-sm">Sezione "Altre Capacità e Competenze"</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <span className="text-green-500">✅</span>
-                  <span className="text-sm">Backup e ripristino completo</span>
+                  <span className="text-sm">Trattamento dati GDPR integrato</span>
                 </div>
               </div>
               
@@ -1487,7 +1603,10 @@
               
               <div className="text-center">
                 <p className="text-xs text-gray-500">
-                  Creato da <strong>EduTechLab Italia</strong> - Innovazione Didattica
+                  Creato da <strong>EduTechLab Italia - Fabio Rizzotto</strong> - Innovazione Didattica v2.0
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  © 2025 EduTechLab Italia - App gratuita e open source
                 </p>
               </div>
             </div>
@@ -1495,8 +1614,17 @@
         );
       };
 
+      // Logo Europass SVG
+      const EuropassLogo = ({ className = "" }) => (
+        <div className={`flex items-center space-x-2 ${className}`}>
+          {/* Logo EU semplificato */}
+          <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">EU</div>
+          <span className="text-blue-600 font-semibold">europass</span>
+        </div>
+      );
+
       const CVPreview = () => (
-        <div className="cv-preview bg-white shadow-lg" style={{ minHeight: '297mm', width: '210mm', margin: '0 auto' }}>
+        <div ref={previewRef} className="cv-preview bg-white shadow-lg" style={{ minHeight: '297mm', width: '210mm', margin: '0 auto' }}>
           <style dangerouslySetInnerHTML={{
             __html: `
               .cv-preview {
@@ -1525,6 +1653,29 @@
                 margin-bottom: 30px;
               }
               
+              .europass-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+              }
+              
+              .europass-logo {
+                display: flex;
+                align-items: center;
+                font-size: 1.2em;
+                color: #003d7a;
+              }
+              
+              .europass-logo .eu-flag {
+                background: #003d7a;
+                color: white;
+                padding: 4px 8px;
+                margin-right: 10px;
+                border-radius: 3px;
+                font-weight: bold;
+                font-size: 0.8em;
+              }
+              
               .personal-info {
                 text-align: center;
                 margin-bottom: 30px;
@@ -1549,6 +1700,15 @@
                 align-items: center;
                 gap: 8px;
                 margin-bottom: 2px;
+              }
+              
+              .info-item a {
+                color: #003d7a;
+                text-decoration: none;
+              }
+              
+              .info-item a:hover {
+                text-decoration: underline;
               }
               
               .section-title {
@@ -1689,6 +1849,29 @@
                 margin-bottom: 15px;
               }
               
+              .cv-footer {
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 1px solid #dddddd;
+                font-size: 0.9em;
+                color: #666;
+              }
+              
+              .privacy-section {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 6px;
+                margin-top: 20px;
+                font-size: 0.9em;
+              }
+              
+              .update-info {
+                text-align: center;
+                color: #666;
+                font-size: 0.8em;
+                margin-top: 10px;
+              }
+              
               @media print {
                 .cv-preview {
                   margin: 0;
@@ -1700,6 +1883,14 @@
             `
           }} />
           
+          {/* Europass Header con Logo */}
+          <div className="europass-header">
+            <div className="europass-logo">
+              <span className="eu-flag">🇪🇺</span>
+              <span style={{ fontWeight: 'bold' }}>europass</span>
+            </div>
+          </div>
+          
           <div className="cv-title">Curriculum Vitae</div>
           <div className="page-bar"></div>
           
@@ -1710,6 +1901,14 @@
               <div className="info-item"><strong>Data di nascita:</strong> {cvData.personalInfo.birthDate}</div>
               <div className="info-item"><strong>Numero di telefono:</strong> {cvData.personalInfo.phone}</div>
               <div className="info-item"><strong>Indirizzo e-mail:</strong> {cvData.personalInfo.email}</div>
+              {cvData.personalInfo.website && (
+                <div className="info-item">
+                  <strong>Sito web:</strong> 
+                  <a href={cvData.personalInfo.website} target="_blank" rel="noopener noreferrer">
+                    {cvData.personalInfo.website}
+                  </a>
+                </div>
+              )}
               <div className="info-item"><strong>Abitazione:</strong> {cvData.personalInfo.address}</div>
             </div>
           </div>
@@ -1839,13 +2038,54 @@
               ))}
             </section>
           )}
+
+          {/* NUOVA SEZIONE: Altre Capacità e Competenze */}
+          {cvData.altreCapacita && (
+            <section>
+              <h2 className="section-title">Altre Capacità e Competenze</h2>
+              <div className="work-item">
+                <p style={{ textAlign: 'justify' }}>{cvData.altreCapacita}</p>
+              </div>
+            </section>
+          )}
+
+          {/* NUOVA SEZIONE: Trattamento Dati Personali */}
+          {cvData.trattamentoDati && cvData.trattamentoDati.enabled && (
+            <section>
+              <h2 className="section-title">Trattamento dei Dati Personali</h2>
+              <div className="privacy-section">
+                <p style={{ textAlign: 'justify', fontSize: '0.9em' }}>
+                  {cvData.trattamentoDati.text}
+                </p>
+              </div>
+            </section>
+          )}
+
+          {/* Footer con info aggiornamento e copyright */}
+          <div className="cv-footer">
+            <div className="update-info">
+              <strong>CV aggiornato:</strong> {new Date(cvData.lastUpdated).toLocaleDateString('it-IT', { 
+                year: 'numeric', 
+                month: 'long' 
+              })}
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '10px', fontSize: '0.7em', color: '#999' }}>
+              Creato con CV PWA Editor v2.0 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita
+            </div>
+          </div>
         </div>
       );
 
       return (
         <div className="min-h-screen bg-gray-100">
-          {/* Welcome Modal */}
           <WelcomeModal />
+          
+          {/* Indicatore pagine */}
+          {activeTab === 'preview' && (
+            <div className="page-indicator">
+              📄 Pagina {pageCount > 1 ? `1-${pageCount}` : '1'} di {pageCount}
+            </div>
+          )}
           
           {/* Notifiche PWA */}
           {showInstallPrompt && !isInstalled && (
@@ -1853,7 +2093,7 @@
               <div className="flex items-start space-x-3">
                 <LucideIcon name="Download" size={24} className="flex-shrink-0 mt-1" />
                 <div className="flex-1">
-                  <h4 className="font-semibold">Installa CV Editor</h4>
+                  <h4 className="font-semibold">Installa CV Editor v2.0</h4>
                   <p className="text-sm text-blue-100 mt-1">
                     Installa l'app per usarla offline e accedervi rapidamente!
                   </p>
@@ -1903,7 +2143,10 @@
                 <div className="flex items-center space-x-3">
                   <LucideIcon name="FileText" size={32} className="text-blue-600" />
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-900">CV PWA Editor</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
+                      <span>CV PWA Editor v2.0</span>
+                      <EuropassLogo className="ml-2" />
+                    </h1>
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
                       {isOnline ? (
                         <><LucideIcon name="Wifi" size={14} className="text-green-500" /> <span>Online</span></>
@@ -1915,6 +2158,10 @@
                           📱 App Installata
                         </span>
                       )}
+                      <span className="text-xs text-gray-400">
+                        <LucideIcon name="Calendar" size={12} className="inline mr-1" />
+                        Agg. {new Date(cvData.lastUpdated).toLocaleDateString('it-IT')}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1978,6 +2225,7 @@
                         { id: 'education', label: 'Formazione', icon: '🎓' },
                         { id: 'formatore', label: 'Formatore', icon: '🎯' },
                         { id: 'skills', label: 'Competenze', icon: '⚡' },
+                        { id: 'altreCapacita', label: 'Altre Capacità', icon: '❤️' },
                         { id: 'advanced', label: 'Impostazioni', icon: '⚙️' }
                       ].map((section) => (
                         <li key={section.id}>
@@ -1991,16 +2239,29 @@
                           >
                             <span>{section.icon}</span>
                             <span>{section.label}</span>
+                            {section.id === 'altreCapacita' && (
+                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs ml-auto">Nuovo</span>
+                            )}
                             {section.id === 'formatore' && (
-                              <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs ml-auto">Nuovo</span>
+                              <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs ml-auto">Pro</span>
                             )}
                             {section.id === 'advanced' && (
-                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs ml-auto">Pro</span>
+                              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs ml-auto">v2.0</span>
                             )}
                           </button>
                         </li>
                       ))}
                     </ul>
+                    
+                    {/* Mini info panel */}
+                    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="text-center">
+                        <EuropassLogo className="justify-center mb-2" />
+                        <p className="text-xs text-blue-700">
+                          Template ufficiale Europass UE
+                        </p>
+                      </div>
+                    </div>
                   </nav>
                 </div>
 
@@ -2013,6 +2274,7 @@
                     {editingSection === 'education' && <EducationEditor />}
                     {editingSection === 'formatore' && <FormatoreEditor />}
                     {editingSection === 'skills' && <SkillsEditor />}
+                    {editingSection === 'altreCapacita' && <AltreCapacitaEditor />}
                     {editingSection === 'advanced' && <AdvancedSettingsEditor />}
                   </div>
                 </div>
@@ -2053,9 +2315,9 @@
   <noscript>
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
       <div style="text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor</h1>
+        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v2.0</h1>
         <p style="color: #666; margin-bottom: 1rem;">Questa applicazione richiede JavaScript per funzionare.</p>
-        <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV.</p>
+        <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV Europass.</p>
       </div>
     </div>
   </noscript>

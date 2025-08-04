@@ -271,11 +271,11 @@
           const registration = await navigator.serviceWorker.register('./sw.js');
           console.log('SW registered successfully:', registration);
           
-          // Listener per il controllerchange
-          navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('New service worker has taken control, reloading...');
-            window.location.reload();
-          });
+          // Listener per il controllerchange - COMMENTED OUT
+          // navigator.serviceWorker.addEventListener('controllerchange', () => {
+          //   console.log('New service worker has taken control, reloading...');
+          //   window.location.reload();
+          // });
 
           registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
@@ -323,7 +323,11 @@
               console.log('Sending SKIP_WAITING message to service worker');
               setIsUpdateAvailable(false);
               registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-              // NON mettere window.location.reload() qui!
+              
+              // Aggiungi un piccolo delay per permettere al SW di attivarsi
+              setTimeout(() => {
+                window.location.reload();
+              }, 100);
             }
           });
         }

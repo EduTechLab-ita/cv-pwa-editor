@@ -295,8 +295,13 @@
             isNew: false
           },
           digital: {
-            title: 'Competenze Digitali Generali',
-            items: [
+            title: 'Competenze Digitali',
+            // Competenze generiche sempre presenti
+            genericContent: 'Descrivi qui le tue competenze digitali generali, software utilizzati, piattaforme conosciute e livello di utilizzo.',
+            // Toggle per DigiCompEU
+            useDigiCompEU: false,
+            // Competenze DigiCompEU (mostrate solo se useDigiCompEU = true)
+            digiCompItems: [
               { name: 'Elaborazione delle informazioni', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
               { name: 'Comunicazione digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
               { name: 'Creazione di contenuti', level: 'BASE', numeric: 'Livello 3/6' },
@@ -315,9 +320,16 @@
             ]
           },
           languages: {
-            italian: 'Madrelingua',
-            english: 'B2 Intermedio Superiore',
-            french: 'A2 Elementare'
+            // Lingua madre sempre presente
+            motherTongue: {
+              name: 'Italiano',
+              level: 'Madrelingua'
+            },
+            // Array dinamico per altre lingue
+            otherLanguages: [
+              { id: 1, name: 'Inglese', level: 'B2 Intermedio Superiore' },
+              { id: 2, name: 'Francese', level: 'A2 Elementare' }
+            ]
           },
           personal: {
             communication: [
@@ -363,6 +375,72 @@
             if (!parsed.altreCapacita) parsed.altreCapacita = '';
             if (!parsed.trattamentoDati) parsed.trattamentoDati = { enabled: true, text: 'Autorizzo il trattamento dei miei dati personali...' };
             if (!parsed.lastUpdated) parsed.lastUpdated = new Date().toISOString();
+            
+            // RETROCOMPATIBILITÀ - Conversione strutture vecchie → nuove
+            
+            // 1. Conversione COMPETENZE DIGITALI
+            if (parsed.skills && parsed.skills.digital) {
+              // Se esiste la vecchia struttura con 'items'
+              if (parsed.skills.digital.items && !parsed.skills.digital.hasOwnProperty('useDigiCompEU')) {
+                console.log('🔄 Conversione competenze digitali: vecchia → nuova struttura');
+                parsed.skills.digital = {
+                  title: parsed.skills.digital.title || 'Competenze Digitali',
+                  genericContent: 'Competenze digitali convertite dal formato precedente.',
+                  useDigiCompEU: true, // Attivo per mantenere i dati esistenti
+                  digiCompItems: parsed.skills.digital.items || []
+                };
+              }
+              
+              // Assicura che tutti i campi esistano
+              if (!parsed.skills.digital.genericContent) parsed.skills.digital.genericContent = '';
+              if (typeof parsed.skills.digital.useDigiCompEU === 'undefined') parsed.skills.digital.useDigiCompEU = false;
+              if (!parsed.skills.digital.digiCompItems) parsed.skills.digital.digiCompItems = [];
+            }
+            
+            // 2. Conversione LINGUE
+            if (parsed.skills && parsed.skills.languages) {
+              // Se esiste la vecchia struttura con 'italian', 'english', 'french'
+              if (parsed.skills.languages.italian && !parsed.skills.languages.motherTongue) {
+                console.log('🔄 Conversione lingue: vecchia → nuova struttura');
+                
+                // Converti lingua madre
+                parsed.skills.languages.motherTongue = {
+                  name: 'Italiano', // Default, l'utente può modificare
+                  level: parsed.skills.languages.italian || 'Madrelingua'
+                };
+                
+                // Converti altre lingue in array
+                const otherLanguages = [];
+                if (parsed.skills.languages.english) {
+                  otherLanguages.push({ 
+                    id: 1, 
+                    name: 'Inglese', 
+                    level: parsed.skills.languages.english 
+                  });
+                }
+                if (parsed.skills.languages.french) {
+                  otherLanguages.push({ 
+                    id: 2, 
+                    name: 'Francese', 
+                    level: parsed.skills.languages.french 
+                  });
+                }
+                parsed.skills.languages.otherLanguages = otherLanguages;
+                
+                // Rimuovi vecchi campi
+                delete parsed.skills.languages.italian;
+                delete parsed.skills.languages.english;
+                delete parsed.skills.languages.french;
+              }
+              
+              // Assicura che tutti i campi esistano
+              if (!parsed.skills.languages.motherTongue) {
+                parsed.skills.languages.motherTongue = { name: 'Italiano', level: 'Madrelingua' };
+              }
+              if (!parsed.skills.languages.otherLanguages) {
+                parsed.skills.languages.otherLanguages = [];
+              }
+            }
             
             setCvData(parsed);
           } catch (error) {
@@ -620,6 +698,88 @@
         }));
       };
 
+      // NUOVE FUNZIONI PER COMPETENZE DIGITALI E LINGUE
+      
+      // Gestione competenze digitali
+      const updateDigitalSkills = (field, value) => {
+        setCvData(prev => ({
+          ...prev,
+          skills: {
+            ...prev.skills,
+            digital: {
+              ...prev.skills.digital,
+              [field]: value
+            }
+          }
+        }));
+      };
+
+      // Gestione lingua madre
+      const updateMotherTongue = (field, value) => {
+        setCvData(prev => ({
+          ...prev,
+          skills: {
+            ...prev.skills,
+            languages: {
+              ...prev.skills.languages,
+              motherTongue: {
+                ...prev.skills.languages.motherTongue,
+                [field]: value
+              }
+            }
+          }
+        }));
+      };
+
+      // Gestione altre lingue - Aggiungi
+      const addOtherLanguage = () => {
+        const newLanguage = {
+          id: Date.now(),
+          name: '',
+          level: ''
+        };
+        setCvData(prev => ({
+          ...prev,
+          skills: {
+            ...prev.skills,
+            languages: {
+              ...prev.skills.languages,
+              otherLanguages: [...prev.skills.languages.otherLanguages, newLanguage]
+            }
+          }
+        }));
+      };
+
+      // Gestione altre lingue - Aggiorna
+      const updateOtherLanguage = (id, field, value) => {
+        setCvData(prev => ({
+          ...prev,
+          skills: {
+            ...prev.skills,
+            languages: {
+              ...prev.skills.languages,
+              otherLanguages: prev.skills.languages.otherLanguages.map(lang =>
+                lang.id === id ? { ...lang, [field]: value } : lang
+              )
+            }
+          }
+        }));
+      };
+
+      // Gestione altre lingue - Rimuovi
+      const deleteOtherLanguage = (id) => {
+        setCvData(prev => ({
+          ...prev,
+          skills: {
+            ...prev.skills,
+            languages: {
+              ...prev.skills.languages,
+              otherLanguages: prev.skills.languages.otherLanguages.filter(lang => lang.id !== id)
+            }
+          }
+        }));
+      };
+
       // Funzioni esistenti per work experience, education, ecc.
       const addWorkExperience = () => {
         const newWork = {
@@ -797,6 +957,52 @@
               if (!importedData.altreCapacita) importedData.altreCapacita = '';
               if (!importedData.trattamentoDati) importedData.trattamentoDati = { enabled: true, text: 'Autorizzo il trattamento...' };
               if (!importedData.lastUpdated) importedData.lastUpdated = new Date().toISOString();
+              
+              // RETROCOMPATIBILITÀ IMPORT - Conversione strutture vecchie → nuove
+              
+              // 1. Conversione COMPETENZE DIGITALI
+              if (importedData.skills && importedData.skills.digital) {
+                if (importedData.skills.digital.items && !importedData.skills.digital.hasOwnProperty('useDigiCompEU')) {
+                  console.log('🔄 Import: Conversione competenze digitali');
+                  importedData.skills.digital = {
+                    title: importedData.skills.digital.title || 'Competenze Digitali',
+                    genericContent: 'Competenze digitali importate dal formato precedente.',
+                    useDigiCompEU: true,
+                    digiCompItems: importedData.skills.digital.items || []
+                  };
+                }
+                if (!importedData.skills.digital.genericContent) importedData.skills.digital.genericContent = '';
+                if (typeof importedData.skills.digital.useDigiCompEU === 'undefined') importedData.skills.digital.useDigiCompEU = false;
+                if (!importedData.skills.digital.digiCompItems) importedData.skills.digital.digiCompItems = [];
+              }
+              
+              // 2. Conversione LINGUE
+              if (importedData.skills && importedData.skills.languages) {
+                if (importedData.skills.languages.italian && !importedData.skills.languages.motherTongue) {
+                  console.log('🔄 Import: Conversione lingue');
+                  importedData.skills.languages.motherTongue = {
+                    name: 'Italiano',
+                    level: importedData.skills.languages.italian || 'Madrelingua'
+                  };
+                  const otherLanguages = [];
+                  if (importedData.skills.languages.english) {
+                    otherLanguages.push({ id: 1, name: 'Inglese', level: importedData.skills.languages.english });
+                  }
+                  if (importedData.skills.languages.french) {
+                    otherLanguages.push({ id: 2, name: 'Francese', level: importedData.skills.languages.french });
+                  }
+                  importedData.skills.languages.otherLanguages = otherLanguages;
+                  delete importedData.skills.languages.italian;
+                  delete importedData.skills.languages.english;
+                  delete importedData.skills.languages.french;
+                }
+                if (!importedData.skills.languages.motherTongue) {
+                  importedData.skills.languages.motherTongue = { name: 'Italiano', level: 'Madrelingua' };
+                }
+                if (!importedData.skills.languages.otherLanguages) {
+                  importedData.skills.languages.otherLanguages = [];
+                }
+              }
               
               setCvData(importedData);
               alert('✅ Dati importati con successo!');
@@ -1274,49 +1480,88 @@
             />
           </div>
 
+          {/* NUOVA SEZIONE COMPETENZE DIGITALI FLESSIBILI */}
           <div className="bg-gray-50 border rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-4">Competenze Digitali (DigiCompEU)</h4>
-            <div className="space-y-3">
-              {cvData.skills.digital.items.map((skill, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-white border rounded">
-                  <div className="flex-1 mr-4">
-                    <input
-                      type="text"
-                      value={skill.name}
-                      onChange={(e) => {
-                        const newSkill = { ...skill, name: e.target.value };
-                        updateSkillItem('digital', index, newSkill);
-                      }}
-                      className="w-full p-2 border rounded text-sm"
-                      placeholder="Nome competenza"
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <select
-                      value={skill.level}
-                      onChange={(e) => {
-                        const newSkill = { ...skill, level: e.target.value };
-                        updateSkillItem('digital', index, newSkill);
-                      }}
-                      className="px-3 py-1 border rounded text-sm"
-                    >
-                      <option value="BASE">BASE</option>
-                      <option value="INTERMEDIO">INTERMEDIO</option>
-                      <option value="AVANZATO">AVANZATO</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={skill.numeric}
-                      onChange={(e) => {
-                        const newSkill = { ...skill, numeric: e.target.value };
-                        updateSkillItem('digital', index, newSkill);
-                      }}
-                      className="w-24 p-1 border rounded text-xs"
-                      placeholder="Livello 6/6"
-                    />
-                  </div>
+            <h4 className="font-semibold text-blue-800 mb-4">📊 Competenze Digitali</h4>
+            
+            {/* CAMPO GENERICO SEMPRE PRESENTE */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Descrizione Generale</label>
+              <textarea
+                value={cvData.skills.digital.genericContent}
+                onChange={(e) => updateDigitalSkills('genericContent', e.target.value)}
+                className="w-full p-3 border rounded-md h-24"
+                placeholder="Descrivi qui le tue competenze digitali generali, software utilizzati, piattaforme conosciute e livello di utilizzo..."
+              />
+            </div>
+
+            {/* TOGGLE DIGICOMPEU */}
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <label className="font-medium text-blue-800">Ho fatto il test DigiCompEU</label>
+                  <p className="text-sm text-blue-600">Aggiungi la griglia delle 5 competenze digitali europee</p>
                 </div>
-              ))}
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={cvData.skills.digital.useDigiCompEU}
+                    onChange={(e) => updateDigitalSkills('useDigiCompEU', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+              </div>
+              
+              {/* GRIGLIA DIGICOMPEU (CONDIZIONALE) */}
+              {cvData.skills.digital.useDigiCompEU && (
+                <div className="space-y-3">
+                  <p className="text-sm text-blue-700 mb-3">📋 Competenze DigiCompEU (Framework Europeo):</p>
+                  {cvData.skills.digital.digiCompItems.map((skill, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-white border rounded">
+                      <div className="flex-1 mr-4">
+                        <input
+                          type="text"
+                          value={skill.name}
+                          onChange={(e) => {
+                            const newItems = [...cvData.skills.digital.digiCompItems];
+                            newItems[index] = { ...skill, name: e.target.value };
+                            updateDigitalSkills('digiCompItems', newItems);
+                          }}
+                          className="w-full p-2 border rounded text-sm"
+                          placeholder="Nome competenza"
+                        />
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <select
+                          value={skill.level}
+                          onChange={(e) => {
+                            const newItems = [...cvData.skills.digital.digiCompItems];
+                            newItems[index] = { ...skill, level: e.target.value };
+                            updateDigitalSkills('digiCompItems', newItems);
+                          }}
+                          className="px-3 py-1 border rounded text-sm"
+                        >
+                          <option value="BASE">BASE</option>
+                          <option value="INTERMEDIO">INTERMEDIO</option>
+                          <option value="AVANZATO">AVANZATO</option>
+                        </select>
+                        <input
+                          type="text"
+                          value={skill.numeric}
+                          onChange={(e) => {
+                            const newItems = [...cvData.skills.digital.digiCompItems];
+                            newItems[index] = { ...skill, numeric: e.target.value };
+                            updateDigitalSkills('digiCompItems', newItems);
+                          }}
+                          className="w-24 p-1 border rounded text-xs"
+                          placeholder="Livello 6/6"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -1386,63 +1631,93 @@
             </div>
           </div>
 
+          {/* NUOVA SEZIONE LINGUE DINAMICHE */}
           <div className="bg-gray-50 border rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-4">Competenze Linguistiche</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">🇮🇹 Italiano</label>
-                <input
-                  type="text"
-                  value={cvData.skills.languages.italian}
-                  onChange={(e) => setCvData(prev => ({
-                    ...prev,
-                    skills: {
-                      ...prev.skills,
-                      languages: {
-                        ...prev.skills.languages,
-                        italian: e.target.value
-                      }
-                    }
-                  }))}
-                  className="w-full p-2 border rounded text-sm"
-                />
+            <h4 className="font-semibold text-blue-800 mb-4">🌍 Competenze Linguistiche</h4>
+            
+            {/* LINGUA MADRE SEMPRE PRESENTE */}
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <h5 className="font-medium text-green-800 mb-3">Lingua Madre</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Nome Lingua</label>
+                  <input
+                    type="text"
+                    value={cvData.skills.languages.motherTongue.name}
+                    onChange={(e) => updateMotherTongue('name', e.target.value)}
+                    className="w-full p-2 border rounded text-sm"
+                    placeholder="es. Italiano"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Livello</label>
+                  <input
+                    type="text"
+                    value={cvData.skills.languages.motherTongue.level}
+                    onChange={(e) => updateMotherTongue('level', e.target.value)}
+                    className="w-full p-2 border rounded text-sm"
+                    placeholder="es. Madrelingua"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">🇬🇧 Inglese</label>
-                <input
-                  type="text"
-                  value={cvData.skills.languages.english}
-                  onChange={(e) => setCvData(prev => ({
-                    ...prev,
-                    skills: {
-                      ...prev.skills,
-                      languages: {
-                        ...prev.skills.languages,
-                        english: e.target.value
-                      }
-                    }
-                  }))}
-                  className="w-full p-2 border rounded text-sm"
-                />
+            </div>
+
+            {/* ALTRE LINGUE DINAMICHE */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h5 className="font-medium text-blue-800">Altre Lingue</h5>
+                <button
+                  onClick={addOtherLanguage}
+                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center gap-1"
+                >
+                  ➕ Aggiungi Lingua
+                </button>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">🇫🇷 Francese</label>
-                <input
-                  type="text"
-                  value={cvData.skills.languages.french}
-                  onChange={(e) => setCvData(prev => ({
-                    ...prev,
-                    skills: {
-                      ...prev.skills,
-                      languages: {
-                        ...prev.skills.languages,
-                        french: e.target.value
-                      }
-                    }
-                  }))}
-                  className="w-full p-2 border rounded text-sm"
-                />
-              </div>
+              
+              {cvData.skills.languages.otherLanguages.length === 0 ? (
+                <div className="text-center py-6 text-gray-500 bg-white border-2 border-dashed border-gray-300 rounded-lg">
+                  <p>🌐 Nessuna lingua straniera aggiunta</p>
+                  <p className="text-sm">Clicca "Aggiungi Lingua" per iniziare</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {cvData.skills.languages.otherLanguages.map((lang) => (
+                    <div key={lang.id} className="p-4 bg-white border rounded-lg">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Nome Lingua</label>
+                          <input
+                            type="text"
+                            value={lang.name}
+                            onChange={(e) => updateOtherLanguage(lang.id, 'name', e.target.value)}
+                            className="w-full p-2 border rounded text-sm"
+                            placeholder="es. Inglese"
+                          />
+                        </div>
+                        <div className="flex items-end gap-2">
+                          <div className="flex-1">
+                            <label className="block text-sm font-medium mb-1">Livello</label>
+                            <input
+                              type="text"
+                              value={lang.level}
+                              onChange={(e) => updateOtherLanguage(lang.id, 'level', e.target.value)}
+                              className="w-full p-2 border rounded text-sm"
+                              placeholder="es. B2 Intermedio Superiore"
+                            />
+                          </div>
+                          <button
+                            onClick={() => deleteOtherLanguage(lang.id)}
+                            className="bg-red-500 text-white px-3 py-2 rounded text-sm hover:bg-red-600"
+                            title="Rimuovi lingua"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -2362,22 +2637,39 @@
               </div>
             </div>
 
+            {/* COMPETENZE DIGITALI FLESSIBILI */}
             <div className="work-item">
               <div className="item-header">{cvData.skills.digital.title}</div>
               <div style={{ paddingLeft: '5px' }}>
-                <div className="digital-skills-grid">
-                  {cvData.skills.digital.items.map((skill, index) => (
-                    <div key={index} className="skill-item">
-                      <div className="skill-details">
-                        <span className="skill-name">{skill.name}</span>
-                        <div className="skill-level">
-                          <span className="level-text">{skill.level}</span>
-                          <span className="level-numeric">{skill.numeric}</span>
+                
+                {/* Descrizione generica sempre presente */}
+                {cvData.skills.digital.genericContent && (
+                  <p style={{ textAlign: 'justify', marginBottom: '15px' }}>
+                    {linkifyText(cvData.skills.digital.genericContent)}
+                  </p>
+                )}
+                
+                {/* Griglia DigiCompEU solo se attivata */}
+                {cvData.skills.digital.useDigiCompEU && (
+                  <div>
+                    <h4 style={{ fontSize: '0.9em', fontWeight: 'bold', marginBottom: '10px', color: '#003d7a' }}>
+                      Competenze DigiCompEU (Framework Europeo):
+                    </h4>
+                    <div className="digital-skills-grid">
+                      {cvData.skills.digital.digiCompItems.map((skill, index) => (
+                        <div key={index} className="skill-item">
+                          <div className="skill-details">
+                            <span className="skill-name">{skill.name}</span>
+                            <div className="skill-level">
+                              <span className="level-text">{skill.level}</span>
+                              <span className="level-numeric">{skill.numeric}</span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -2393,17 +2685,31 @@
             </div>
           </section>
 
+          {/* COMPETENZE LINGUISTICHE DINAMICHE */}
           <section>
             <h2 className="section-title">Competenze Linguistiche</h2>
             <div className="skills-grid">
+              
+              {/* Lingua madre sempre presente */}
               <div className="skill-category">
                 <div className="skill-title">Madrelingua</div>
-                <div>🇮🇹 {cvData.skills.languages.italian}</div>
+                <div>🗣️ <strong>{cvData.skills.languages.motherTongue.name}</strong> - {cvData.skills.languages.motherTongue.level}</div>
               </div>
+              
+              {/* Altre lingue dinamiche */}
               <div className="skill-category">
                 <div className="skill-title">Altre lingue</div>
-                <div>🇬🇧 <strong>Inglese</strong> - {cvData.skills.languages.english}</div>
-                <div>🇫🇷 <strong>Francese</strong> - {cvData.skills.languages.french}</div>
+                {cvData.skills.languages.otherLanguages.length === 0 ? (
+                  <div style={{ fontStyle: 'italic', color: '#666' }}>
+                    Nessuna lingua straniera dichiarata
+                  </div>
+                ) : (
+                  cvData.skills.languages.otherLanguages.map((lang) => (
+                    <div key={lang.id}>
+                      🌍 <strong>{lang.name}</strong> - {lang.level}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </section>

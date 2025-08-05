@@ -47,6 +47,25 @@
         color: #0066cc !important;
         text-decoration: underline !important;
       }
+      
+      /* Nasconde header e footer del browser e aggiunge il nostro */
+      @page {
+        margin: 0.5in;
+        size: A4;
+        /* Rimuove header e footer del browser */
+        @top-left { content: ""; }
+        @top-center { content: ""; }
+        @top-right { content: ""; }
+        @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v2.0 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-right { content: ""; }
+      }
+      
+      /* Stile per stampa pulita */
+      html, body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
     }
     
     /* Custom Scrollbar */
@@ -2243,8 +2262,7 @@
           {/* Europass Header con Logo */}
           <div className="europass-header">
             <div className="europass-logo">
-              <span className="eu-flag">🇪🇺</span>
-              <span style={{ fontWeight: 'bold' }}>europass</span>
+              <EuropassLogo />
             </div>
           </div>
           
@@ -2258,10 +2276,11 @@
                 top: '0', 
                 right: '0', 
                 width: '120px', 
-                height: '160px',
-                borderRadius: '8px',
+                height: '120px',
+                borderRadius: '50%',
                 overflow: 'hidden',
-                border: '2px solid #ddd'
+                border: '3px solid #003d7a',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
               }}>
                 <img 
                   src={cvData.personalInfo.photo} 
@@ -2275,7 +2294,7 @@
               </div>
             )}
             <h1>{cvData.personalInfo.name}</h1>
-            <div className="personal-info-grid" style={{ marginRight: (cvData.personalInfo.photo && advancedSettings.showPhoto) ? '140px' : '0' }}>
+            <div className="personal-info-grid" style={{ marginRight: (cvData.personalInfo.photo && advancedSettings.showPhoto) ? '130px' : '0' }}>
               <div className="info-item"><strong>Nazionalità:</strong> {cvData.personalInfo.nationality}</div>
               <div className="info-item"><strong>Data di nascita:</strong> {cvData.personalInfo.birthDate}</div>
               <div className="info-item"><strong>Numero di telefono:</strong> {cvData.personalInfo.phone}</div>
@@ -2440,16 +2459,13 @@
             </section>
           )}
 
-          {/* Footer con info aggiornamento e copyright */}
+          {/* Footer con solo info aggiornamento */}
           <div className="cv-footer">
-            <div className="update-info">
+            <div className="update-info" style={{ textAlign: 'center' }}>
               <strong>CV aggiornato:</strong> {new Date(cvData.lastUpdated).toLocaleDateString('it-IT', { 
                 year: 'numeric', 
                 month: 'long' 
               })}
-            </div>
-            <div style={{ textAlign: 'center', marginTop: '10px', fontSize: '0.7em', color: '#999' }}>
-              Creato con CV PWA Editor v2.0 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita
             </div>
           </div>
         </div>

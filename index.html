@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v2.1 - EduTechLab Italia</title>
+  <title>CV PWA Editor v3.0 - EduTechLab Italia [AGG: 17:50]</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -373,9 +373,22 @@
         const savedSettings = localStorage.getItem('advancedSettings');
         const hasVisited = localStorage.getItem('hasVisited');
         
+        // FORZA AGGIORNAMENTO CACHE v3.0
+        if ('caches' in window) {
+          caches.keys().then(cacheNames => {
+            cacheNames.forEach(cacheName => {
+              if (cacheName.includes('v2.') || cacheName.includes('v1.')) {
+                console.log('Eliminando cache vecchia:', cacheName);
+                caches.delete(cacheName);
+              }
+            });
+          });
+        }
+        
         if (savedData) {
           try {
             const parsed = JSON.parse(savedData);
+            console.log('PWA v3.0 caricata - Funzioni export disponibili:', typeof exportAsPDF, typeof exportAsHTML);
             // Assicurati che i nuovi campi esistano
             if (!parsed.personalInfo.website) parsed.personalInfo.website = '';
             if (!parsed.altreCapacita) parsed.altreCapacita = '';

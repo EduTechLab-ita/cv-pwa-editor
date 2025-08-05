@@ -19,10 +19,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- LIBRERIE PER EXPORT AVANZATI -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   
   <style>
     /* Print Styles per PDF */
@@ -388,7 +384,7 @@
         if (savedData) {
           try {
             const parsed = JSON.parse(savedData);
-            console.log('PWA v3.0 caricata - Funzioni export disponibili:', typeof exportAsPDF, typeof exportAsHTML);
+            console.log('PWA v3.0 caricata e funzionante');
             // Assicurati che i nuovi campi esistano
             if (!parsed.personalInfo.website) parsed.personalInfo.website = '';
             if (!parsed.altreCapacita) parsed.altreCapacita = '';
@@ -945,72 +941,6 @@
         alert('✅ Backup esportato con successo! Conserva questo file per importare i tuoi dati in futuro.');
       };
 
-      // Export PDF programmatico
-      const exportAsPDF = async () => {
-        try {
-          const element = previewRef.current;
-          if (!element) {
-            alert('❌ Errore: CV preview non trovato. Assicurati che il CV sia visibile.');
-            return;
-          }
-
-          const canvas = await html2canvas(element, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff'
-          });
-
-          const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF('portrait', 'mm', 'a4');
-          
-          const imgData = canvas.toDataURL('image/png', 1.0);
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = pdf.internal.pageSize.getHeight();
-          const imgWidth = pdfWidth;
-          const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-          
-          pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-          
-          const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = 'cv-' + cvData.personalInfo.name.replace(/\s+/g, '-').toLowerCase() + '-' + timestamp;
-          pdf.save(fileName + '.pdf');
-          
-          alert('✅ PDF esportato con successo!');
-        } catch (error) {
-          console.error('Errore export PDF:', error);
-          alert('❌ Errore durante export PDF. Usa la stampa del browser come alternativa.');
-        }
-      };
-
-      // Export HTML standalone
-      const exportAsHTML = () => {
-        try {
-          const element = previewRef.current;
-          if (!element) {
-            alert('❌ Errore: CV preview non trovato. Assicurati che il CV sia visibile.');
-            return;
-          }
-
-          const htmlContent = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CV - ' + cvData.personalInfo.name + '</title><style>* { margin: 0; padding: 0; box-sizing: border-box; }body { font-family: "Segoe UI", sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }.cv-container { max-width: 800px; margin: 20px auto; background: white; padding: 40px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }</style></head><body><div class="cv-container">' + element.innerHTML + '</div></body></html>';
-          
-          const timestamp = new Date().toISOString().split('T')[0];
-          const fileName = 'cv-' + cvData.personalInfo.name.replace(/\s+/g, '-').toLowerCase() + '-' + timestamp;
-          const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-          
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = fileName + '.html';
-          link.click();
-          URL.revokeObjectURL(url);
-          
-          alert('✅ HTML esportato con successo! Aprilo nel browser per visualizzare o stampare.');
-        } catch (error) {
-          console.error('Errore export HTML:', error);
-          alert('❌ Errore durante export HTML.');
-        }
-      };
 
       const importData = (event) => {
         const file = event.target.files[0];
@@ -1908,25 +1838,13 @@
         const [activeSettingsTab, setActiveSettingsTab] = useState('export');
 
         const exportFormats = [
-          { id: 'pdf', name: 'PDF', icon: '📄', description: 'Documento avanzato (jsPDF)' },
-          { id: 'json', name: 'JSON', icon: '⚙️', description: 'Dati strutturati (backup)' },
-          { id: 'html', name: 'HTML', icon: '🌐', description: 'Pagina web standalone' },
-          { id: 'docx', name: 'Word', icon: '📝', description: 'Microsoft Word (in sviluppo)' }
+          { id: 'json', name: 'JSON', icon: '⚙️', description: 'Dati strutturati (backup)' }
         ];
 
         const handleExport = (format) => {
           switch (format) {
-            case 'pdf':
-              exportAsPDF();
-              break;
             case 'json':
               exportAsJSON();
-              break;
-            case 'html':
-              exportAsHTML();
-              break;
-            case 'docx':
-              alert('Funzione Word in sviluppo. Usa PDF o HTML per ora.');
               break;
             default:
               console.log('Formato non supportato:', format);
@@ -2030,13 +1948,9 @@
                       <span>Condividi CV</span>
                     </button>
 
-                    <button
-                      onClick={() => handleExport('pdf')}
-                      className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                    >
-                      <LucideIcon name="Download" size={16} />
-                      <span>Scarica PDF</span>
-                    </button>
+                    <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-md border border-blue-200">
+                      💡 <strong>Per salvare il PDF:</strong> Usa il pulsante verde "Stampa PDF" in alto a destra
+                    </div>
                   </div>
                 </div>
               </div>

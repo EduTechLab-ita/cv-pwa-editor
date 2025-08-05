@@ -935,12 +935,8 @@
       // Export PDF programmatico
       const exportAsPDF = async () => {
         try {
-          // Aspetta un po' per assicurarsi che il DOM sia renderizzato
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          const element = document.querySelector('.cv-preview');
+          const element = previewRef.current;
           if (!element) {
-            console.log('Elementi disponibili:', document.querySelectorAll('[class*="cv"]'));
             alert('❌ Errore: CV preview non trovato. Assicurati che il CV sia visibile.');
             return;
           }
@@ -977,9 +973,8 @@
       // Export HTML standalone
       const exportAsHTML = () => {
         try {
-          const element = document.querySelector('.cv-preview');
+          const element = previewRef.current;
           if (!element) {
-            console.log('Elementi disponibili:', document.querySelectorAll('[class*="cv"]'));
             alert('❌ Errore: CV preview non trovato. Assicurati che il CV sia visibile.');
             return;
           }
@@ -2466,6 +2461,16 @@
                 margin-top: 30px;
                 margin-bottom: 20px;
               }
+
+              .section-subtitle {
+                background: #0066cc;
+                color: white;
+                padding: 8px 16px;
+                margin: 20px 0 15px 0;
+                font-size: 1.1em;
+                font-weight: 500;
+                border-radius: 4px;
+              }
               
               .work-item {
                 margin-bottom: 25px;
@@ -2658,6 +2663,14 @@
                 text-transform: uppercase;
                 letter-spacing: 2px;
                 font-weight: 600;
+                border-bottom: none;
+              }
+
+              .modern-template .section-subtitle {
+                background: rgba(255,255,255,0.15);
+                border: 1px solid rgba(255,255,255,0.3);
+                color: #ffffff;
+                backdrop-filter: blur(5px);
               }
 
               .modern-template .personal-info h1 {
@@ -2782,7 +2795,7 @@
           </section>
 
           <section>
-            <h2 className="section-title">Competenze Digitali</h2>
+            <h2 className="section-title">Competenze Digitali e Linguistiche</h2>
             
             <div className={`work-item ${cvData.skills.ai.isNew ? 'new-highlight' : ''}`}>
               <div className="item-header">{cvData.skills.ai.title}</div>
@@ -2841,7 +2854,7 @@
 
           {/* COMPETENZE LINGUISTICHE DINAMICHE */}
           <section>
-            <h2 className="section-title">Competenze Linguistiche</h2>
+            <h3 className="section-subtitle">🌍 Lingue Conosciute</h3>
             <div className="skills-grid">
               
               {/* Lingua madre sempre presente */}

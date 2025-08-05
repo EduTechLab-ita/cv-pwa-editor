@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v3.0 - EduTechLab Italia [AGG: 17:50]</title>
+  <title>CV PWA Editor v4.2 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -245,6 +245,7 @@
       const [deferredPrompt, setDeferredPrompt] = useState(null);
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
+      const [showVersionBanner, setShowVersionBanner] = useState(false);
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
@@ -481,6 +482,16 @@
         if (!hasVisited) {
           setShowWelcome(true);
           localStorage.setItem('hasVisited', 'true');
+        }
+
+        // Controlla se mostrare banner aggiornamento versione
+        const currentVersion = '4.2';
+        const lastSeenVersion = localStorage.getItem('lastSeenVersion');
+        if (lastSeenVersion && lastSeenVersion !== currentVersion) {
+          setShowVersionBanner(true);
+          localStorage.setItem('lastSeenVersion', currentVersion);
+        } else if (!lastSeenVersion) {
+          localStorage.setItem('lastSeenVersion', currentVersion);
         }
       }, []);
 
@@ -2042,15 +2053,27 @@
                       </div>
                     </div>
                     
-                    <div className="p-6 border border-gray-200 rounded-lg opacity-50">
+                    <div 
+                      onClick={() => updateAdvancedSettings('templateStyle', 'modern')}
+                      className={`p-6 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                        advancedSettings.templateStyle === 'modern' 
+                          ? 'border-blue-500 bg-blue-50' 
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
                       <div className="flex items-center space-x-4">
                         <div className="text-4xl">✨</div>
                         <div className="flex-1">
                           <h5 className="font-semibold">Moderno</h5>
                           <p className="text-sm text-gray-600">Design pulito e contemporaneo</p>
-                          <span className="inline-block mt-2 text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                            🚧 In sviluppo
+                          <span className="inline-block mt-2 text-xs bg-green-100 text-green-600 px-2 py-1 rounded">
+                            ✅ Disponibile
                           </span>
+                          {advancedSettings.templateStyle === 'modern' && (
+                            <span className="block mt-2 text-xs text-blue-600 font-medium">
+                              ✓ Attivo
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -2886,6 +2909,24 @@
       return (
         <div className="min-h-screen bg-gray-100">
           <WelcomeModal />
+          
+          {/* Banner Aggiornamento Versione */}
+          {showVersionBanner && (
+            <div className="bg-green-500 text-white p-3 text-center shadow-lg relative">
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-lg">🎉</span>
+                <span className="font-medium">
+                  Aggiornato alla versione 4.2! Template moderno ora disponibile e UX migliorata
+                </span>
+                <button
+                  onClick={() => setShowVersionBanner(false)}
+                  className="ml-4 text-white hover:text-gray-200 font-bold text-xl"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
           
           {/* Indicatore pagine */}
           {activeTab === 'preview' && (

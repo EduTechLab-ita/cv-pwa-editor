@@ -2595,16 +2595,18 @@
 
               /* TEMPLATE MODERNO */
               .modern-template {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+                color: #1e293b;
                 font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+                border-left: 8px solid #3b82f6;
               }
 
               .modern-template .europass-header {
-                background: rgba(255,255,255,0.1);
+                background: linear-gradient(135deg, #3b82f6, #1e40af);
                 border-radius: 15px;
-                backdrop-filter: blur(10px);
                 margin-bottom: 30px;
+                color: white;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
               }
 
               .modern-template .cv-title {
@@ -2612,53 +2614,94 @@
                 font-weight: 300;
                 text-align: center;
                 margin: 30px 0;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                color: #1e40af;
+                text-shadow: none;
               }
 
               .modern-template .section-title {
-                color: #fff;
-                background: rgba(255,255,255,0.2);
+                color: white;
+                background: linear-gradient(135deg, #3b82f6, #1e40af);
                 padding: 15px 20px;
-                border-radius: 25px;
-                backdrop-filter: blur(5px);
+                border-radius: 8px;
                 margin: 30px 0 20px 0;
                 text-transform: uppercase;
-                letter-spacing: 2px;
+                letter-spacing: 1px;
                 font-weight: 600;
                 border-bottom: none;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
               }
 
               .modern-template .section-subtitle {
-                background: rgba(255,255,255,0.15);
-                border: 1px solid rgba(255,255,255,0.3);
-                color: #ffffff;
-                backdrop-filter: blur(5px);
+                background: linear-gradient(135deg, #6366f1, #4f46e5);
+                border: none;
+                color: white;
+                box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
               }
 
               .modern-template .personal-info h1 {
-                color: #fff;
+                color: #1e40af;
                 font-size: 2.5em;
-                font-weight: 300;
-                margin-bottom: 10px;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+                font-weight: 600;
+                margin-bottom: 15px;
+                text-shadow: none;
+              }
+
+              .modern-template .personal-info .info-item {
+                color: #475569;
+                background: rgba(255,255,255,0.7);
+                padding: 8px 12px;
+                margin: 4px 0;
+                border-radius: 6px;
+                border-left: 3px solid #3b82f6;
               }
 
               .modern-template .work-item,
               .modern-template .skill-item {
-                background: rgba(255,255,255,0.1);
-                border-radius: 15px;
+                background: rgba(255,255,255,0.9);
+                border-radius: 12px;
                 padding: 20px;
                 margin-bottom: 20px;
-                backdrop-filter: blur(5px);
-                border: 1px solid rgba(255,255,255,0.2);
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                color: #334155;
+              }
+
+              .modern-template .work-item h4,
+              .modern-template .work-item h5,
+              .modern-template .item-header,
+              .modern-template .item-subheader {
+                color: #1e293b;
+              }
+
+              .modern-template .date-range {
+                color: #3b82f6;
+                font-weight: 500;
+              }
+
+              .modern-template .skill-category {
+                background: rgba(255,255,255,0.9);
+                border: 1px solid #e2e8f0;
+                border-left: 4px solid #3b82f6;
+                color: #334155;
+              }
+
+              .modern-template .skill-title {
+                color: #1e293b;
+                font-weight: 600;
               }
 
               .modern-template .cv-footer {
-                background: rgba(255,255,255,0.1);
-                border-radius: 15px;
-                backdrop-filter: blur(5px);
+                background: rgba(255,255,255,0.9);
+                border-radius: 12px;
                 border-top: none;
-                color: rgba(255,255,255,0.8);
+                color: #475569;
+                border: 1px solid #e2e8f0;
+              }
+
+              .modern-template .privacy-section {
+                background: rgba(255,255,255,0.9);
+                border: 1px solid #e2e8f0;
+                color: #475569;
               }
             `
           }} />

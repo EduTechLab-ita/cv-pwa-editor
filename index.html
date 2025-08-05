@@ -254,7 +254,8 @@
       const [advancedSettings, setAdvancedSettings] = useState({
         showPhoto: true,
         dateFormat: 'italian',
-        privacyConsent: true
+        privacyConsent: true,
+        templateStyle: 'europass'
       });
 
       // Template iniziale PULITO per tutti gli utenti
@@ -934,9 +935,13 @@
       // Export PDF programmatico
       const exportAsPDF = async () => {
         try {
+          // Aspetta un po' per assicurarsi che il DOM sia renderizzato
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
           const element = document.querySelector('.cv-preview');
           if (!element) {
-            alert('❌ Errore: CV preview non trovato');
+            console.log('Elementi disponibili:', document.querySelectorAll('[class*="cv"]'));
+            alert('❌ Errore: CV preview non trovato. Assicurati che il CV sia visibile.');
             return;
           }
 
@@ -974,7 +979,8 @@
         try {
           const element = document.querySelector('.cv-preview');
           if (!element) {
-            alert('❌ Errore: CV preview non trovato');
+            console.log('Elementi disponibili:', document.querySelectorAll('[class*="cv"]'));
+            alert('❌ Errore: CV preview non trovato. Assicurati che il CV sia visibile.');
             return;
           }
 
@@ -2176,6 +2182,22 @@
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
+
+                    {/* Selezione Template */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="font-medium text-gray-700">Template CV</label>
+                        <p className="text-sm text-gray-500">Scegli lo stile del tuo CV</p>
+                      </div>
+                      <select 
+                        value={advancedSettings.templateStyle}
+                        onChange={(e) => updateAdvancedSettings('templateStyle', e.target.value)}
+                        className="border rounded-md px-3 py-1 text-sm"
+                      >
+                        <option value="europass">Europass Standard</option>
+                        <option value="modern">Moderno</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -2184,8 +2206,8 @@
                   <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                     <p><strong>Ultima Modifica:</strong> {new Date(cvData.lastUpdated).toLocaleString('it-IT')}</p>
                     <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
-                    <p><strong>Versione App:</strong> 2.0.0</p>
-                    <p><strong>Template:</strong> Europass Standard</p>
+                    <p><strong>Versione App:</strong> 2.8.0 Advanced</p>
+                    <p><strong>Template:</strong> {advancedSettings.templateStyle === 'modern' ? 'Moderno' : 'Europass Standard'}</p>
                   </div>
                 </div>
 
@@ -2347,7 +2369,7 @@
       );
 
       const CVPreview = () => (
-        <div ref={previewRef} className="cv-preview bg-white shadow-lg" style={{ minHeight: '297mm', width: '210mm', margin: '0 auto' }}>
+        <div ref={previewRef} className={`cv-preview bg-white shadow-lg ${advancedSettings.templateStyle === 'modern' ? 'modern-template' : ''}`} style={{ minHeight: '297mm', width: '210mm', margin: '0 auto' }}>
           <style dangerouslySetInnerHTML={{
             __html: `
               .cv-preview {
@@ -2602,6 +2624,66 @@
                   width: 100%;
                   padding: 20px;
                 }
+              }
+
+              /* TEMPLATE MODERNO */
+              .modern-template {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+              }
+
+              .modern-template .europass-header {
+                background: rgba(255,255,255,0.1);
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+                margin-bottom: 30px;
+              }
+
+              .modern-template .cv-title {
+                font-size: 3em;
+                font-weight: 300;
+                text-align: center;
+                margin: 30px 0;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+              }
+
+              .modern-template .section-title {
+                color: #fff;
+                background: rgba(255,255,255,0.2);
+                padding: 15px 20px;
+                border-radius: 25px;
+                backdrop-filter: blur(5px);
+                margin: 30px 0 20px 0;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-weight: 600;
+              }
+
+              .modern-template .personal-info h1 {
+                color: #fff;
+                font-size: 2.5em;
+                font-weight: 300;
+                margin-bottom: 10px;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+              }
+
+              .modern-template .work-item,
+              .modern-template .skill-item {
+                background: rgba(255,255,255,0.1);
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 20px;
+                backdrop-filter: blur(5px);
+                border: 1px solid rgba(255,255,255,0.2);
+              }
+
+              .modern-template .cv-footer {
+                background: rgba(255,255,255,0.1);
+                border-radius: 15px;
+                backdrop-filter: blur(5px);
+                border-top: none;
+                color: rgba(255,255,255,0.8);
               }
             `
           }} />

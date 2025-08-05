@@ -13,11 +13,11 @@
   
   <link rel="manifest" href="./manifest.json">
   
-  <!-- Favicon per compatibilità massima -->
-  <link rel="icon" type="image/png" sizes="32x32" href="./icon-192.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./icon-192.png">
-  <link rel="shortcut icon" href="./icon-192.png">
-  <link rel="apple-touch-icon" href="./icon-192.png">
+  <!-- Favicon con cache busting per aggiornamento immediato -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./icon-192.png?v=4.3">
+  <link rel="icon" type="image/png" sizes="16x16" href="./icon-192.png?v=4.3">
+  <link rel="shortcut icon" href="./icon-192.png?v=4.3">
+  <link rel="apple-touch-icon" href="./icon-192.png?v=4.3">
   
   <!-- Fallback SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcyIiBoZWlnaHQ9IjcyIiByeD0iMTYiIGZpbGw9IiMwMDNkN2EiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZmZmZmZmIj4KPHA+PHBhdGggZD0iTTIwLDE4SDRWNEgyME0yMCwySDRBMiwyIDAgMCwwIDIsNFYxOEEyLDIgMCAwLDAgNCwyMEgyMEEyLDIgMCAwLDAgMjIsMThWNEEyLDIgMCAwLDAgMjAsMlpNMTIsMTRMMTAuNSwxMi41TDcsMTZIMTdMMTMuNSwxMS41TDEyLDE0WiIgLz48L3A+Cjwvc3ZnPgo8L3N2Zz4K">
@@ -498,6 +498,16 @@
         if (lastSeenVersion && lastSeenVersion !== currentVersion) {
           setShowVersionBanner(true);
           localStorage.setItem('lastSeenVersion', currentVersion);
+          
+          // Reset template selection per nuove versioni
+          const currentSettings = JSON.parse(localStorage.getItem('advancedSettings') || '{}');
+          if (!currentSettings.templateStyle || currentSettings.templateStyle === undefined) {
+            setAdvancedSettings(prev => {
+              const resetSettings = { ...prev, templateStyle: 'europass' };
+              localStorage.setItem('advancedSettings', JSON.stringify(resetSettings));
+              return resetSettings;
+            });
+          }
         } else if (!lastSeenVersion) {
           localStorage.setItem('lastSeenVersion', currentVersion);
         }
@@ -2171,8 +2181,9 @@
                   <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                     <p><strong>Ultima Modifica:</strong> {new Date(cvData.lastUpdated).toLocaleString('it-IT')}</p>
                     <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
-                    <p><strong>Versione App:</strong> 2.8.0 Advanced</p>
+                    <p><strong>Versione App:</strong> v4.3.0</p>
                     <p><strong>Template:</strong> {advancedSettings.templateStyle === 'modern' ? 'Moderno' : 'Europass Standard'}</p>
+                    <p><strong>Debug Template:</strong> "{advancedSettings.templateStyle}"</p>
                   </div>
                 </div>
 

@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v4.3 - EduTechLab Italia</title>
+  <title>CV PWA Editor v4.4 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -66,7 +66,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v4.3 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v4.4 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -493,7 +493,7 @@
         }
 
         // Controlla se mostrare banner aggiornamento versione
-        const currentVersion = '4.3';
+        const currentVersion = '4.4';
         const lastSeenVersion = localStorage.getItem('lastSeenVersion');
         if (lastSeenVersion && lastSeenVersion !== currentVersion) {
           setShowVersionBanner(true);
@@ -965,7 +965,7 @@
           meta: {
             version: '2.0.0',
             exported: new Date().toISOString(),
-            app: 'CV PWA Editor v4.3',
+            app: 'CV PWA Editor v4.4',
             author: 'EduTechLab Italia - Fabio Rizzotto',
             copyright: '© 2025 EduTechLab Italia - App gratuita',
             website: 'https://edutechlab-ita.github.io/'
@@ -1141,7 +1141,7 @@
       const shareCV = async () => {
         const shareData = {
           title: `CV Europass di ${cvData.personalInfo.name}`,
-          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.3',
+          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.4',
           url: window.location.href
         };
         
@@ -2205,7 +2205,7 @@
                   <h4 className="font-semibold mb-4">Informazioni App</h4>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="text-center">
-                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.3</h5>
+                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.4</h5>
                       <p className="text-sm text-blue-700 mb-2">
                         Editor professionale per Curriculum Vitae Europass
                       </p>
@@ -2274,7 +2274,7 @@
             <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
               <div className="text-center">
                 <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.3!</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.4!</h2>
                 <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae Europass</p>
               </div>
               
@@ -2992,7 +2992,7 @@
               <div className="flex items-center justify-center space-x-2">
                 <span className="text-lg">🎉</span>
                 <span className="font-medium">
-                  Aggiornato alla versione 4.3! Template moderno perfettamente leggibile
+                  Aggiornato alla versione 4.4! Aggiunta firma sviluppatore nel menu
                 </span>
                 <button
                   onClick={() => setShowVersionBanner(false)}
@@ -3049,7 +3049,7 @@
                   <LucideIcon name="FileText" size={32} className="text-blue-600" />
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-                      <span>CV PWA Editor v4.3</span>
+                      <span>CV PWA Editor v4.4</span>
                       <EuropassLogo className="ml-2" />
                     </h1>
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -3165,6 +3165,14 @@
                         <p className="text-xs text-blue-700">
                           Template ufficiale Europass UE
                         </p>
+                        <div className="mt-2 pt-2 border-t border-blue-200">
+                          <p className="text-xs text-gray-600">
+                            💻 Sviluppato da <span className="font-semibold text-blue-800">Fabio Rizzotto</span>
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            EduTechLab Italia
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </nav>
@@ -3220,7 +3228,7 @@
   <noscript>
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
       <div style="text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.3</h1>
+        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.4</h1>
         <p style="color: #666; margin-bottom: 1rem;">Questa applicazione richiede JavaScript per funzionare.</p>
         <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV Europass.</p>
       </div>

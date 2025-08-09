@@ -685,14 +685,8 @@
           // Solo se ci sono dati CV nel localStorage
           const savedData = localStorage.getItem('cvData');
           if (savedData) {
-            const message = '⚠️ ATTENZIONE: I tuoi dati CV sono salvati SOLO in questo browser!\n\n' +
-                           '🔹 Per non perdere il tuo lavoro, ti consigliamo di fare un BACKUP:\n' +
-                           '   1. Vai in "Impostazioni" (icona ingranaggio ⚙️ nel menu a sinistra)\n' +
-                           '   2. Clicca su "Export & Condivisione"\n' +
-                           '   3. Clicca "Esporta Backup Completo"\n' +
-                           '   4. Salva il file .json in un posto sicuro\n\n' +
-                           '💾 I tuoi dati rimarranno disponibili solo finché non cancelli i dati del browser.\n\n' +
-                           'Vuoi uscire comunque?';
+            // Messaggio breve - i browser moderni ignorano messaggi lunghi per sicurezza
+            const message = 'I tuoi dati CV sono salvati solo in questo browser. Ricorda di esportare un backup dalle Impostazioni prima di uscire.';
             
             e.preventDefault();
             e.returnValue = message;
@@ -712,13 +706,17 @@
       };
 
 
-      // Salva automaticamente i dati E aggiorna timestamp
+      // Salva automaticamente i dati con debounce per evitare loop di re-render
       useEffect(() => {
-        const dataToSave = {
-          ...cvData,
-          lastUpdated: new Date().toISOString()
-        };
-        localStorage.setItem('cvData', JSON.stringify(dataToSave));
+        const timeoutId = setTimeout(() => {
+          const dataToSave = {
+            ...cvData,
+            lastUpdated: new Date().toISOString()
+          };
+          localStorage.setItem('cvData', JSON.stringify(dataToSave));
+        }, 500); // Debounce di 500ms
+
+        return () => clearTimeout(timeoutId);
       }, [cvData]);
 
       const updatePersonalInfo = (field, value) => {

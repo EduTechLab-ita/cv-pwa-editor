@@ -721,36 +721,48 @@
       // Funzioni Cookie Banner semplificate
       const acceptCookies = () => {
         try {
+          // Prima salva le preferenze
           localStorage.setItem('cookieConsent', 'accepted');
-          setShowCookieBanner(false);
           
-          // Verifica se mostrare welcome modal
-          const hasVisited = localStorage.getItem('hasVisited');
-          const currentVersion = '4.7';
-          const lastSeenVersion = localStorage.getItem('lastSeenVersion');
-          
-          if (!hasVisited) {
-            localStorage.setItem('hasVisited', 'true');
-            localStorage.setItem('lastSeenVersion', currentVersion);
-            setTimeout(() => setShowWelcome(true), 300);
-          } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
-            localStorage.setItem('lastSeenVersion', currentVersion);
-            setTimeout(() => setShowWelcome(true), 300);
-          }
+          // Poi nasconde il banner con un piccolo delay per evitare conflitti
+          setTimeout(() => {
+            setShowCookieBanner(false);
+            
+            // Verifica se mostrare welcome modal
+            try {
+              const hasVisited = localStorage.getItem('hasVisited');
+              const currentVersion = '4.7';
+              const lastSeenVersion = localStorage.getItem('lastSeenVersion');
+              
+              if (!hasVisited) {
+                localStorage.setItem('hasVisited', 'true');
+                localStorage.setItem('lastSeenVersion', currentVersion);
+                setTimeout(() => setShowWelcome(true), 500);
+              } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
+                localStorage.setItem('lastSeenVersion', currentVersion);
+                setTimeout(() => setShowWelcome(true), 500);
+              }
+            } catch (welcomeError) {
+              console.log('Welcome modal non disponibile:', welcomeError);
+            }
+          }, 100);
           
         } catch (error) {
           console.error('Errore accettazione cookie:', error);
-          setShowCookieBanner(false);
+          setTimeout(() => setShowCookieBanner(false), 100);
         }
       };
 
       const rejectCookies = () => {
         try {
           localStorage.setItem('cookieConsent', 'rejected');
-          setShowCookieBanner(false);
+          // Delay per evitare conflitti di rendering
+          setTimeout(() => {
+            setShowCookieBanner(false);
+          }, 100);
         } catch (error) {
           console.error('Errore rifiuto cookie:', error);
-          setShowCookieBanner(false);
+          setTimeout(() => setShowCookieBanner(false), 100);
         }
       };
 

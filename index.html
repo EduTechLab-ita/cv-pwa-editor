@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v4.5 - EduTechLab Italia</title>
+  <title>CV PWA Editor v4.6 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -66,7 +66,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v4.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v4.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -496,7 +496,7 @@
         }
 
         // Controlla se mostrare banner aggiornamento versione
-        const currentVersion = '4.5';
+        const currentVersion = '4.6';
         const lastSeenVersion = localStorage.getItem('lastSeenVersion');
         if (lastSeenVersion && lastSeenVersion !== currentVersion) {
           setShowVersionBanner(true);
@@ -1004,7 +1004,7 @@
           meta: {
             version: '2.0.0',
             exported: new Date().toISOString(),
-            app: 'CV PWA Editor v4.5',
+            app: 'CV PWA Editor v4.6',
             author: 'EduTechLab Italia - Fabio Rizzotto',
             copyright: '© 2025 EduTechLab Italia - App gratuita',
             website: 'https://edutechlab-ita.github.io/'
@@ -2252,7 +2252,7 @@
                         <div className="text-4xl">🇪🇺</div>
                         <div className="flex-1">
                           <h5 className="font-semibold">Europass Standard</h5>
-                          <p className="text-sm text-gray-600">Template ufficiale Europass EU</p>
+                          <p className="text-sm text-gray-600">Template Europass EU</p>
                           <span className={`inline-block mt-2 text-xs px-2 py-1 rounded ${
                             advancedSettings.templateStyle === 'europass'
                               ? 'bg-blue-100 text-blue-800'
@@ -3397,7 +3397,7 @@
                       <div className="text-center">
                         <EuropassLogo className="justify-center mb-2" />
                         <p className="text-xs text-blue-700">
-                          Template ufficiale Europass UE
+                          Template Europass UE
                         </p>
                         <div className="mt-2 pt-2 border-t border-blue-200">
                           <p className="text-xs text-gray-600">

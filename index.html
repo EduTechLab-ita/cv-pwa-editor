@@ -259,12 +259,8 @@
       const [hasUpdate, setHasUpdate] = useState(false);
       const [showUpdateBanner, setShowUpdateBanner] = useState(false);
       
-      // Sistema di gestione sequenza banner
-      const [bannerSequence, setBannerSequence] = useState({
-        current: 'none', // 'update', 'install', 'cookie', 'welcome', 'none'
-        queue: [],
-        processing: false
-      });
+      // Stati semplificati per banner individuali
+      // Rimossa la logica complessa di sequenza che causava errori
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
@@ -501,35 +497,25 @@
           }
         }
 
-        // Sistema di gestione sequenza banner migliorata
+        // Sistema banner semplificato senza sequenza complessa
         const currentVersion = '4.7';
         const lastSeenVersion = localStorage.getItem('lastSeenVersion');
         const cookieConsent = localStorage.getItem('cookieConsent');
         
-        // Costruisci la sequenza dei banner in base alle condizioni
-        const bannersToShow = [];
-        
-        // 1. Banner cookie (solo se necessario)
+        // Banner cookie (mostra immediatamente se necessario)
         if (!cookieConsent) {
-          bannersToShow.push('cookie');
+          setShowCookieBanner(true);
         }
         
-        // 2. Banner installazione PWA (solo se app non installata e prompt disponibile)
-        // Verrà aggiunto dinamicamente quando disponibile
-        
-        // 3. Modal benvenuto (solo dopo cookie e se necessario)
+        // Modal benvenuto (mostra solo se cookie già accettati)
         if (cookieConsent) {
           if (!hasVisited) {
-            bannersToShow.push('welcome');
+            // Piccolo delay per evitare conflitti con cookie banner
+            setTimeout(() => setShowWelcome(true), 500);
             localStorage.setItem('hasVisited', 'true');
             localStorage.setItem('lastSeenVersion', currentVersion);
           } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
-            // Mostra modal benvenuto per versioni importanti (4.7 ha nuove funzionalità)
-            if (currentVersion === '4.7') {
-              bannersToShow.push('welcome');
-            } else {
-              bannersToShow.push('welcome'); // Cambiato da setShowVersionBanner per usare modal uniforme
-            }
+            setTimeout(() => setShowWelcome(true), 500);
             localStorage.setItem('lastSeenVersion', currentVersion);
             
             // Reset template selection per nuove versioni
@@ -544,14 +530,6 @@
           } else if (!lastSeenVersion) {
             localStorage.setItem('lastSeenVersion', currentVersion);
           }
-        }
-        
-        // Aggiungi i banner alla sequenza
-        if (bannersToShow.length > 0) {
-          setBannerSequence(prev => ({
-            ...prev,
-            queue: [...prev.queue, ...bannersToShow]
-          }));
         }
       }, []);
 
@@ -609,10 +587,7 @@
                     
                     // Invece di aggiornare automaticamente, mostra il banner
                     setHasUpdate(true);
-                    setBannerSequence(prev => ({
-                      ...prev,
-                      queue: prev.queue.includes('update') ? prev.queue : ['update', ...prev.queue]
-                    }));
+                    setShowUpdateBanner(true);
                   }
                 });
               }
@@ -686,50 +661,24 @@
         return () => window.removeEventListener('load', handleLoad);
       }, []);
 
-      // Effect per processare la sequenza dei banner
-      useEffect(() => {
-        if (!bannerSequence.processing && bannerSequence.queue.length > 0) {
-          const timer = setTimeout(() => {
-            processNextBanner();
-          }, 300);
-          
-          return () => clearTimeout(timer);
-        }
-      }, [bannerSequence.queue, bannerSequence.processing]);
-
-      // Debug per monitorare la sequenza banner
-      useEffect(() => {
-        if (bannerSequence.queue.length > 0 || bannerSequence.current !== 'none') {
-          console.log('🎯 Banner Sequence State:', {
-            current: bannerSequence.current,
-            queue: bannerSequence.queue,
-            processing: bannerSequence.processing
-          });
-        }
-      }, [bannerSequence]);
+      // Effect rimosso - niente più logica di sequenza complessa
 
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
+          // Rimosso e.preventDefault() che causava errori
           setDeferredPrompt(e);
           
-          // Aggiungi banner installazione alla sequenza solo se non è già installata
+          // Mostra banner installazione direttamente se app non installata
           if (!isInstalled) {
-            setBannerSequence(prev => ({
-              ...prev,
-              queue: prev.queue.includes('install') ? prev.queue : [...prev.queue, 'install']
-            }));
+            // Delay per evitare conflitti con altri banner
+            setTimeout(() => setShowInstallPrompt(true), 1000);
           }
         });
 
         window.addEventListener('appinstalled', () => {
           setIsInstalled(true);
           setDeferredPrompt(null);
-          
-          // Se il banner installazione è attualmente mostrato, completalo
-          if (bannerSequence.current === 'install') {
-            completeBanner('install');
-          }
+          setShowInstallPrompt(false);
         });
 
         // Banner promemoria backup alla chiusura
@@ -760,60 +709,49 @@
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
-          console.log('Install prompt result:', outcome);
           setDeferredPrompt(null);
-          
-          // Completa il banner indipendentemente dal risultato
-          completeBanner('install');
+          setShowInstallPrompt(false);
         }
       };
 
       const dismissInstallPWA = () => {
-        // Nascondi il prompt per questa sessione
         setDeferredPrompt(null);
-        completeBanner('install');
+        setShowInstallPrompt(false);
       };
 
-      // Funzioni Cookie Banner
+      // Funzioni Cookie Banner semplificate
       const acceptCookies = () => {
         try {
-          // Prima imposta il consenso
           localStorage.setItem('cookieConsent', 'accepted');
+          setShowCookieBanner(false);
           
-          // Ottieni i dati necessari prima di modificare gli stati
+          // Verifica se mostrare welcome modal
           const hasVisited = localStorage.getItem('hasVisited');
           const currentVersion = '4.7';
           const lastSeenVersion = localStorage.getItem('lastSeenVersion');
           
-          // Completa il banner cookie
-          completeBanner('cookie');
-          
-          // Aggiungi welcome modal alla sequenza se necessario
           if (!hasVisited) {
             localStorage.setItem('hasVisited', 'true');
             localStorage.setItem('lastSeenVersion', currentVersion);
-            addToSequence('welcome');
+            setTimeout(() => setShowWelcome(true), 300);
           } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
             localStorage.setItem('lastSeenVersion', currentVersion);
-            addToSequence('welcome');
+            setTimeout(() => setShowWelcome(true), 300);
           }
           
         } catch (error) {
-          console.error('Errore nell\'accettazione dei cookie:', error);
-          // In caso di errore, completa comunque il banner
-          completeBanner('cookie');
+          console.error('Errore accettazione cookie:', error);
+          setShowCookieBanner(false);
         }
       };
 
       const rejectCookies = () => {
         try {
           localStorage.setItem('cookieConsent', 'rejected');
-          // Completa il banner cookie senza aggiungere altri banner
-          completeBanner('cookie');
+          setShowCookieBanner(false);
         } catch (error) {
-          console.error('Errore nel rifiuto dei cookie:', error);
-          // In caso di errore, completa comunque il banner
-          completeBanner('cookie');
+          console.error('Errore rifiuto cookie:', error);
+          setShowCookieBanner(false);
         }
       };
 
@@ -821,79 +759,8 @@
         setShowCookieInfo(!showCookieInfo);
       };
 
-      // Sistema di gestione sequenza banner migliorata
-      const addToSequence = (bannerType) => {
-        setBannerSequence(prev => {
-          if (!prev.queue.includes(bannerType)) {
-            return {
-              ...prev,
-              queue: [...prev.queue, bannerType]
-            };
-          }
-          return prev;
-        });
-      };
-
-      const processNextBanner = () => {
-        setBannerSequence(prev => {
-          if (prev.processing || prev.queue.length === 0) return prev;
-          
-          const nextBanner = prev.queue[0];
-          const remainingQueue = prev.queue.slice(1);
-          
-          // Mostra il banner appropriato
-          switch (nextBanner) {
-            case 'update':
-              setShowUpdateBanner(true);
-              break;
-            case 'install':
-              setShowInstallPrompt(true);
-              break;
-            case 'cookie':
-              setShowCookieBanner(true);
-              break;
-            case 'welcome':
-              setShowWelcome(true);
-              break;
-          }
-          
-          return {
-            current: nextBanner,
-            queue: remainingQueue,
-            processing: true
-          };
-        });
-      };
-
-      const completeBanner = (bannerType) => {
-        // Nascondi il banner corrente
-        switch (bannerType) {
-          case 'update':
-            setShowUpdateBanner(false);
-            break;
-          case 'install':
-            setShowInstallPrompt(false);
-            break;
-          case 'cookie':
-            setShowCookieBanner(false);
-            break;
-          case 'welcome':
-            setShowWelcome(false);
-            break;
-        }
-        
-        // Passa al prossimo banner con un piccolo delay
-        setTimeout(() => {
-          setBannerSequence(prev => ({
-            ...prev,
-            current: 'none',
-            processing: false
-          }));
-          
-          // Processa il prossimo banner nella coda
-          setTimeout(processNextBanner, 100);
-        }, 100);
-      };
+      // Sistema banner semplificato - niente più sequenze complesse
+      // I banner ora si gestiscono in modo indipendente
 
 
       // Salva automaticamente i dati E aggiorna timestamp
@@ -2859,14 +2726,14 @@
               
               <div className="flex space-x-3">
                 <button
-                  onClick={() => completeBanner('welcome')}
+                  onClick={() => setShowWelcome(false)}
                   className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
                 >
                   Chiudi
                 </button>
                 <button
                   onClick={() => {
-                    completeBanner('welcome');
+                    setShowWelcome(false);
                     setEditingSection('personalInfo');
                   }}
                   className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
@@ -3686,7 +3553,7 @@
                     Aggiorna
                   </button>
                   <button
-                    onClick={() => completeBanner('update')}
+                    onClick={() => setShowUpdateBanner(false)}
                     className="text-white hover:bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold"
                   >
                     ×
@@ -3705,7 +3572,7 @@
                   Aggiornato alla versione 4.7! Fix dialog uscita, icona cookie e sistema aiuto
                 </span>
                 <button
-                  onClick={() => completeBanner('version')}
+                  onClick={() => setShowVersionBanner(false)}
                   className="ml-4 text-white hover:text-gray-200 font-bold text-xl"
                 >
                   ×

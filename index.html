@@ -525,7 +525,6 @@
         }
 
         // Controlla se mostrare cookie banner (solo al primo accesso)
-        const cookieConsent = localStorage.getItem('cookieConsent');
         if (!cookieConsent) {
           setShowCookieBanner(true);
         }

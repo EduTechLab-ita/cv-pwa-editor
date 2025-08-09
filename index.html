@@ -256,6 +256,15 @@
       const [showVersionBanner, setShowVersionBanner] = useState(false);
       const [showCookieBanner, setShowCookieBanner] = useState(false);
       const [showCookieInfo, setShowCookieInfo] = useState(false);
+      const [hasUpdate, setHasUpdate] = useState(false);
+      const [showUpdateBanner, setShowUpdateBanner] = useState(false);
+      
+      // Sistema di gestione sequenza banner
+      const [bannerSequence, setBannerSequence] = useState({
+        current: 'none', // 'update', 'install', 'cookie', 'welcome', 'none'
+        queue: [],
+        processing: false
+      });
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
@@ -492,41 +501,57 @@
           }
         }
 
-        // Controlla se mostrare banner aggiornamento versione o modal benvenuto
+        // Sistema di gestione sequenza banner migliorata
         const currentVersion = '4.7';
         const lastSeenVersion = localStorage.getItem('lastSeenVersion');
         const cookieConsent = localStorage.getItem('cookieConsent');
         
-        // Mostra welcome modal solo se i cookie sono già stati accettati o è primo accesso senza cookies
-        if (!hasVisited && cookieConsent) {
-          setShowWelcome(true);
-          localStorage.setItem('hasVisited', 'true');
-          localStorage.setItem('lastSeenVersion', currentVersion);
-        } else if (lastSeenVersion && lastSeenVersion !== currentVersion && cookieConsent) {
-          // Mostra modal benvenuto per versioni importanti (4.7 ha nuove funzionalità)
-          if (currentVersion === '4.7') {
-            setShowWelcome(true);
-          } else {
-            setShowVersionBanner(true);
-          }
-          localStorage.setItem('lastSeenVersion', currentVersion);
-          
-          // Reset template selection per nuove versioni
-          const currentSettings = JSON.parse(localStorage.getItem('advancedSettings') || '{}');
-          if (!currentSettings.templateStyle || currentSettings.templateStyle === undefined) {
-            setAdvancedSettings(prev => {
-              const resetSettings = { ...prev, templateStyle: 'europass' };
-              localStorage.setItem('advancedSettings', JSON.stringify(resetSettings));
-              return resetSettings;
-            });
-          }
-        } else if (!lastSeenVersion) {
-          localStorage.setItem('lastSeenVersion', currentVersion);
-        }
-
-        // Controlla se mostrare cookie banner (solo al primo accesso)
+        // Costruisci la sequenza dei banner in base alle condizioni
+        const bannersToShow = [];
+        
+        // 1. Banner cookie (solo se necessario)
         if (!cookieConsent) {
-          setShowCookieBanner(true);
+          bannersToShow.push('cookie');
+        }
+        
+        // 2. Banner installazione PWA (solo se app non installata e prompt disponibile)
+        // Verrà aggiunto dinamicamente quando disponibile
+        
+        // 3. Modal benvenuto (solo dopo cookie e se necessario)
+        if (cookieConsent) {
+          if (!hasVisited) {
+            bannersToShow.push('welcome');
+            localStorage.setItem('hasVisited', 'true');
+            localStorage.setItem('lastSeenVersion', currentVersion);
+          } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
+            // Mostra modal benvenuto per versioni importanti (4.7 ha nuove funzionalità)
+            if (currentVersion === '4.7') {
+              bannersToShow.push('welcome');
+            } else {
+              bannersToShow.push('welcome'); // Cambiato da setShowVersionBanner per usare modal uniforme
+            }
+            localStorage.setItem('lastSeenVersion', currentVersion);
+            
+            // Reset template selection per nuove versioni
+            const currentSettings = JSON.parse(localStorage.getItem('advancedSettings') || '{}');
+            if (!currentSettings.templateStyle || currentSettings.templateStyle === undefined) {
+              setAdvancedSettings(prev => {
+                const resetSettings = { ...prev, templateStyle: 'europass' };
+                localStorage.setItem('advancedSettings', JSON.stringify(resetSettings));
+                return resetSettings;
+              });
+            }
+          } else if (!lastSeenVersion) {
+            localStorage.setItem('lastSeenVersion', currentVersion);
+          }
+        }
+        
+        // Aggiungi i banner alla sequenza
+        if (bannersToShow.length > 0) {
+          setBannerSequence(prev => ({
+            ...prev,
+            queue: [...prev.queue, ...bannersToShow]
+          }));
         }
       }, []);
 
@@ -580,17 +605,14 @@
               if (newWorker) {
                 newWorker.addEventListener('statechange', () => {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    console.log('🔄 Nuovo aggiornamento disponibile, applicando automaticamente...');
+                    console.log('🔄 Nuovo aggiornamento disponibile');
                     
-                    // AGGIORNAMENTO AUTOMATICO SILENZIOSO
-                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                    
-                    // Piccolo delay e poi reload con notifica
-                    setTimeout(() => {
-                      // Salva in sessionStorage che c'è stato un aggiornamento
-                      sessionStorage.setItem('appUpdated', 'true');
-                      window.location.reload();
-                    }, 100);
+                    // Invece di aggiornare automaticamente, mostra il banner
+                    setHasUpdate(true);
+                    setBannerSequence(prev => ({
+                      ...prev,
+                      queue: prev.queue.includes('update') ? prev.queue : ['update', ...prev.queue]
+                    }));
                   }
                 });
               }
@@ -664,17 +686,50 @@
         return () => window.removeEventListener('load', handleLoad);
       }, []);
 
+      // Effect per processare la sequenza dei banner
+      useEffect(() => {
+        if (!bannerSequence.processing && bannerSequence.queue.length > 0) {
+          const timer = setTimeout(() => {
+            processNextBanner();
+          }, 300);
+          
+          return () => clearTimeout(timer);
+        }
+      }, [bannerSequence.queue, bannerSequence.processing]);
+
+      // Debug per monitorare la sequenza banner
+      useEffect(() => {
+        if (bannerSequence.queue.length > 0 || bannerSequence.current !== 'none') {
+          console.log('🎯 Banner Sequence State:', {
+            current: bannerSequence.current,
+            queue: bannerSequence.queue,
+            processing: bannerSequence.processing
+          });
+        }
+      }, [bannerSequence]);
+
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           setDeferredPrompt(e);
-          setShowInstallPrompt(true);
+          
+          // Aggiungi banner installazione alla sequenza solo se non è già installata
+          if (!isInstalled) {
+            setBannerSequence(prev => ({
+              ...prev,
+              queue: prev.queue.includes('install') ? prev.queue : [...prev.queue, 'install']
+            }));
+          }
         });
 
         window.addEventListener('appinstalled', () => {
           setIsInstalled(true);
-          setShowInstallPrompt(false);
           setDeferredPrompt(null);
+          
+          // Se il banner installazione è attualmente mostrato, completalo
+          if (bannerSequence.current === 'install') {
+            completeBanner('install');
+          }
         });
 
         // Banner promemoria backup alla chiusura
@@ -707,42 +762,137 @@
           const { outcome } = await deferredPrompt.userChoice;
           console.log('Install prompt result:', outcome);
           setDeferredPrompt(null);
-          setShowInstallPrompt(false);
+          
+          // Completa il banner indipendentemente dal risultato
+          completeBanner('install');
         }
+      };
+
+      const dismissInstallPWA = () => {
+        // Nascondi il prompt per questa sessione
+        setDeferredPrompt(null);
+        completeBanner('install');
       };
 
       // Funzioni Cookie Banner
       const acceptCookies = () => {
-        localStorage.setItem('cookieConsent', 'accepted');
-        setShowCookieBanner(false);
-        
-        // Dopo aver accettato i cookie, controlla se mostrare welcome modal
-        const hasVisited = localStorage.getItem('hasVisited');
-        const currentVersion = '4.7';
-        const lastSeenVersion = localStorage.getItem('lastSeenVersion');
-        
-        if (!hasVisited) {
-          setShowWelcome(true);
-          localStorage.setItem('hasVisited', 'true');
-          localStorage.setItem('lastSeenVersion', currentVersion);
-        } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
-          // Mostra modal benvenuto per versioni importanti (4.7 ha nuove funzionalità)
-          if (currentVersion === '4.7') {
-            setShowWelcome(true);
-          } else {
-            setShowVersionBanner(true);
+        try {
+          // Prima imposta il consenso
+          localStorage.setItem('cookieConsent', 'accepted');
+          
+          // Ottieni i dati necessari prima di modificare gli stati
+          const hasVisited = localStorage.getItem('hasVisited');
+          const currentVersion = '4.7';
+          const lastSeenVersion = localStorage.getItem('lastSeenVersion');
+          
+          // Completa il banner cookie
+          completeBanner('cookie');
+          
+          // Aggiungi welcome modal alla sequenza se necessario
+          if (!hasVisited) {
+            localStorage.setItem('hasVisited', 'true');
+            localStorage.setItem('lastSeenVersion', currentVersion);
+            addToSequence('welcome');
+          } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
+            localStorage.setItem('lastSeenVersion', currentVersion);
+            addToSequence('welcome');
           }
-          localStorage.setItem('lastSeenVersion', currentVersion);
+          
+        } catch (error) {
+          console.error('Errore nell\'accettazione dei cookie:', error);
+          // In caso di errore, completa comunque il banner
+          completeBanner('cookie');
         }
       };
 
       const rejectCookies = () => {
-        localStorage.setItem('cookieConsent', 'rejected');
-        setShowCookieBanner(false);
+        try {
+          localStorage.setItem('cookieConsent', 'rejected');
+          // Completa il banner cookie senza aggiungere altri banner
+          completeBanner('cookie');
+        } catch (error) {
+          console.error('Errore nel rifiuto dei cookie:', error);
+          // In caso di errore, completa comunque il banner
+          completeBanner('cookie');
+        }
       };
 
       const toggleCookieInfo = () => {
         setShowCookieInfo(!showCookieInfo);
+      };
+
+      // Sistema di gestione sequenza banner migliorata
+      const addToSequence = (bannerType) => {
+        setBannerSequence(prev => {
+          if (!prev.queue.includes(bannerType)) {
+            return {
+              ...prev,
+              queue: [...prev.queue, bannerType]
+            };
+          }
+          return prev;
+        });
+      };
+
+      const processNextBanner = () => {
+        setBannerSequence(prev => {
+          if (prev.processing || prev.queue.length === 0) return prev;
+          
+          const nextBanner = prev.queue[0];
+          const remainingQueue = prev.queue.slice(1);
+          
+          // Mostra il banner appropriato
+          switch (nextBanner) {
+            case 'update':
+              setShowUpdateBanner(true);
+              break;
+            case 'install':
+              setShowInstallPrompt(true);
+              break;
+            case 'cookie':
+              setShowCookieBanner(true);
+              break;
+            case 'welcome':
+              setShowWelcome(true);
+              break;
+          }
+          
+          return {
+            current: nextBanner,
+            queue: remainingQueue,
+            processing: true
+          };
+        });
+      };
+
+      const completeBanner = (bannerType) => {
+        // Nascondi il banner corrente
+        switch (bannerType) {
+          case 'update':
+            setShowUpdateBanner(false);
+            break;
+          case 'install':
+            setShowInstallPrompt(false);
+            break;
+          case 'cookie':
+            setShowCookieBanner(false);
+            break;
+          case 'welcome':
+            setShowWelcome(false);
+            break;
+        }
+        
+        // Passa al prossimo banner con un piccolo delay
+        setTimeout(() => {
+          setBannerSequence(prev => ({
+            ...prev,
+            current: 'none',
+            processing: false
+          }));
+          
+          // Processa il prossimo banner nella coda
+          setTimeout(processNextBanner, 100);
+        }, 100);
       };
 
 
@@ -2590,25 +2740,16 @@
                   </ul>
                 </div>
 
-                <div className="text-center space-y-2">
-                  <h5 className="font-medium text-gray-800">📄 Documenti ufficiali:</h5>
-                  <div className="space-x-4">
-                    <a 
-                      href="https://edutechlab-ita.github.io/privacy-policy" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm underline"
-                    >
-                      Privacy Policy completa
-                    </a>
-                    <a 
-                      href="https://edutechlab-ita.github.io/cookie-policy" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800 text-sm underline"
-                    >
-                      Cookie Policy
-                    </a>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <h5 className="font-medium text-gray-800 mb-2">📄 Informativa Privacy e Cookie completa:</h5>
+                  <div className="text-sm text-gray-600 space-y-2">
+                    <p><strong>Titolare del trattamento:</strong> CV PWA Editor - App locale</p>
+                    <p><strong>Tipologia dati raccolti:</strong> Solo dati CV salvati in localStorage (non trasmessi)</p>
+                    <p><strong>Finalità:</strong> Creazione e editing CV in modalità offline</p>
+                    <p><strong>Base giuridica:</strong> Consenso dell'utente e interesse legittimo per funzionamento app</p>
+                    <p><strong>Conservazione:</strong> Solo nel browser locale, eliminabili cancellando dati browser</p>
+                    <p><strong>Diritti:</strong> Cancellazione dati tramite browser o reset app</p>
+                    <p><strong>Sicurezza:</strong> Dati mai trasmessi, app funziona offline, open source</p>
                   </div>
                 </div>
               </div>
@@ -2644,7 +2785,7 @@
                   </p>
                   <p className="text-xs text-gray-500">
                     I tuoi dati CV rimangono sempre nel tuo browser e non vengono mai trasmessi a server esterni. 
-                    <a href="https://edutechlab-ita.github.io/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Privacy Policy completa</a>
+                    <button onClick={() => setShowCookieInfo(true)} className="text-blue-600 underline hover:text-blue-800">Privacy Policy completa</button>
                   </p>
                 </div>
                 <div className="flex space-x-3">
@@ -2718,14 +2859,14 @@
               
               <div className="flex space-x-3">
                 <button
-                  onClick={() => setShowWelcome(false)}
+                  onClick={() => completeBanner('welcome')}
                   className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
                 >
                   Chiudi
                 </button>
                 <button
                   onClick={() => {
-                    setShowWelcome(false);
+                    completeBanner('welcome');
                     setEditingSection('personalInfo');
                   }}
                   className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
@@ -2814,32 +2955,16 @@
 
                       <div className="text-center">
                         <div className="space-y-2">
-                          <h6 className="font-medium text-gray-800">📄 Documenti ufficiali:</h6>
+                          <h6 className="font-medium text-gray-800">📄 Informazioni legali:</h6>
                           <div className="space-x-4">
-                            <a 
-                              href="https://edutechlab-ita.github.io/privacy-policy" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
+                            <button
+                              onClick={() => setShowCookieInfo(true)}
                               className="text-blue-600 hover:text-blue-800 text-sm underline"
                             >
-                              Privacy Policy completa
-                            </a>
-                            <a 
-                              href="https://edutechlab-ita.github.io/cookie-policy" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-sm underline"
-                            >
-                              Cookie Policy
-                            </a>
-                            <a 
-                              href="https://edutechlab-ita.github.io/terms" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 text-sm underline"
-                            >
-                              Termini di servizio
-                            </a>
+                              Privacy e Cookie Policy
+                            </button>
+                            <span className="text-gray-400 text-sm">|</span>
+                            <span className="text-gray-600 text-sm">App locale - Nessun servizio esterno</span>
                           </div>
                         </div>
                       </div>
@@ -3530,6 +3655,47 @@
           <CookieBanner />
           <CookieInfoModal />
           
+          {/* Banner Aggiornamento App */}
+          {showUpdateBanner && hasUpdate && (
+            <div className="bg-blue-500 text-white p-3 text-center shadow-lg relative" style={{zIndex: 55}}>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-lg">🔄</span>
+                <span className="font-medium">
+                  Nuovo aggiornamento disponibile! Clicca per aggiornare l'app.
+                </span>
+                <div className="flex space-x-2 ml-4">
+                  <button
+                    onClick={async () => {
+                      try {
+                        // Applica l'aggiornamento
+                        const registration = await navigator.serviceWorker.getRegistration();
+                        if (registration && registration.waiting) {
+                          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                          sessionStorage.setItem('appUpdated', 'true');
+                          window.location.reload();
+                        } else {
+                          window.location.reload();
+                        }
+                      } catch (error) {
+                        console.error('Errore aggiornamento:', error);
+                        window.location.reload();
+                      }
+                    }}
+                    className="bg-white text-blue-500 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100"
+                  >
+                    Aggiorna
+                  </button>
+                  <button
+                    onClick={() => completeBanner('update')}
+                    className="text-white hover:bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Banner Aggiornamento Versione */}
           {showVersionBanner && (
             <div className="bg-green-500 text-white p-3 text-center shadow-lg relative">
@@ -3539,7 +3705,7 @@
                   Aggiornato alla versione 4.7! Fix dialog uscita, icona cookie e sistema aiuto
                 </span>
                 <button
-                  onClick={() => setShowVersionBanner(false)}
+                  onClick={() => completeBanner('version')}
                   className="ml-4 text-white hover:text-gray-200 font-bold text-xl"
                 >
                   ×
@@ -3557,7 +3723,7 @@
           
           {/* Notifiche PWA */}
           {showInstallPrompt && !isInstalled && (
-            <div className="fixed top-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
+            <div className="fixed top-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-sm" style={{zIndex: 54}}>
               <div className="flex items-start space-x-3">
                 <LucideIcon name="Download" size={24} className="flex-shrink-0 mt-1" />
                 <div className="flex-1">
@@ -3573,7 +3739,7 @@
                       Installa
                     </button>
                     <button
-                      onClick={() => setShowInstallPrompt(false)}
+                      onClick={dismissInstallPWA}
                       className="text-blue-100 px-3 py-1 rounded text-sm"
                     >
                       Dopo

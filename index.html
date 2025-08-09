@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v4.5 - EduTechLab Italia</title>
+  <title>CV PWA Editor v4.6 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -66,7 +66,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v4.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v4.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -168,7 +168,7 @@
         Trash2: '🗑️', FileText: '📄', Wifi: '📶', WifiOff: '📵', 
         RotateCw: '🔄', Settings: '⚙️', Share2: '🔗', Palette: '🎨',
         Upload: '📤', User: '👤', Globe: '🌐', Calendar: '📅', 
-        Shield: '🛡️', Heart: '❤️', Image: '🖼️', Camera: '📷'
+        Shield: '🛡️', Heart: '❤️', Image: '🖼️', Camera: '📷', HelpCircle: '❓'
       };
       
       return <span className={`inline-flex items-center justify-center ${className}`} style={{fontSize: `${size}px`}} {...props}>
@@ -254,6 +254,7 @@
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
       const [showVersionBanner, setShowVersionBanner] = useState(false);
+      const [showCookieBanner, setShowCookieBanner] = useState(false);
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
@@ -496,7 +497,7 @@
         }
 
         // Controlla se mostrare banner aggiornamento versione
-        const currentVersion = '4.5';
+        const currentVersion = '4.6';
         const lastSeenVersion = localStorage.getItem('lastSeenVersion');
         if (lastSeenVersion && lastSeenVersion !== currentVersion) {
           setShowVersionBanner(true);
@@ -513,6 +514,12 @@
           }
         } else if (!lastSeenVersion) {
           localStorage.setItem('lastSeenVersion', currentVersion);
+        }
+
+        // Controlla se mostrare cookie banner (solo al primo accesso)
+        const cookieConsent = localStorage.getItem('cookieConsent');
+        if (!cookieConsent) {
+          setShowCookieBanner(true);
         }
       }, []);
 
@@ -658,6 +665,17 @@
           setShowInstallPrompt(false);
           setDeferredPrompt(null);
         });
+
+        // Banner promemoria backup alla chiusura
+        window.addEventListener('beforeunload', (e) => {
+          // Solo se ci sono dati CV nel localStorage
+          const savedData = localStorage.getItem('cvData');
+          if (savedData) {
+            const message = '⚠️ PROMEMORIA: I tuoi dati CV sono salvati solo localmente. Ti consigliamo di fare un backup esportando i dati dalle Impostazioni Avanzate prima di chiudere.';
+            e.returnValue = message; // Per browser più vecchi
+            return message; // Per browser moderni
+          }
+        });
       };
 
       const installPWA = async () => {
@@ -668,6 +686,17 @@
           setDeferredPrompt(null);
           setShowInstallPrompt(false);
         }
+      };
+
+      // Funzioni Cookie Banner
+      const acceptCookies = () => {
+        localStorage.setItem('cookieConsent', 'accepted');
+        setShowCookieBanner(false);
+      };
+
+      const rejectCookies = () => {
+        localStorage.setItem('cookieConsent', 'rejected');
+        setShowCookieBanner(false);
       };
 
 
@@ -1004,7 +1033,7 @@
           meta: {
             version: '2.0.0',
             exported: new Date().toISOString(),
-            app: 'CV PWA Editor v4.5',
+            app: 'CV PWA Editor v4.6',
             author: 'EduTechLab Italia - Fabio Rizzotto',
             copyright: '© 2025 EduTechLab Italia - App gratuita',
             website: 'https://edutechlab-ita.github.io/'
@@ -1187,7 +1216,7 @@
       const shareCV = async () => {
         const shareData = {
           title: `CV Europass di ${cvData.personalInfo.name}`,
-          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.5',
+          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.6',
           url: window.location.href
         };
         
@@ -2087,7 +2116,8 @@
                 { id: 'export', label: 'Export & Condivisione', icon: <LucideIcon name="Download" size={16} /> },
                 { id: 'privacy', label: 'Privacy & Trattamento Dati', icon: <LucideIcon name="Shield" size={16} /> },
                 { id: 'templates', label: 'Template', icon: <LucideIcon name="Palette" size={16} /> },
-                { id: 'settings', label: 'Impostazioni', icon: <LucideIcon name="Settings" size={16} /> }
+                { id: 'settings', label: 'Impostazioni', icon: <LucideIcon name="Settings" size={16} /> },
+                { id: 'help', label: 'Aiuto & Assistenza', icon: <LucideIcon name="HelpCircle" size={16} /> }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -2404,7 +2434,7 @@
                   <h4 className="font-semibold mb-4">Informazioni App</h4>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="text-center">
-                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.5</h5>
+                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.6</h5>
                       <p className="text-sm text-blue-700 mb-2">
                         Editor professionale per Curriculum Vitae Europass
                       </p>
@@ -2465,6 +2495,47 @@
         );
       };
 
+      const CookieBanner = () => {
+        if (!showCookieBanner) return null;
+        
+        return (
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-blue-500 shadow-lg z-50">
+            <div className="max-w-6xl mx-auto p-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className="text-2xl">🍪</span>
+                    <h3 className="font-semibold text-gray-800">Informativa sui Cookie</h3>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Questa app utilizza <strong>solo cookie tecnici</strong> necessari per il funzionamento (localStorage per salvare i dati del CV localmente). 
+                    <strong>Non utilizziamo cookie di tracciamento o pubblicità</strong>.
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    I tuoi dati CV rimangono sempre nel tuo browser e non vengono mai trasmessi a server esterni. 
+                    <a href="https://edutechlab-ita.github.io/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Privacy Policy completa</a>
+                  </p>
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    onClick={rejectCookies}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 text-sm font-medium"
+                  >
+                    Solo Necessari
+                  </button>
+                  <button
+                    onClick={acceptCookies}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+                  >
+                    Accetta Tutti
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
       const WelcomeModal = () => {
         if (!showWelcome) return null;
         
@@ -2473,7 +2544,7 @@
             <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
               <div className="text-center">
                 <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.5!</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.6!</h2>
                 <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae Europass</p>
               </div>
               
@@ -2540,6 +2611,113 @@
                   © 2025 EduTechLab Italia - App gratuita e open source
                 </p>
               </div>
+            )}
+
+            {/* Help & Assistenza */}
+            {activeSettingsTab === 'help' && (
+              <div className="space-y-6">
+                {/* ASSISTENZA UTENTE */}
+                <div>
+                  <h4 className="font-semibold mb-4">🆘 Aiuto & Assistenza</h4>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <div className="text-center mb-4">
+                      <div className="text-4xl mb-2">💌</div>
+                      <h5 className="font-semibold text-green-800">Hai bisogno di aiuto?</h5>
+                      <p className="text-sm text-green-700 mb-4">
+                        Contatta il nostro team di supporto per qualsiasi domanda o problema.
+                      </p>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="bg-white rounded-lg p-4 border">
+                        <h6 className="font-medium text-gray-800 mb-2">📧 Email di supporto:</h6>
+                        <a 
+                          href="mailto:edutechlab.ita@gmail.com?subject=Supporto CV PWA Editor v4.6&body=Ciao, ho bisogno di aiuto con l'app CV PWA Editor.%0A%0ADescrivi qui il tuo problema:%0A%0A"
+                          className="text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                          edutechlab.ita@gmail.com
+                        </a>
+                      </div>
+                      <div className="bg-white rounded-lg p-4 border">
+                        <h6 className="font-medium text-gray-800 mb-2">🌐 Sito web ufficiale:</h6>
+                        <a 
+                          href="https://edutechlab-ita.github.io" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                          https://edutechlab-ita.github.io
+                        </a>
+                      </div>
+                      <div className="text-xs text-gray-500 text-center mt-4">
+                        <p>💡 <strong>Suggerimento:</strong> Prima di scrivere, prova a svuotare la cache del browser (Ctrl+F5)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* PRIVACY & GDPR */}
+                <div>
+                  <h4 className="font-semibold mb-4">🔒 Privacy & Trattamento Dati</h4>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-3">
+                        <span className="text-2xl">🛡️</span>
+                        <div className="flex-1">
+                          <h5 className="font-semibold text-blue-800 mb-2">I tuoi dati sono al sicuro</h5>
+                          <p className="text-sm text-blue-700 mb-4">
+                            Questa app <strong>non trasmette mai</strong> i tuoi dati a server esterni. 
+                            Tutti i dati del CV sono salvati esclusivamente nel <strong>localStorage</strong> del tuo browser.
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-white rounded-lg p-4 border-l-4 border-blue-400">
+                        <h6 className="font-medium text-gray-800 mb-2">📋 Cosa significa per te:</h6>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          <li>• <strong>Massima privacy</strong>: Nessuno può accedere ai tuoi dati</li>
+                          <li>• <strong>Controllo totale</strong>: Solo tu puoi esportare/importare i dati</li>
+                          <li>• <strong>Nessun tracking</strong>: Non raccogliamo informazioni personali</li>
+                          <li>• <strong>Funziona offline</strong>: I dati rimangono sul tuo dispositivo</li>
+                        </ul>
+                      </div>
+
+                      <div className="text-center">
+                        <div className="space-y-2">
+                          <h6 className="font-medium text-gray-800">📄 Documenti ufficiali:</h6>
+                          <div className="space-x-4">
+                            <a 
+                              href="https://edutechlab-ita.github.io/privacy-policy" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm underline"
+                            >
+                              Privacy Policy completa
+                            </a>
+                            <a 
+                              href="https://edutechlab-ita.github.io/cookie-policy" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm underline"
+                            >
+                              Cookie Policy
+                            </a>
+                            <a 
+                              href="https://edutechlab-ita.github.io/terms" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm underline"
+                            >
+                              Termini di servizio
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             </div>
           </div>
         );
@@ -3218,6 +3396,7 @@
       return (
         <div className="min-h-screen bg-gray-100">
           <WelcomeModal />
+          <CookieBanner />
           
           {/* Banner Aggiornamento Versione */}
           {showVersionBanner && (
@@ -3225,7 +3404,7 @@
               <div className="flex items-center justify-center space-x-2">
                 <span className="text-lg">🎉</span>
                 <span className="font-medium">
-                  Aggiornato alla versione 4.5! Nuova sezione Pubblicazioni disponibile
+                  Aggiornato alla versione 4.6! Cookie banner, assistenza e promemoria backup
                 </span>
                 <button
                   onClick={() => setShowVersionBanner(false)}
@@ -3282,7 +3461,7 @@
                   <LucideIcon name="FileText" size={32} className="text-blue-600" />
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-                      <span>CV PWA Editor v4.5</span>
+                      <span>CV PWA Editor v4.6</span>
                       <EuropassLogo className="ml-2" />
                     </h1>
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -3463,7 +3642,7 @@
   <noscript>
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
       <div style="text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.5</h1>
+        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.6</h1>
         <p style="color: #666; margin-bottom: 1rem;">Questa applicazione richiede JavaScript per funzionare.</p>
         <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV Europass.</p>
       </div>

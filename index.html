@@ -665,13 +665,12 @@
 
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
-          // Rimosso e.preventDefault() che causava errori
+          // Salva l'evento per uso futuro, SENZA preventDefault
           setDeferredPrompt(e);
           
-          // Mostra banner installazione direttamente se app non installata
+          // Mostra banner solo se necessario
           if (!isInstalled) {
-            // Delay per evitare conflitti con altri banner
-            setTimeout(() => setShowInstallPrompt(true), 1000);
+            setTimeout(() => setShowInstallPrompt(true), 2000);
           }
         });
 

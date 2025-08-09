@@ -519,7 +519,7 @@
         }
       }, []);
 
-      // Calcola pagine quando cambia il contenuto
+      // Calcola pagine solo quando in modalità preview (non durante editing per evitare perdita focus)
       useEffect(() => {
         if (previewRef.current && activeTab === 'preview') {
           const calculatePages = () => {
@@ -530,9 +530,10 @@
             setPageCount(calculatedPages);
           };
           
-          setTimeout(calculatePages, 500); // Delay per rendering
+          const timeoutId = setTimeout(calculatePages, 1000); // Debounce più lungo
+          return () => clearTimeout(timeoutId);
         }
-      }, [cvData, activeTab]);
+      }, [activeTab]); // Rimosso cvData per evitare re-calcoli durante digitazione
 
       // PWA Setup e Service Worker Registration
       useEffect(() => {
@@ -549,12 +550,41 @@
         const handleOnline = () => setIsOnline(true);
         const handleOffline = () => setIsOnline(false);
         
+        // Dialog beforeunload - spostato qui per assicurarmi che sia registrato
+        const handleBeforeUnload = (e) => {
+          // Controlla se l'utente ha disabilitato i dialog dalle impostazioni
+          const savedSettings = localStorage.getItem('advancedSettings');
+          if (savedSettings) {
+            try {
+              const settings = JSON.parse(savedSettings);
+              if (settings.preventExitDialogs === true) {
+                return; // Non mostra il dialog se l'utente lo ha disabilitato
+              }
+            } catch (error) {
+              // Se c'è errore nel parsing, procedi con il dialog
+            }
+          }
+          
+          // Solo se ci sono dati CV nel localStorage
+          const savedData = localStorage.getItem('cvData');
+          if (savedData) {
+            // Messaggio breve - i browser moderni ignorano messaggi lunghi per sicurezza
+            const message = 'I tuoi dati CV sono salvati solo in questo browser. Ricorda di esportare un backup dalle Impostazioni prima di uscire.';
+            
+            e.preventDefault();
+            e.returnValue = message;
+            return message;
+          }
+        };
+        
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
           window.removeEventListener('online', handleOnline);
           window.removeEventListener('offline', handleOffline);
+          window.removeEventListener('beforeunload', handleBeforeUnload);
         };
       }, []);
 
@@ -665,33 +695,6 @@
           setIsInstalled(true);
           setShowInstallPrompt(false);
           setDeferredPrompt(null);
-        });
-
-        // Dialog beforeunload intelligente - rispetta preferenze utente
-        window.addEventListener('beforeunload', (e) => {
-          // Controlla se l'utente ha disabilitato i dialog dalle impostazioni
-          const savedSettings = localStorage.getItem('advancedSettings');
-          if (savedSettings) {
-            try {
-              const settings = JSON.parse(savedSettings);
-              if (settings.preventExitDialogs === true) {
-                return; // Non mostra il dialog se l'utente lo ha disabilitato
-              }
-            } catch (error) {
-              // Se c'è errore nel parsing, procedi con il dialog
-            }
-          }
-          
-          // Solo se ci sono dati CV nel localStorage
-          const savedData = localStorage.getItem('cvData');
-          if (savedData) {
-            // Messaggio breve - i browser moderni ignorano messaggi lunghi per sicurezza
-            const message = 'I tuoi dati CV sono salvati solo in questo browser. Ricorda di esportare un backup dalle Impostazioni prima di uscire.';
-            
-            e.preventDefault();
-            e.returnValue = message;
-            return message;
-          }
         });
       };
 

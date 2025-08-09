@@ -261,6 +261,7 @@
         showPhoto: true,
         dateFormat: 'italian',
         privacyConsent: true,
+        preventExitDialogs: false,
         templateStyle: 'europass',
         showPubblicazioni: true
       });
@@ -483,6 +484,7 @@
               showPhoto: parsedSettings.showPhoto ?? true,
               dateFormat: parsedSettings.dateFormat ?? 'italian',
               privacyConsent: parsedSettings.privacyConsent ?? true,
+              preventExitDialogs: parsedSettings.preventExitDialogs ?? false,
               templateStyle: parsedSettings.templateStyle ?? 'europass',
               showPubblicazioni: parsedSettings.showPubblicazioni ?? true
             });
@@ -663,6 +665,39 @@
           setIsInstalled(true);
           setShowInstallPrompt(false);
           setDeferredPrompt(null);
+        });
+
+        // Dialog beforeunload intelligente - rispetta preferenze utente
+        window.addEventListener('beforeunload', (e) => {
+          // Controlla se l'utente ha disabilitato i dialog dalle impostazioni
+          const savedSettings = localStorage.getItem('advancedSettings');
+          if (savedSettings) {
+            try {
+              const settings = JSON.parse(savedSettings);
+              if (settings.preventExitDialogs === true) {
+                return; // Non mostra il dialog se l'utente lo ha disabilitato
+              }
+            } catch (error) {
+              // Se c'è errore nel parsing, procedi con il dialog
+            }
+          }
+          
+          // Solo se ci sono dati CV nel localStorage
+          const savedData = localStorage.getItem('cvData');
+          if (savedData) {
+            const message = '⚠️ ATTENZIONE: I tuoi dati CV sono salvati SOLO in questo browser!\n\n' +
+                           '🔹 Per non perdere il tuo lavoro, ti consigliamo di fare un BACKUP:\n' +
+                           '   1. Vai in "Impostazioni" (icona ingranaggio ⚙️ nel menu a sinistra)\n' +
+                           '   2. Clicca su "Export & Condivisione"\n' +
+                           '   3. Clicca "Esporta Backup Completo"\n' +
+                           '   4. Salva il file .json in un posto sicuro\n\n' +
+                           '💾 I tuoi dati rimarranno disponibili solo finché non cancelli i dati del browser.\n\n' +
+                           'Vuoi uscire comunque?';
+            
+            e.preventDefault();
+            e.returnValue = message;
+            return message;
+          }
         });
       };
 
@@ -2397,11 +2432,37 @@
                 </div>
 
                 <div>
+                  <h4 className="font-semibold mb-4">⚙️ Preferenze Utente</h4>
+                  <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h6 className="font-medium text-gray-800">Impedisci avvisi di uscita</h6>
+                        <p className="text-sm text-gray-500">Disabilita il messaggio di conferma quando chiudi l'app</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          checked={advancedSettings.preventExitDialogs}
+                          onChange={(e) => updateAdvancedSettings('preventExitDialogs', e.target.checked)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                      </label>
+                    </div>
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+                      <p className="text-xs text-yellow-700">
+                        ⚠️ <strong>Attenzione:</strong> Se disabiliti gli avvisi, ricorda di fare backup regolari dei tuoi dati CV!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
                   <h4 className="font-semibold mb-4">Informazioni CV</h4>
                   <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                     <p><strong>Ultima Modifica:</strong> {new Date(cvData.lastUpdated).toLocaleString('it-IT')}</p>
                     <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
-                    <p><strong>Versione App:</strong> v4.3.0</p>
+                    <p><strong>Versione App:</strong> v4.7</p>
                     <p><strong>Template:</strong> {advancedSettings.templateStyle === 'modern' ? 'Moderno' : 'Europass Standard'}</p>
                   </div>
                 </div>

@@ -254,6 +254,7 @@
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
       const [showVersionBanner, setShowVersionBanner] = useState(false);
+      const [showCookieInfo, setShowCookieInfo] = useState(false);
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
@@ -645,6 +646,11 @@
           }, 1000);
         }
       });
+
+      // Funzione toggle per modal cookie info
+      const toggleCookieInfo = () => {
+        setShowCookieInfo(!showCookieInfo);
+      };
 
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -2545,6 +2551,65 @@
         );
       };
 
+      // Modal per informazioni cookie e privacy
+      const CookieInfoModal = () => {
+        if (!showCookieInfo) return null;
+        
+        return (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-2xl w-full p-6 space-y-4 max-h-96 overflow-y-auto">
+              <div className="text-center">
+                <div className="text-4xl mb-4">🍪</div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Informativa Cookie e Privacy</h2>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">🔒 Privacy dei tuoi dati</h3>
+                  <p className="text-sm text-gray-600">
+                    <strong>I tuoi dati CV rimangono sempre nel tuo browser</strong> e non vengono mai trasmessi a server esterni. 
+                    Utilizziamo solo localStorage del browser per salvare le tue informazioni localmente.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">🍪 Cookie tecnici</h3>
+                  <p className="text-sm text-gray-600">
+                    Questa app utilizza <strong>solo cookie tecnici necessari</strong> per il funzionamento (localStorage). 
+                    <strong>Non utilizziamo cookie di tracciamento, pubblicità o analytics.</strong>
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">💾 Salvataggio dati</h3>
+                  <p className="text-sm text-gray-600">
+                    I dati del CV sono salvati automaticamente nel localStorage del tuo browser. 
+                    Per sicurezza, ti consigliamo di esportare regolarmente un backup dal menu Impostazioni.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">🌐 Funzionamento offline</h3>
+                  <p className="text-sm text-gray-600">
+                    L'app funziona completamente offline dopo il primo caricamento. 
+                    Tutti i tuoi dati rimangono locali e accessibili anche senza connessione internet.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={toggleCookieInfo}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+                >
+                  Ho capito
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
       // Logo Europass - Immagine originale di Fabio
       const EuropassLogo = ({ className = "" }) => (
         <div className={`flex items-center ${className}`}>
@@ -3218,6 +3283,7 @@
       return (
         <div className="min-h-screen bg-gray-100">
           <WelcomeModal />
+          <CookieInfoModal />
           
           {/* Banner Aggiornamento Versione */}
           {showVersionBanner && (
@@ -3451,6 +3517,17 @@
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Icona Cookie Permanente - Bottom Left */}
+          <div className="fixed bottom-4 left-4">
+            <button
+              onClick={toggleCookieInfo}
+              className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+              title="Informazioni Cookie e Privacy"
+            >
+              <span className="text-lg">🍪</span>
+            </button>
           </div>
         </div>
       );

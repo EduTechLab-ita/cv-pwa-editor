@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v4.7 - EduTechLab Italia</title>
+  <title>CV PWA Editor v4.5 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -66,7 +66,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v4.7 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v4.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -168,7 +168,7 @@
         Trash2: '🗑️', FileText: '📄', Wifi: '📶', WifiOff: '📵', 
         RotateCw: '🔄', Settings: '⚙️', Share2: '🔗', Palette: '🎨',
         Upload: '📤', User: '👤', Globe: '🌐', Calendar: '📅', 
-        Shield: '🛡️', Heart: '❤️', Image: '🖼️', Camera: '📷', HelpCircle: '❓'
+        Shield: '🛡️', Heart: '❤️', Image: '🖼️', Camera: '📷'
       };
       
       return <span className={`inline-flex items-center justify-center ${className}`} style={{fontSize: `${size}px`}} {...props}>
@@ -180,12 +180,12 @@
     const linkifyText = (text) => {
       if (!text) return text;
       
-      // Regex per URL e email (rimosso flag g per evitare problemi di stato)
-      const urlRegex = /(https?:\/\/[^\s]+)/;
-      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
+      // Regex per URL e email
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
       
       // Prima gestisce URL
-      let parts = text.split(/(https?:\/\/[^\s]+)/);
+      let parts = text.split(urlRegex);
       parts = parts.map((part, index) => {
         if (urlRegex.test(part)) {
           return (
@@ -203,7 +203,7 @@
         }
         
         // Poi gestisce email nel testo rimanente
-        return part.split(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/).map((emailPart, emailIndex) => {
+        return part.split(emailRegex).map((emailPart, emailIndex) => {
           if (emailRegex.test(emailPart)) {
             return (
               <a 
@@ -254,13 +254,6 @@
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
       const [showVersionBanner, setShowVersionBanner] = useState(false);
-      const [showCookieBanner, setShowCookieBanner] = useState(false);
-      const [showCookieInfo, setShowCookieInfo] = useState(false);
-      const [hasUpdate, setHasUpdate] = useState(false);
-      const [showUpdateBanner, setShowUpdateBanner] = useState(false);
-      
-      // Stati semplificati per banner individuali
-      // Rimossa la logica complessa di sequenza che causava errori
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
@@ -497,39 +490,29 @@
           }
         }
 
-        // Sistema banner semplificato senza sequenza complessa
-        const currentVersion = '4.7';
-        const lastSeenVersion = localStorage.getItem('lastSeenVersion');
-        const cookieConsent = localStorage.getItem('cookieConsent');
-        
-        // Banner cookie (mostra immediatamente se necessario)
-        if (!cookieConsent) {
-          setShowCookieBanner(true);
+        if (!hasVisited) {
+          setShowWelcome(true);
+          localStorage.setItem('hasVisited', 'true');
         }
-        
-        // Modal benvenuto (mostra solo se cookie già accettati)
-        if (cookieConsent) {
-          if (!hasVisited) {
-            // Piccolo delay per evitare conflitti con cookie banner
-            setTimeout(() => setShowWelcome(true), 500);
-            localStorage.setItem('hasVisited', 'true');
-            localStorage.setItem('lastSeenVersion', currentVersion);
-          } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
-            setTimeout(() => setShowWelcome(true), 500);
-            localStorage.setItem('lastSeenVersion', currentVersion);
-            
-            // Reset template selection per nuove versioni
-            const currentSettings = JSON.parse(localStorage.getItem('advancedSettings') || '{}');
-            if (!currentSettings.templateStyle || currentSettings.templateStyle === undefined) {
-              setAdvancedSettings(prev => {
-                const resetSettings = { ...prev, templateStyle: 'europass' };
-                localStorage.setItem('advancedSettings', JSON.stringify(resetSettings));
-                return resetSettings;
-              });
-            }
-          } else if (!lastSeenVersion) {
-            localStorage.setItem('lastSeenVersion', currentVersion);
+
+        // Controlla se mostrare banner aggiornamento versione
+        const currentVersion = '4.5';
+        const lastSeenVersion = localStorage.getItem('lastSeenVersion');
+        if (lastSeenVersion && lastSeenVersion !== currentVersion) {
+          setShowVersionBanner(true);
+          localStorage.setItem('lastSeenVersion', currentVersion);
+          
+          // Reset template selection per nuove versioni
+          const currentSettings = JSON.parse(localStorage.getItem('advancedSettings') || '{}');
+          if (!currentSettings.templateStyle || currentSettings.templateStyle === undefined) {
+            setAdvancedSettings(prev => {
+              const resetSettings = { ...prev, templateStyle: 'europass' };
+              localStorage.setItem('advancedSettings', JSON.stringify(resetSettings));
+              return resetSettings;
+            });
           }
+        } else if (!lastSeenVersion) {
+          localStorage.setItem('lastSeenVersion', currentVersion);
         }
       }, []);
 
@@ -583,11 +566,17 @@
               if (newWorker) {
                 newWorker.addEventListener('statechange', () => {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    console.log('🔄 Nuovo aggiornamento disponibile');
+                    console.log('🔄 Nuovo aggiornamento disponibile, applicando automaticamente...');
                     
-                    // Invece di aggiornare automaticamente, mostra il banner
-                    setHasUpdate(true);
-                    setShowUpdateBanner(true);
+                    // AGGIORNAMENTO AUTOMATICO SILENZIOSO
+                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    
+                    // Piccolo delay e poi reload con notifica
+                    setTimeout(() => {
+                      // Salva in sessionStorage che c'è stato un aggiornamento
+                      sessionStorage.setItem('appUpdated', 'true');
+                      window.location.reload();
+                    }, 100);
                   }
                 });
               }
@@ -646,61 +635,28 @@
         }, 4000);
       };
 
-      // Gestione aggiornamento app - spostato in useEffect per evitare memory leak
-      useEffect(() => {
-        const handleLoad = () => {
-          if (sessionStorage.getItem('appUpdated') === 'true') {
-            sessionStorage.removeItem('appUpdated');
-            setTimeout(() => {
-              showUpdateNotification();
-            }, 1000);
-          }
-        };
-        
-        window.addEventListener('load', handleLoad);
-        return () => window.removeEventListener('load', handleLoad);
-      }, []);
-
-      // Effect rimosso - niente più logica di sequenza complessa
+      // Controlla se c'è stato un aggiornamento al caricamento della pagina
+      window.addEventListener('load', () => {
+        if (sessionStorage.getItem('appUpdated') === 'true') {
+          sessionStorage.removeItem('appUpdated');
+          // Aspetta un po' prima di mostrare la notifica
+          setTimeout(() => {
+            showUpdateNotification();
+          }, 1000);
+        }
+      });
 
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
-          // Salva l'evento per uso futuro, SENZA preventDefault
+          e.preventDefault();
           setDeferredPrompt(e);
-          
-          // Mostra banner solo se necessario
-          if (!isInstalled) {
-            setTimeout(() => setShowInstallPrompt(true), 2000);
-          }
+          setShowInstallPrompt(true);
         });
 
         window.addEventListener('appinstalled', () => {
           setIsInstalled(true);
-          setDeferredPrompt(null);
           setShowInstallPrompt(false);
-        });
-
-        // Banner promemoria backup alla chiusura
-        window.addEventListener('beforeunload', (e) => {
-          // Controlla se l'utente ha disabilitato i dialog
-          const preventDialog = localStorage.getItem('preventExitDialogs');
-          if (preventDialog === 'true') {
-            return; // Non mostra il dialog se l'utente lo ha disabilitato
-          }
-          
-          // Solo se ci sono dati CV nel localStorage
-          const savedData = localStorage.getItem('cvData');
-          if (savedData) {
-            const message = '⚠️ ATTENZIONE: I tuoi dati CV sono salvati SOLO in questo browser!\n\n' +
-                           '🔹 Per non perdere il tuo lavoro, ti consigliamo di fare un BACKUP:\n' +
-                           '   1. Vai in "Impostazioni Avanzate" (icona ingranaggio ⚙️ nel menu a sinistra)\n' +
-                           '   2. Clicca su "Export & Condivisione"\n' +
-                           '   3. Clicca "Esporta Backup Completo"\n' +
-                           '   4. Salva il file .json sul tuo computer\n\n' +
-                           '💡 Con il backup potrai importare i tuoi dati in qualsiasi momento!';
-            e.returnValue = message; // Per browser più vecchi
-            return message; // Per browser moderni
-          }
+          setDeferredPrompt(null);
         });
       };
 
@@ -708,70 +664,11 @@
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
+          console.log('Install prompt result:', outcome);
           setDeferredPrompt(null);
           setShowInstallPrompt(false);
         }
       };
-
-      const dismissInstallPWA = () => {
-        setDeferredPrompt(null);
-        setShowInstallPrompt(false);
-      };
-
-      // Funzioni Cookie Banner semplificate
-      const acceptCookies = () => {
-        try {
-          // Prima salva le preferenze
-          localStorage.setItem('cookieConsent', 'accepted');
-          
-          // Poi nasconde il banner con un piccolo delay per evitare conflitti
-          setTimeout(() => {
-            setShowCookieBanner(false);
-            
-            // Verifica se mostrare welcome modal
-            try {
-              const hasVisited = localStorage.getItem('hasVisited');
-              const currentVersion = '4.7';
-              const lastSeenVersion = localStorage.getItem('lastSeenVersion');
-              
-              if (!hasVisited) {
-                localStorage.setItem('hasVisited', 'true');
-                localStorage.setItem('lastSeenVersion', currentVersion);
-                setTimeout(() => setShowWelcome(true), 500);
-              } else if (lastSeenVersion && lastSeenVersion !== currentVersion) {
-                localStorage.setItem('lastSeenVersion', currentVersion);
-                setTimeout(() => setShowWelcome(true), 500);
-              }
-            } catch (welcomeError) {
-              console.log('Welcome modal non disponibile:', welcomeError);
-            }
-          }, 100);
-          
-        } catch (error) {
-          console.error('Errore accettazione cookie:', error);
-          setTimeout(() => setShowCookieBanner(false), 100);
-        }
-      };
-
-      const rejectCookies = () => {
-        try {
-          localStorage.setItem('cookieConsent', 'rejected');
-          // Delay per evitare conflitti di rendering
-          setTimeout(() => {
-            setShowCookieBanner(false);
-          }, 100);
-        } catch (error) {
-          console.error('Errore rifiuto cookie:', error);
-          setTimeout(() => setShowCookieBanner(false), 100);
-        }
-      };
-
-      const toggleCookieInfo = () => {
-        setShowCookieInfo(!showCookieInfo);
-      };
-
-      // Sistema banner semplificato - niente più sequenze complesse
-      // I banner ora si gestiscono in modo indipendente
 
 
       // Salva automaticamente i dati E aggiorna timestamp
@@ -1107,7 +1004,7 @@
           meta: {
             version: '2.0.0',
             exported: new Date().toISOString(),
-            app: 'CV PWA Editor v4.7',
+            app: 'CV PWA Editor v4.5',
             author: 'EduTechLab Italia - Fabio Rizzotto',
             copyright: '© 2025 EduTechLab Italia - App gratuita',
             website: 'https://edutechlab-ita.github.io/'
@@ -1290,7 +1187,7 @@
       const shareCV = async () => {
         const shareData = {
           title: `CV Europass di ${cvData.personalInfo.name}`,
-          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.7',
+          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.5',
           url: window.location.href
         };
         
@@ -2190,8 +2087,7 @@
                 { id: 'export', label: 'Export & Condivisione', icon: <LucideIcon name="Download" size={16} /> },
                 { id: 'privacy', label: 'Privacy & Trattamento Dati', icon: <LucideIcon name="Shield" size={16} /> },
                 { id: 'templates', label: 'Template', icon: <LucideIcon name="Palette" size={16} /> },
-                { id: 'settings', label: 'Impostazioni', icon: <LucideIcon name="Settings" size={16} /> },
-                { id: 'help', label: 'Aiuto & Assistenza', icon: <LucideIcon name="HelpCircle" size={16} /> }
+                { id: 'settings', label: 'Impostazioni', icon: <LucideIcon name="Settings" size={16} /> }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -2508,7 +2404,7 @@
                   <h4 className="font-semibold mb-4">Informazioni App</h4>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="text-center">
-                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.7</h5>
+                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.5</h5>
                       <p className="text-sm text-blue-700 mb-2">
                         Editor professionale per Curriculum Vitae Europass
                       </p>
@@ -2569,132 +2465,15 @@
         );
       };
 
-      const CookieInfoModal = () => {
-        if (!showCookieInfo) return null;
-        
-        return (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-800 flex items-center space-x-2">
-                  <span className="text-2xl">🍪</span>
-                  <span>Informazioni sui Cookie e Privacy</span>
-                </h3>
-                <button
-                  onClick={toggleCookieInfo}
-                  className="text-gray-400 hover:text-gray-600 text-2xl font-bold"
-                >
-                  ×
-                </button>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-green-800 mb-2">🛡️ I tuoi dati sono completamente al sicuro</h4>
-                  <p className="text-sm text-green-700">
-                    Questa app utilizza <strong>SOLO cookie tecnici necessari</strong> (localStorage) per salvare i dati del CV nel tuo browser. 
-                    <strong>Non utilizziamo cookie di tracciamento, pubblicità o analytics</strong>.
-                  </p>
-                </div>
-
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-800 mb-2">📋 Cosa salviamo e dove:</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• <strong>Dati del CV</strong>: Solo nel localStorage del TUO browser</li>
-                    <li>• <strong>Impostazioni app</strong>: Solo nel localStorage del TUO browser</li>
-                    <li>• <strong>Consenso cookie</strong>: Solo nel localStorage del TUO browser</li>
-                    <li>• <strong>Zero dati su server esterni</strong>: Mai trasmesso nulla</li>
-                  </ul>
-                </div>
-
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-yellow-800 mb-2">💡 Perché è sicuro:</h4>
-                  <ul className="text-sm text-yellow-700 space-y-1">
-                    <li>• Funziona completamente <strong>offline</strong></li>
-                    <li>• Nessuna registrazione o login richiesto</li>
-                    <li>• Nessun server che raccoglie dati</li>
-                    <li>• Open source e trasparente</li>
-                    <li>• Solo tu puoi accedere ai tuoi dati CV</li>
-                  </ul>
-                </div>
-
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                  <h5 className="font-medium text-gray-800 mb-2">📄 Informativa Privacy e Cookie completa:</h5>
-                  <div className="text-sm text-gray-600 space-y-2">
-                    <p><strong>Titolare del trattamento:</strong> CV PWA Editor - App locale</p>
-                    <p><strong>Tipologia dati raccolti:</strong> Solo dati CV salvati in localStorage (non trasmessi)</p>
-                    <p><strong>Finalità:</strong> Creazione e editing CV in modalità offline</p>
-                    <p><strong>Base giuridica:</strong> Consenso dell'utente e interesse legittimo per funzionamento app</p>
-                    <p><strong>Conservazione:</strong> Solo nel browser locale, eliminabili cancellando dati browser</p>
-                    <p><strong>Diritti:</strong> Cancellazione dati tramite browser o reset app</p>
-                    <p><strong>Sicurezza:</strong> Dati mai trasmessi, app funziona offline, open source</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-center pt-4">
-                <button
-                  onClick={toggleCookieInfo}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-                >
-                  Ho capito
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      const CookieBanner = () => {
-        if (!showCookieBanner) return null;
-        
-        return (
-          <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-blue-500 shadow-lg z-50">
-            <div className="max-w-6xl mx-auto p-4">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <span className="text-2xl">🍪</span>
-                    <h3 className="font-semibold text-gray-800">Informativa sui Cookie</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    Questa app utilizza <strong>solo cookie tecnici</strong> necessari per il funzionamento (localStorage per salvare i dati del CV localmente). 
-                    <strong>Non utilizziamo cookie di tracciamento o pubblicità</strong>.
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    I tuoi dati CV rimangono sempre nel tuo browser e non vengono mai trasmessi a server esterni. 
-                    <button onClick={() => setShowCookieInfo(true)} className="text-blue-600 underline hover:text-blue-800">Privacy Policy completa</button>
-                  </p>
-                </div>
-                <div className="flex space-x-3">
-                  <button
-                    onClick={rejectCookies}
-                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 text-sm font-medium"
-                  >
-                    Solo Necessari
-                  </button>
-                  <button
-                    onClick={acceptCookies}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
-                  >
-                    Accetta Tutti
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      };
-
       const WelcomeModal = () => {
         if (!showWelcome) return null;
         
         return (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" style={{zIndex: 60}}>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
               <div className="text-center">
                 <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.7!</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.5!</h2>
                 <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae Europass</p>
               </div>
               
@@ -2761,97 +2540,6 @@
                   © 2025 EduTechLab Italia - App gratuita e open source
                 </p>
               </div>
-            )}
-
-            {/* Help & Assistenza */}
-            {activeSettingsTab === 'help' && (
-              <div className="space-y-6">
-                {/* ASSISTENZA UTENTE */}
-                <div>
-                  <h4 className="font-semibold mb-4">🆘 Aiuto & Assistenza</h4>
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                    <div className="text-center mb-4">
-                      <div className="text-4xl mb-2">💌</div>
-                      <h5 className="font-semibold text-green-800">Hai bisogno di aiuto?</h5>
-                      <p className="text-sm text-green-700 mb-4">
-                        Contatta il nostro team di supporto per qualsiasi domanda o problema.
-                      </p>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="bg-white rounded-lg p-4 border">
-                        <h6 className="font-medium text-gray-800 mb-2">📧 Email di supporto:</h6>
-                        <a 
-                          href="mailto:edutechlab.ita@gmail.com?subject=Supporto CV PWA Editor v4.7&body=Ciao, ho bisogno di aiuto con l'app CV PWA Editor.%0A%0ADescrivi qui il tuo problema:%0A%0A"
-                          className="text-blue-600 hover:text-blue-800 font-medium"
-                        >
-                          edutechlab.ita@gmail.com
-                        </a>
-                      </div>
-                      <div className="bg-white rounded-lg p-4 border">
-                        <h6 className="font-medium text-gray-800 mb-2">🌐 Sito web ufficiale:</h6>
-                        <a 
-                          href="https://edutechlab-ita.github.io" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800 font-medium"
-                        >
-                          https://edutechlab-ita.github.io
-                        </a>
-                      </div>
-                      <div className="text-xs text-gray-500 text-center mt-4">
-                        <p>💡 <strong>Suggerimento:</strong> Prima di scrivere, prova a svuotare la cache del browser (Ctrl+F5)</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* PRIVACY & GDPR */}
-                <div>
-                  <h4 className="font-semibold mb-4">🔒 Privacy & Trattamento Dati</h4>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-3">
-                        <span className="text-2xl">🛡️</span>
-                        <div className="flex-1">
-                          <h5 className="font-semibold text-blue-800 mb-2">I tuoi dati sono al sicuro</h5>
-                          <p className="text-sm text-blue-700 mb-4">
-                            Questa app <strong>non trasmette mai</strong> i tuoi dati a server esterni. 
-                            Tutti i dati del CV sono salvati esclusivamente nel <strong>localStorage</strong> del tuo browser.
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white rounded-lg p-4 border-l-4 border-blue-400">
-                        <h6 className="font-medium text-gray-800 mb-2">📋 Cosa significa per te:</h6>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          <li>• <strong>Massima privacy</strong>: Nessuno può accedere ai tuoi dati</li>
-                          <li>• <strong>Controllo totale</strong>: Solo tu puoi esportare/importare i dati</li>
-                          <li>• <strong>Nessun tracking</strong>: Non raccogliamo informazioni personali</li>
-                          <li>• <strong>Funziona offline</strong>: I dati rimangono sul tuo dispositivo</li>
-                        </ul>
-                      </div>
-
-                      <div className="text-center">
-                        <div className="space-y-2">
-                          <h6 className="font-medium text-gray-800">📄 Informazioni legali:</h6>
-                          <div className="space-x-4">
-                            <button
-                              onClick={() => setShowCookieInfo(true)}
-                              className="text-blue-600 hover:text-blue-800 text-sm underline"
-                            >
-                              Privacy e Cookie Policy
-                            </button>
-                            <span className="text-gray-400 text-sm">|</span>
-                            <span className="text-gray-600 text-sm">App locale - Nessun servizio esterno</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             </div>
           </div>
         );
@@ -3530,57 +3218,14 @@
       return (
         <div className="min-h-screen bg-gray-100">
           <WelcomeModal />
-          <CookieBanner />
-          <CookieInfoModal />
           
-          {/* Banner Aggiornamento App */}
-          {showUpdateBanner && hasUpdate && (
-            <div className="bg-blue-500 text-white p-3 text-center shadow-lg relative" style={{zIndex: 55}}>
-              <div className="flex items-center justify-center space-x-2">
-                <span className="text-lg">🔄</span>
-                <span className="font-medium">
-                  Nuovo aggiornamento disponibile! Clicca per aggiornare l'app.
-                </span>
-                <div className="flex space-x-2 ml-4">
-                  <button
-                    onClick={async () => {
-                      try {
-                        // Applica l'aggiornamento
-                        const registration = await navigator.serviceWorker.getRegistration();
-                        if (registration && registration.waiting) {
-                          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                          sessionStorage.setItem('appUpdated', 'true');
-                          window.location.reload();
-                        } else {
-                          window.location.reload();
-                        }
-                      } catch (error) {
-                        console.error('Errore aggiornamento:', error);
-                        window.location.reload();
-                      }
-                    }}
-                    className="bg-white text-blue-500 px-3 py-1 rounded text-sm font-medium hover:bg-gray-100"
-                  >
-                    Aggiorna
-                  </button>
-                  <button
-                    onClick={() => setShowUpdateBanner(false)}
-                    className="text-white hover:bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold"
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Banner Aggiornamento Versione */}
           {showVersionBanner && (
             <div className="bg-green-500 text-white p-3 text-center shadow-lg relative">
               <div className="flex items-center justify-center space-x-2">
                 <span className="text-lg">🎉</span>
                 <span className="font-medium">
-                  Aggiornato alla versione 4.7! Fix dialog uscita, icona cookie e sistema aiuto
+                  Aggiornato alla versione 4.5! Nuova sezione Pubblicazioni disponibile
                 </span>
                 <button
                   onClick={() => setShowVersionBanner(false)}
@@ -3601,7 +3246,7 @@
           
           {/* Notifiche PWA */}
           {showInstallPrompt && !isInstalled && (
-            <div className="fixed top-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg max-w-sm" style={{zIndex: 54}}>
+            <div className="fixed top-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
               <div className="flex items-start space-x-3">
                 <LucideIcon name="Download" size={24} className="flex-shrink-0 mt-1" />
                 <div className="flex-1">
@@ -3617,7 +3262,7 @@
                       Installa
                     </button>
                     <button
-                      onClick={dismissInstallPWA}
+                      onClick={() => setShowInstallPrompt(false)}
                       className="text-blue-100 px-3 py-1 rounded text-sm"
                     >
                       Dopo
@@ -3637,7 +3282,7 @@
                   <LucideIcon name="FileText" size={32} className="text-blue-600" />
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-                      <span>CV PWA Editor v4.7</span>
+                      <span>CV PWA Editor v4.5</span>
                       <EuropassLogo className="ml-2" />
                     </h1>
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -3752,7 +3397,7 @@
                       <div className="text-center">
                         <EuropassLogo className="justify-center mb-2" />
                         <p className="text-xs text-blue-700">
-                          Template Europass UE
+                          Template ufficiale Europass UE
                         </p>
                         <div className="mt-2 pt-2 border-t border-blue-200">
                           <p className="text-xs text-gray-600">
@@ -3807,30 +3452,18 @@
               </div>
             )}
           </div>
-
-          {/* Icona Cookie Permanente - Bottom Left */}
-          <div className="fixed bottom-4 left-4">
-            <button
-              onClick={toggleCookieInfo}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-              title="Informazioni Cookie e Privacy"
-            >
-              <span className="text-lg">🍪</span>
-            </button>
-          </div>
         </div>
       );
     };
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<CVEditor />);
+    ReactDOM.render(<CVEditor />, document.getElementById('root'));
   </script>
 
   <!-- Fallback per JavaScript disabilitato -->
   <noscript>
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
       <div style="text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.7</h1>
+        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.5</h1>
         <p style="color: #666; margin-bottom: 1rem;">Questa applicazione richiede JavaScript per funzionare.</p>
         <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV Europass.</p>
       </div>

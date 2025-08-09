@@ -180,12 +180,12 @@
     const linkifyText = (text) => {
       if (!text) return text;
       
-      // Regex per URL e email
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
-      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+      // Regex per URL e email (rimosso flag g per evitare problemi di stato)
+      const urlRegex = /(https?:\/\/[^\s]+)/;
+      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/;
       
       // Prima gestisce URL
-      let parts = text.split(urlRegex);
+      let parts = text.split(/(https?:\/\/[^\s]+)/);
       parts = parts.map((part, index) => {
         if (urlRegex.test(part)) {
           return (
@@ -203,7 +203,7 @@
         }
         
         // Poi gestisce email nel testo rimanente
-        return part.split(emailRegex).map((emailPart, emailIndex) => {
+        return part.split(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/).map((emailPart, emailIndex) => {
           if (emailRegex.test(emailPart)) {
             return (
               <a 
@@ -649,16 +649,20 @@
         }, 4000);
       };
 
-      // Controlla se c'è stato un aggiornamento al caricamento della pagina
-      window.addEventListener('load', () => {
-        if (sessionStorage.getItem('appUpdated') === 'true') {
-          sessionStorage.removeItem('appUpdated');
-          // Aspetta un po' prima di mostrare la notifica
-          setTimeout(() => {
-            showUpdateNotification();
-          }, 1000);
-        }
-      });
+      // Gestione aggiornamento app - spostato in useEffect per evitare memory leak
+      useEffect(() => {
+        const handleLoad = () => {
+          if (sessionStorage.getItem('appUpdated') === 'true') {
+            sessionStorage.removeItem('appUpdated');
+            setTimeout(() => {
+              showUpdateNotification();
+            }, 1000);
+          }
+        };
+        
+        window.addEventListener('load', handleLoad);
+        return () => window.removeEventListener('load', handleLoad);
+      }, []);
 
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {

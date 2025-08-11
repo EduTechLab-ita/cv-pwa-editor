@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV PWA Editor v5.1 - EduTechLab Italia</title>
+  <title>CV PWA Editor v5.2 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -766,7 +766,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.1!</strong> Design migliorato e input finalmente funzionanti</span>
+      <span><strong>Aggiornato alla versione 5.2!</strong> Nuove funzionalità v4.7: Formatore, Competenze DigiCompEU, Upload Foto</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -779,7 +779,7 @@
           <img src="./CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
           <div>
             <h1 class="app-title">CV PWA Editor</h1>
-            <span class="app-version">v5.1</span>
+            <span class="app-version">v5.2</span>
           </div>
         </div>
         
@@ -828,6 +828,10 @@
           <span class="nav-icon">🎓</span>
           Formazione
         </button>
+        <button class="nav-section" data-section="formatore" onclick="switchSection('formatore')">
+          <span class="nav-icon">🎯</span>
+          Formatore
+        </button>
         <button class="nav-section" data-section="skills" onclick="switchSection('skills')">
           <span class="nav-icon">⚡</span>
           Competenze
@@ -841,8 +845,8 @@
           Pubblicazioni
         </button>
         <button class="nav-section" data-section="other" onclick="switchSection('other')">
-          <span class="nav-icon">✨</span>
-          Altre Info
+          <span class="nav-icon">❤️</span>
+          Altre Capacità
         </button>
         <button class="nav-section" data-section="settings" onclick="switchSection('settings')">
           <span class="nav-icon">⚙️</span>
@@ -1031,6 +1035,27 @@
         </div>
       </div>
       
+      <!-- Formatore -->
+      <div class="section" id="formatore">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>🎯</span>
+            Esperienza come Formatore
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div id="formatoreList" class="dynamic-list">
+            <!-- Le attività formative verranno generate dinamicamente -->
+          </div>
+          
+          <button class="add-item-btn" onclick="addFormatore()">
+            <span>➕</span>
+            Aggiungi Attività Formativa
+          </button>
+        </div>
+      </div>
+      
       <!-- Competenze -->
       <div class="section" id="skills">
         <div class="content-header">
@@ -1040,37 +1065,68 @@
           </h2>
         </div>
         
-        <div class="content-body">
-          <div class="form-grid">
-            <div class="form-group full-width">
-              <label class="form-label" for="aiSkills">Competenze AI e Machine Learning</label>
+        <div class="content-body" style="max-width: none;">
+          <!-- Competenze Specialistiche -->
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <span style="background: #3b82f6; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem;">⭐ Specialistiche</span>
+              <h4 style="font-weight: 600; color: #003d7a; margin: 0;">Competenze del Tuo Settore</h4>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aiSkills">Competenze Specialistiche</label>
               <textarea 
                 id="aiSkills" 
                 class="form-textarea"
-                placeholder="Descrive le tue competenze in Intelligenza Artificiale, Machine Learning, Deep Learning, NLP, Computer Vision, etc."
+                placeholder="Descrivi qui le tue competenze specialistiche, certificazioni, e aree di expertise specifiche del tuo settore professionale."
                 style="min-height: 100px;"
               ></textarea>
             </div>
+          </div>
+
+          <!-- Competenze Digitali -->
+          <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
+            <h4 style="font-weight: 600; color: #003d7a; margin-bottom: 16px;">📊 Competenze Digitali</h4>
             
-            <div class="form-group full-width">
-              <label class="form-label" for="digitalSkills">Competenze Digitali</label>
+            <!-- Campo Generico sempre presente -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="digitalSkillsGeneric">Competenze Digitali Generali</label>
               <textarea 
-                id="digitalSkills" 
+                id="digitalSkillsGeneric" 
                 class="form-textarea"
-                placeholder="Linguaggi di programmazione, framework, database, sistemi operativi, software specialistici, etc."
+                placeholder="Descrivi qui le tue competenze digitali generali, software utilizzati, piattaforme conosciute e livello di utilizzo."
                 style="min-height: 120px;"
               ></textarea>
             </div>
-            
-            <div class="form-group full-width">
-              <label class="form-label" for="platforms">Piattaforme e Software</label>
-              <textarea 
-                id="platforms" 
-                class="form-textarea"
-                placeholder="Microsoft Office, Google Workspace, Adobe Creative Suite, CRM, LMS, etc."
-                style="min-height: 80px;"
-              ></textarea>
+
+            <!-- Toggle DigiCompEU -->
+            <div style="margin-bottom: 20px;">
+              <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                <input type="checkbox" id="useDigiCompEU" style="width: 18px; height: 18px;">
+                <span style="font-weight: 500; color: #374151;">Utilizza il Framework DigiCompEU (Competenze Digitali Europee)</span>
+              </label>
+              <p style="font-size: 0.875rem; color: #6b7280; margin-top: 4px; margin-left: 30px;">
+                Attiva per mostrare le competenze secondo il framework europeo DigComp 2.1
+              </p>
             </div>
+
+            <!-- Sezione DigiCompEU (nascosta di default) -->
+            <div id="digiCompSection" style="display: none; margin-top: 20px;">
+              <p style="font-size: 0.875rem; color: #1d4ed8; margin-bottom: 12px;">📋 Competenze DigiCompEU (Framework Europeo):</p>
+              <div id="digiCompItems" style="display: grid; gap: 12px;">
+                <!-- Le competenze verranno generate dinamicamente -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Piattaforme e Software -->
+          <div class="form-group full-width">
+            <label class="form-label" for="platforms">Piattaforme e Software</label>
+            <textarea 
+              id="platforms" 
+              class="form-textarea"
+              placeholder="Microsoft Office, Google Workspace, Adobe Creative Suite, CRM, LMS, etc."
+              style="min-height: 80px;"
+            ></textarea>
           </div>
         </div>
       </div>
@@ -1291,9 +1347,24 @@
         },
         experience: [],
         education: [],
+        formatore: [],
         skills: {
-          ai: '',
-          digital: '',
+          ai: {
+            title: 'Competenze Specialistiche',
+            content: ''
+          },
+          digital: {
+            title: 'Competenze Digitali',
+            genericContent: '',
+            useDigiCompEU: false,
+            digiCompItems: [
+              { name: 'Elaborazione delle informazioni', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
+              { name: 'Comunicazione digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
+              { name: 'Creazione di contenuti digitali', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
+              { name: 'Sicurezza digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
+              { name: 'Risoluzione di problemi digitali', level: 'AVANZATO', numeric: 'Livello 5/6' }
+            ]
+          },
           platforms: ''
         },
         languages: {
@@ -1445,14 +1516,70 @@
           `;
         }
         
+        // Formatore
+        if (data.formatore.length > 0) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Esperienza come Formatore</h2>
+              <div class="cv-content">
+                ${data.formatore.map(form => `
+                  <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
+                      <span>${form.title}</span>
+                      <span>${form.period}</span>
+                    </div>
+                    ${form.hours ? `<div style="font-weight: 500; color: #1d4ed8; margin: 5px 0;">${form.hours}</div>` : ''}
+                    ${form.institutions ? `<div style="font-weight: 500; margin: 5px 0;">${form.institutions}</div>` : ''}
+                    ${form.topics ? `<div style="margin-top: 8px;"><strong>Tematiche:</strong> ${this.linkifyText(form.topics)}</div>` : ''}
+                    ${form.details && form.details.length > 0 ? `
+                      <div style="margin-top: 8px;">
+                        <strong>Dettaglio attività:</strong>
+                        <ul style="margin: 5px 0 0 20px;">
+                          ${form.details.map(detail => `<li>${this.linkifyText(detail)}</li>`).join('')}
+                        </ul>
+                      </div>
+                    ` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+        
         // Competenze
-        if (data.skills.ai || data.skills.digital || data.skills.platforms) {
+        if ((data.skills.ai && data.skills.ai.content) || (data.skills.digital && (data.skills.digital.genericContent || data.skills.digital.useDigiCompEU)) || data.skills.platforms) {
           html += `
             <div class="cv-section">
               <h2 class="cv-section-title">Competenze</h2>
               <div class="cv-content">
-                ${data.skills.ai ? `<div style="margin-bottom: 15px;"><strong>AI e Machine Learning:</strong><br>${this.linkifyText(data.skills.ai)}</div>` : ''}
-                ${data.skills.digital ? `<div style="margin-bottom: 15px;"><strong>Competenze Digitali:</strong><br>${this.linkifyText(data.skills.digital)}</div>` : ''}
+                ${data.skills.ai && data.skills.ai.content ? `
+                  <div style="margin-bottom: 20px; padding: 15px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 6px;">
+                    <strong style="color: #003d7a;">${data.skills.ai.title}:</strong><br>
+                    ${this.linkifyText(data.skills.ai.content)}
+                  </div>
+                ` : ''}
+                
+                ${data.skills.digital && (data.skills.digital.genericContent || data.skills.digital.useDigiCompEU) ? `
+                  <div style="margin-bottom: 20px;">
+                    <strong style="color: #003d7a;">Competenze Digitali:</strong><br>
+                    ${data.skills.digital.genericContent ? `<div style="margin: 10px 0;">${this.linkifyText(data.skills.digital.genericContent)}</div>` : ''}
+                    
+                    ${data.skills.digital.useDigiCompEU && data.skills.digital.digiCompItems ? `
+                      <div style="margin-top: 15px; padding: 12px; background: #f9fafb; border-radius: 6px;">
+                        <strong style="color: #1d4ed8; font-size: 0.9em;">Competenze DigiCompEU (Framework Europeo):</strong>
+                        <div style="margin-top: 8px; display: grid; gap: 6px;">
+                          ${data.skills.digital.digiCompItems.map(skill => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #e5e7eb;">
+                              <span style="font-weight: 500;">${skill.name}</span>
+                              <span style="background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">${skill.level} (${skill.numeric})</span>
+                            </div>
+                          `).join('')}
+                        </div>
+                      </div>
+                    ` : ''}
+                  </div>
+                ` : ''}
+                
                 ${data.skills.platforms ? `<div style="margin-bottom: 15px;"><strong>Piattaforme e Software:</strong><br>${this.linkifyText(data.skills.platforms)}</div>` : ''}
               </div>
             </div>
@@ -1534,6 +1661,42 @@
     };
     
     // === FUNZIONI GLOBALI ===
+    
+    // Render DigiCompEU items
+    function renderDigiCompItems() {
+      const container = document.getElementById('digiCompItems');
+      if (!container || !AppState.cvData.skills.digital.digiCompItems) return;
+      
+      container.innerHTML = AppState.cvData.skills.digital.digiCompItems.map((skill, index) => `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: white; border: 1px solid #d1d5db; border-radius: 6px;">
+          <div style="flex: 1; margin-right: 16px;">
+            <input type="text" value="${skill.name}" 
+                   onchange="updateDigiCompItem(${index}, 'name', this.value)"
+                   style="width: 100%; padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem;">
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <select onchange="updateDigiCompItem(${index}, 'level', this.value)" 
+                    style="padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem;">
+              <option value="BASE" ${skill.level === 'BASE' ? 'selected' : ''}>BASE</option>
+              <option value="INTERMEDIO" ${skill.level === 'INTERMEDIO' ? 'selected' : ''}>INTERMEDIO</option>
+              <option value="AVANZATO" ${skill.level === 'AVANZATO' ? 'selected' : ''}>AVANZATO</option>
+            </select>
+            <input type="text" value="${skill.numeric}" placeholder="Livello X/6"
+                   onchange="updateDigiCompItem(${index}, 'numeric', this.value)"
+                   style="width: 80px; padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem;">
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Update DigiCompEU item
+    function updateDigiCompItem(index, field, value) {
+      if (AppState.cvData.skills.digital.digiCompItems[index]) {
+        AppState.cvData.skills.digital.digiCompItems[index][field] = value;
+        AppState.saveData();
+        AppState.updatePreview();
+      }
+    }
     
     // === UPLOAD FOTO ===
     
@@ -1742,6 +1905,91 @@
       }
     }
     
+    // Formatore
+    function addFormatore() {
+      const newForm = {
+        id: Date.now(),
+        period: '',
+        hours: '',
+        title: '',
+        institutions: '',
+        topics: '',
+        details: []
+      };
+      AppState.cvData.formatore.push(newForm);
+      AppState.saveData();
+      renderFormatoreList();
+      AppState.updatePreview();
+    }
+    
+    function removeFormatore(id) {
+      AppState.cvData.formatore = AppState.cvData.formatore.filter(form => form.id !== id);
+      AppState.saveData();
+      renderFormatoreList();
+      AppState.updatePreview();
+    }
+    
+    function renderFormatoreList() {
+      const container = document.getElementById('formatoreList');
+      if (AppState.cvData.formatore.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna attività formativa aggiunta</div>';
+        return;
+      }
+      
+      container.innerHTML = AppState.cvData.formatore.map(form => `
+        <div class="list-item">
+          <div class="list-item-header">
+            <div class="list-item-title">${form.title || 'Attività Formativa'}</div>
+            <div class="list-item-controls">
+              <button class="list-btn danger" onclick="removeFormatore(${form.id})">🗑️</button>
+            </div>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Periodo</label>
+              <input type="text" class="form-input" placeholder="es. Ottobre 2023 - Giugno 2025" value="${form.period}"
+                     onchange="updateFormatore(${form.id}, 'period', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ore Totali</label>
+              <input type="text" class="form-input" placeholder="es. 342 ore totali" value="${form.hours}"
+                     onchange="updateFormatore(${form.id}, 'hours', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Titolo Formazione</label>
+              <input type="text" class="form-input" placeholder="Titolo del corso o progetto formativo" value="${form.title}"
+                     onchange="updateFormatore(${form.id}, 'title', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Enti e Istituzioni</label>
+              <input type="text" class="form-input" placeholder="Scuole e istituzioni coinvolte" value="${form.institutions}"
+                     onchange="updateFormatore(${form.id}, 'institutions', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Tematiche Principali</label>
+              <textarea class="form-textarea" placeholder="Tematiche principali del corso..."
+                        onchange="updateFormatore(${form.id}, 'topics', this.value)">${form.topics}</textarea>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Dettaglio Attività (una per riga)</label>
+              <textarea class="form-textarea" placeholder="Esempio: I.C. di Roma: 20 ore - Coding e Robotica&#10;Formazione Milano: 15 ore - Intelligenza Artificiale"
+                        onchange="updateFormatore(${form.id}, 'details', this.value.split('\\n').filter(line => line.trim()))">${Array.isArray(form.details) ? form.details.join('\\n') : ''}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function updateFormatore(id, field, value) {
+      const form = AppState.cvData.formatore.find(f => f.id === id);
+      if (form) {
+        form[field] = value;
+        AppState.saveData();
+        AppState.updatePreview();
+      }
+    }
+    
     // Lingue
     function addLanguage() {
       const newLang = {
@@ -1945,7 +2193,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.1');
+      localStorage.setItem('lastSeenVersion_v5', '5.2');
     }
     
     // Stampa CV
@@ -1961,7 +2209,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 CV PWA Editor v5.1 Design Upgrade inizializzato');
+      console.log('🚀 CV PWA Editor v5.2 con funzionalità v4.7 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -1977,6 +2225,32 @@
       if (AppState.cvData.profile.text) {
         document.getElementById('profileText').value = AppState.cvData.profile.text;
       }
+      
+      // Popola competenze
+      if (AppState.cvData.skills.ai.content) {
+        document.getElementById('aiSkills').value = AppState.cvData.skills.ai.content;
+      }
+      if (AppState.cvData.skills.digital.genericContent) {
+        document.getElementById('digitalSkillsGeneric').value = AppState.cvData.skills.digital.genericContent;
+      }
+      if (AppState.cvData.skills.platforms) {
+        document.getElementById('platforms').value = AppState.cvData.skills.platforms;
+      }
+      
+      // Toggle DigiCompEU
+      const useDigiCompEUCheckbox = document.getElementById('useDigiCompEU');
+      if (useDigiCompEUCheckbox && AppState.cvData.skills.digital.useDigiCompEU) {
+        useDigiCompEUCheckbox.checked = true;
+        document.getElementById('digiCompSection').style.display = 'block';
+        renderDigiCompItems();
+      }
+      
+      // Render liste dinamiche
+      renderExperienceList();
+      renderEducationList();
+      renderFormatoreList();
+      renderLanguagesList();
+      renderPublicationsList();
       
       // Aggiorna anteprima
       AppState.updatePreview();
@@ -2000,17 +2274,47 @@
       }
       
       // Event listeners per competenze
-      ['aiSkills', 'digitalSkills', 'platforms'].forEach(fieldId => {
-        const textarea = document.getElementById(fieldId);
-        if (textarea) {
-          const skillKey = fieldId === 'aiSkills' ? 'ai' : fieldId === 'digitalSkills' ? 'digital' : 'platforms';
-          textarea.addEventListener('input', function(e) {
-            AppState.cvData.skills[skillKey] = e.target.value;
-            AppState.saveData();
-            AppState.updatePreview();
-          });
-        }
-      });
+      const aiSkillsTextarea = document.getElementById('aiSkills');
+      if (aiSkillsTextarea) {
+        aiSkillsTextarea.addEventListener('input', function(e) {
+          AppState.cvData.skills.ai.content = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      const digitalSkillsGenericTextarea = document.getElementById('digitalSkillsGeneric');
+      if (digitalSkillsGenericTextarea) {
+        digitalSkillsGenericTextarea.addEventListener('input', function(e) {
+          AppState.cvData.skills.digital.genericContent = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      const platformsTextarea = document.getElementById('platforms');
+      if (platformsTextarea) {
+        platformsTextarea.addEventListener('input', function(e) {
+          AppState.cvData.skills.platforms = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      // Toggle DigiCompEU
+      const useDigiCompEUCheckbox = document.getElementById('useDigiCompEU');
+      if (useDigiCompEUCheckbox) {
+        useDigiCompEUCheckbox.addEventListener('change', function(e) {
+          AppState.cvData.skills.digital.useDigiCompEU = e.target.checked;
+          const digiCompSection = document.getElementById('digiCompSection');
+          digiCompSection.style.display = e.target.checked ? 'block' : 'none';
+          if (e.target.checked) {
+            renderDigiCompItems();
+          }
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
       
       // Event listeners per lingue madrelingua
       const motherTongueInput = document.getElementById('motherTongue');
@@ -2173,7 +2477,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.1') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.2') {
         document.getElementById('versionBanner').classList.add('show');
       }
       

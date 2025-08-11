@@ -1289,8 +1289,8 @@
               <label className="block text-sm font-medium mb-1">Nome Completo</label>
               <input
                 type="text"
-                value={cvData.personalInfo.name}
-                onChange={(e) => updatePersonalInfo('name', e.target.value)}
+                defaultValue={cvData.personalInfo.name}
+                onInput={(e) => updatePersonalInfo('name', e.target.value)}
                 className="w-full p-2 border rounded-md"
                 placeholder="Il tuo nome completo"
               />

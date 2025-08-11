@@ -688,7 +688,37 @@
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           setDeferredPrompt(e);
-          setShowInstallPrompt(true);
+          const currentContent = element.textContent;
+          const newContent = data[section][field] || '';
+          
+          // Aggiorna solo se il contenuto è effettivamente cambiato
+          if (currentContent !== newContent) {
+            element.textContent = newContent;
+          }
+          
+          // Focus sul nuovo campo aggiunto
+          setTimeout(() => {
+            const newFields = document.querySelectorAll('[data-section="esperienza"] .experience-item:last-child [contenteditable]');
+            if (newFields.length > 0) {
+              newFields[0].focus();
+            }
+          }, 100);
+          
+          // Focus sul nuovo campo aggiunto
+          setTimeout(() => {
+            const newFields = document.querySelectorAll('[data-section="formazione"] .education-item:last-child [contenteditable]');
+            if (newFields.length > 0) {
+              newFields[0].focus();
+            }
+          }, 100);
+          
+          // Focus sul nuovo campo aggiunto
+          setTimeout(() => {
+            const newFields = document.querySelectorAll('[data-section="competenze"] .skill-item:last-child [contenteditable]');
+            if (newFields.length > 0) {
+              newFields[0].focus();
+            }
+          }, 100);
         });
 
         window.addEventListener('appinstalled', () => {

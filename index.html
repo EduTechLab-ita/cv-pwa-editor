@@ -3,3237 +3,492 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV PWA Editor v5.0 - FASE 1 Foundation</title>
+  
+  <!-- Meta PWA -->
   <meta name="theme-color" content="#003d7a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="CV Editor">
-  
-  <title>CV PWA Editor v4.4 - EduTechLab Italia</title>
-  <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
-  
-  <link rel="manifest" href="./manifest.json">
-  
-  <!-- Favicon con cache busting per aggiornamento immediato -->
-  <link rel="icon" type="image/png" sizes="32x32" href="./icon-192.png?v=4.3">
-  <link rel="icon" type="image/png" sizes="16x16" href="./icon-192.png?v=4.3">
-  <link rel="shortcut icon" href="./icon-192.png?v=4.3">
-  <link rel="apple-touch-icon" href="./icon-192.png?v=4.3">
-  
-  <!-- Fallback SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjcyIiBoZWlnaHQ9IjcyIiByeD0iMTYiIGZpbGw9IiMwMDNkN2EiLz4KPHN2ZyB4PSIxNiIgeT0iMTYiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZmZmZmZmIj4KPHA+PHBhdGggZD0iTTIwLDE4SDRWNEgyME0yMCwySDRBMiwyIDAgMCwwIDIsNFYxOEEyLDIgMCAwLDAgNCwyMEgyMEEyLDIgMCAwLDAgMjIsMThWNEEyLDIgMCAwLDAgMjAsMlpNMTIsMTRMMTAuNSwxMi41TDcsMTZIMTdMMTMuNSwxMS41TDEyLDE0WiIgLz48L3A+Cjwvc3ZnPgo8L3N2Zz4K">
-  
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  
   
   <style>
-    /* Print Styles per PDF */
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-      .cv-preview, .cv-preview * {
-        visibility: visible;
-      }
-      .cv-preview {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100% !important;
-        margin: 0 !important;
-        box-shadow: none !important;
-      }
-      
-      /* Hide tutto tranne il CV */
-      header, .fixed, nav, button, .page-indicator {
-        display: none !important;
-      }
-      
-      /* Ensure links are clickable in print */
-      .cv-preview a {
-        color: #0066cc !important;
-        text-decoration: underline !important;
-      }
-      
-      /* Nasconde header e footer del browser e aggiunge il nostro */
-      @page {
-        margin: 0.5in;
-        size: A4;
-        /* Rimuove header e footer del browser */
-        @top-left { content: ""; }
-        @top-center { content: ""; }
-        @top-right { content: ""; }
-        @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v4.4 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
-        @bottom-right { content: ""; }
-      }
-      
-      /* Stile per stampa pulita */
-      html, body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+    /* === CSS FOUNDATION v5.0 === */
+    
+    /* Reset e Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f7fa;
+    }
+    
+    /* Layout Grid Responsive */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    @media (min-width: 768px) {
+      .container {
+        grid-template-columns: 300px 1fr;
       }
     }
     
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #a1a1a1;
-    }
-
-    /* Page count indicator */
-    .page-indicator {
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      background: rgba(0, 61, 122, 0.9);
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #003d7a, #0056b3);
       color: white;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      z-index: 1000;
-    }
-
-    /* Photo preview styles */
-    .photo-preview {
-      width: 120px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 4px;
-      border: 2px solid #e5e7eb;
-    }
-
-    .photo-upload-area {
-      border: 2px dashed #d1d5db;
-      border-radius: 8px;
       padding: 20px;
+      border-radius: 12px;
       text-align: center;
-      transition: border-color 0.2s;
+      grid-column: 1 / -1;
     }
-
-    .photo-upload-area:hover {
-      border-color: #6366f1;
-    }
-
-    .photo-upload-area.dragover {
-      border-color: #4f46e5;
-      background-color: #f8fafc;
-    }
-
-    /* Profile photo in CV */
-    .cv-profile-photo {
-      width: 3.5cm;
-      height: 4.5cm;
-      object-fit: cover;
-      border-radius: 4px;
-      float: right;
-      margin-left: 20px;
+    
+    .header h1 {
+      font-size: 2rem;
       margin-bottom: 10px;
     }
-
-    /* Link styling */
-    .clickable-link {
-      color: #0066cc;
-      text-decoration: underline;
+    
+    .version-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+    
+    /* Sidebar Navigation */
+    .sidebar {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+    }
+    
+    .nav-section {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      background: #f8f9fa;
+      border: none;
+      border-radius: 8px;
+      text-align: left;
       cursor: pointer;
+      transition: all 0.2s;
+      font-size: 1rem;
+      color: #495057;
     }
-
-    .clickable-link:hover {
-      color: #0052a3;
+    
+    .nav-section:hover {
+      background: #e9ecef;
+      transform: translateX(4px);
     }
+    
+    .nav-section.active {
+      background: #003d7a;
+      color: white;
+    }
+    
+    /* Main Content Area */
+    .main-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Form Styling */
+    .section {
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    .section.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .section-title {
+      color: #003d7a;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e9ecef;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    @media (min-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    label {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    
+    /* INPUT STYLING CRITICO */
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s;
+      background: white;
+      font-family: inherit;
+    }
+    
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #003d7a;
+      box-shadow: 0 0 0 3px rgba(0, 61, 122, 0.1);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    /* Success Indicator */
+    .save-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+    }
+    
+    .save-indicator.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: #6c757d;
+      font-size: 0.9rem;
+      grid-column: 1 / -1;
+      margin-top: 20px;
+    }
+    
   </style>
 </head>
-
-<body class="bg-gray-100">
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+<body>
+  
+  <!-- Header -->
+  <div class="container">
+    <div class="header">
+      <h1>CV PWA Editor</h1>
+      <span class="version-badge">v5.0 FASE 1 - Foundation</span>
+      <p style="margin-top: 10px; opacity: 0.9;">Input nativi che FUNZIONANO! 🎯</p>
+    </div>
     
-    // Icone Lucide simulate
-    const LucideIcon = ({ name, size = 16, className = "", ...props }) => {
-      const icons = {
-        Save: '💾', Eye: '👁️', Download: '⬇️', Edit3: '✏️', Plus: '➕', 
-        Trash2: '🗑️', FileText: '📄', Wifi: '📶', WifiOff: '📵', 
-        RotateCw: '🔄', Settings: '⚙️', Share2: '🔗', Palette: '🎨',
-        Upload: '📤', User: '👤', Globe: '🌐', Calendar: '📅', 
-        Shield: '🛡️', Heart: '❤️', Image: '🖼️', Camera: '📷'
-      };
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <h3 style="margin-bottom: 15px; color: #003d7a;">Sezioni</h3>
+      <button class="nav-section active" data-section="personal">👤 Info Personali</button>
+      <button class="nav-section" data-section="profile">📝 Profilo</button>
+      <button class="nav-section" data-section="preview">👁️ Anteprima</button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
       
-      return <span className={`inline-flex items-center justify-center ${className}`} style={{fontSize: `${size}px`}} {...props}>
-        {icons[name] || '🔧'}
-      </span>;
-    };
-
-    // Utility function to detect and convert URLs to clickable links
-    const linkifyText = (text) => {
-      if (!text) return text;
-      
-      // Regex per URL e email
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
-      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
-      
-      // Prima gestisce URL
-      let parts = text.split(urlRegex);
-      parts = parts.map((part, index) => {
-        if (urlRegex.test(part)) {
-          return (
-            <a 
-              key={`url-${index}`} 
-              href={part} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="clickable-link"
-              style={{ color: '#0066cc', textDecoration: 'underline' }}
-            >
-              {part}
-            </a>
-          );
-        }
+      <!-- Sezione Info Personali -->
+      <div class="section active" id="personal">
+        <h2 class="section-title">Informazioni Personali</h2>
         
-        // Poi gestisce email nel testo rimanente
-        return part.split(emailRegex).map((emailPart, emailIndex) => {
-          if (emailRegex.test(emailPart)) {
-            return (
-              <a 
-                key={`email-${index}-${emailIndex}`} 
-                href={`mailto:${emailPart}`} 
-                className="clickable-link"
-                style={{ color: '#0066cc', textDecoration: 'underline' }}
-              >
-                {emailPart}
-              </a>
-            );
-          }
-          return emailPart;
-        });
-      });
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fullName">Nome Completo *</label>
+            <input type="text" id="fullName" placeholder="Il tuo nome completo">
+          </div>
+          
+          <div class="form-group">
+            <label for="nationality">Nazionalità</label>
+            <input type="text" id="nationality" placeholder="Es. Italiana" value="Italiana">
+          </div>
+          
+          <div class="form-group">
+            <label for="birthDate">Data di Nascita</label>
+            <input type="text" id="birthDate" placeholder="GG/MM/AAAA">
+          </div>
+          
+          <div class="form-group">
+            <label for="phone">Telefono</label>
+            <input type="tel" id="phone" placeholder="(+39) 123 456 7890">
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" placeholder="tua@email.com">
+          </div>
+          
+          <div class="form-group full-width">
+            <label for="address">Indirizzo</label>
+            <input type="text" id="address" placeholder="Via Esempio 123, 12345 Città (Prov)">
+          </div>
+          
+          <div class="form-group full-width">
+            <label for="website">Sito Web (opzionale)</label>
+            <input type="text" id="website" placeholder="https://tuosito.com">
+          </div>
+        </div>
+      </div>
       
-      return parts.flat();
-    };
-
-    // Utility function for date formatting
-    const formatDate = (dateString, format = 'italian') => {
-      if (!dateString) return dateString;
+      <!-- Sezione Profilo -->
+      <div class="section" id="profile">
+        <h2 class="section-title">Profilo Professionale</h2>
+        
+        <div class="form-group">
+          <label for="profileText">Descrizione del tuo profilo professionale</label>
+          <textarea id="profileText" placeholder="Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera..."></textarea>
+        </div>
+      </div>
       
-      // Se è già formattato o contiene testo, restituisci così com'è
-      if (dateString.includes('/') || dateString.includes('oggi') || dateString.includes('presente')) {
-        return dateString;
-      }
+      <!-- Sezione Anteprima -->
+      <div class="section" id="preview">
+        <h2 class="section-title">Anteprima CV</h2>
+        
+        <div id="cvPreview" style="border: 2px solid #e9ecef; border-radius: 8px; padding: 30px; background: white; min-height: 400px;">
+          <div style="text-align: center; padding: 40px; color: #6c757d;">
+            <h3>Anteprima del tuo CV</h3>
+            <p>Compila i campi nelle altre sezioni per vedere l'anteprima qui.</p>
+          </div>
+        </div>
+      </div>
       
-      // Altrimenti applica il formato richiesto
-      switch (format) {
-        case 'italian':
-          return dateString; // Mantieni formato italiano MM/AAAA
-        case 'iso':
-          return dateString.replace(/(\d{2})\/(\d{4})/, '$2-$1'); // MM/AAAA -> AAAA-MM
-        case 'full':
-          return dateString; // Per ora mantieni così
-        default:
-          return dateString;
-      }
-    };
-
-    const CVEditor = () => {
-      // PWA States
-      const [isOnline, setIsOnline] = useState(navigator.onLine);
-      const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-      const [showWelcome, setShowWelcome] = useState(false);
-      const [deferredPrompt, setDeferredPrompt] = useState(null);
-      const [isInstalled, setIsInstalled] = useState(false);
-      const [pageCount, setPageCount] = useState(1);
-      const [showVersionBanner, setShowVersionBanner] = useState(false);
-
-      // Advanced settings
-      const [advancedSettings, setAdvancedSettings] = useState({
-        showPhoto: true,
-        dateFormat: 'italian',
-        privacyConsent: true,
-        templateStyle: 'europass'
-      });
-
-      // Template iniziale PULITO per tutti gli utenti
-      const [cvData, setCvData] = useState({
-        personalInfo: {
-          name: 'Il Tuo Nome',
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <p>🚀 CV PWA Editor v5.0 - FASE 1 Foundation Test</p>
+      <p>Sviluppato da Claude Code + Fabio Rizzotto | Focus: Input nativi funzionanti</p>
+    </div>
+    
+  </div>
+  
+  <!-- Save Indicator -->
+  <div class="save-indicator" id="saveIndicator">✅ Salvato automaticamente</div>
+  
+  <!-- JavaScript Vanilla Foundation -->
+  <script>
+    // === JAVASCRIPT FOUNDATION v5.0 ===
+    
+    // Stato globale applicazione
+    const AppState = {
+      cvData: {
+        personal: {
+          fullName: '',
           nationality: 'Italiana',
-          birthDate: 'GG/MM/AAAA',
-          phone: '(+39) 123 456 7890',
-          email: 'tuaemail@esempio.com',
-          address: 'Via Esempio 123, 12345 Città (Prov)',
-          website: '',
-          photo: '' // Base64 encoded photo
+          birthDate: '',
+          phone: '',
+          email: '',
+          address: '',
+          website: ''
         },
-        profile: 'Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera. Questo è uno spazio importante per presentarti in modo efficace ai potenziali datori di lavoro.',
-        workExperience: [
-          {
-            id: 1,
-            startDate: 'MM/AAAA',
-            endDate: 'MM/AAAA o "Ad oggi"',
-            title: 'Titolo della Posizione',
-            company: 'Nome Azienda, Città',
-            description: 'Descrivi qui le tue responsabilità, risultati ottenuti e competenze sviluppate in questo ruolo. Includi achievements quantificabili quando possibile.',
-            isNew: false
+        profile: {
+          text: ''
+        }
+      },
+      
+      // Carica dati da localStorage
+      loadData() {
+        try {
+          const saved = localStorage.getItem('cvData_v5');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            this.cvData = { ...this.cvData, ...parsed };
+            console.log('✅ Dati caricati da localStorage');
           }
-        ],
-        education: [
-          {
-            id: 1,
-            date: 'AAAA',
-            title: 'Titolo di Studio o Certificazione',
-            institution: 'Nome Istituzione, Città',
-            description: 'Descrizione del percorso formativo e delle competenze acquisite.',
-            level: 'Livello QEQ (opzionale)',
-            isNew: false,
-            link: 'https://esempio.com/certificato (opzionale)'
-          }
-        ],
-        skills: {
-          ai: {
-            title: 'Competenze Specialistiche',
-            content: 'Descrivi qui le tue competenze specialistiche, certificazioni, e aree di expertise specifiche del tuo settore professionale.',
-            isNew: false
-          },
-          digital: {
-            title: 'Competenze Digitali',
-            // Competenze generiche sempre presenti
-            genericContent: 'Descrivi qui le tue competenze digitali generali, software utilizzati, piattaforme conosciute e livello di utilizzo.',
-            // Toggle per DigiCompEU
-            useDigiCompEU: false,
-            // Competenze DigiCompEU (mostrate solo se useDigiCompEU = true)
-            digiCompItems: [
-              { name: 'Elaborazione delle informazioni', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Comunicazione digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Creazione di contenuti', level: 'BASE', numeric: 'Livello 3/6' },
-              { name: 'Sicurezza digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Problem solving', level: 'INTERMEDIO', numeric: 'Livello 4/6' }
-            ]
-          },
-          platforms: {
-            title: 'Software e Piattaforme',
-            items: [
-              'Microsoft Office 365 - Livello avanzato',
-              'Google Workspace - Utilizzo professionale',
-              'Piattaforme di comunicazione (Teams, Zoom)',
-              'Software specifici del settore',
-              'Gestione progetti digitali'
-            ]
-          },
-          languages: {
-            // Lingua madre sempre presente
-            motherTongue: {
-              name: 'Italiano',
-              level: 'Madrelingua'
-            },
-            // Array dinamico per altre lingue
-            otherLanguages: [
-              { id: 1, name: 'Inglese', level: 'B2 Intermedio Superiore' },
-              { id: 2, name: 'Francese', level: 'A2 Elementare' }
-            ]
-          },
-          personal: {
-            communication: [
-              'Eccellenti capacità di comunicazione scritta e orale',
-              'Capacità di parlare in pubblico',
-              'Ottime capacità di ascolto attivo',
-              'Abilità nel fornire feedback costruttivo',
-              'Competenze di negoziazione'
-            ],
-            organizational: [
-              'Ottime competenze di gestione del tempo',
-              'Capacità di lavorare sotto pressione',
-              'Orientamento agli obiettivi e ai risultati',
-              'Flessibilità e adattabilità',
-              'Capacità di lavorare in team multidisciplinari'
-            ]
-          }
-        },
-        formatore: [],
-        altreCapacita: '',
-        trattamentoDati: {
-          enabled: true,
-          text: 'Autorizzo il trattamento dei miei dati personali presenti nel CV ai sensi dell\'art. 13 d. lgs. 30 giugno 2003 n. 196 - "Codice in materia di protezione dei dati personali" e dell\'art. 13 GDPR 679/16 - "Regolamento europeo sulla protezione dei dati personali".'
-        },
-        lastUpdated: new Date().toISOString() // NUOVO CAMPO
-      });
-
-      const [activeTab, setActiveTab] = useState('edit');
-      const [editingSection, setEditingSection] = useState('personalInfo');
-      const previewRef = useRef(null);
-
-      // Carica i dati salvati al mount
-      useEffect(() => {
-        const savedData = localStorage.getItem('cvData');
-        const savedSettings = localStorage.getItem('advancedSettings');
-        const hasVisited = localStorage.getItem('hasVisited');
+        } catch (error) {
+          console.log('⚠️ Errore caricamento dati:', error);
+        }
+      },
+      
+      // Salva dati in localStorage
+      saveData() {
+        try {
+          localStorage.setItem('cvData_v5', JSON.stringify(this.cvData));
+          this.showSaveIndicator();
+          console.log('✅ Dati salvati in localStorage');
+        } catch (error) {
+          console.error('❌ Errore salvataggio:', error);
+        }
+      },
+      
+      // Mostra indicatore salvataggio
+      showSaveIndicator() {
+        const indicator = document.getElementById('saveIndicator');
+        indicator.classList.add('show');
+        setTimeout(() => {
+          indicator.classList.remove('show');
+        }, 2000);
+      },
+      
+      // Aggiorna campo dati
+      updateField(section, field, value) {
+        if (!this.cvData[section]) {
+          this.cvData[section] = {};
+        }
+        this.cvData[section][field] = value;
+        this.saveData();
+        this.updatePreview();
+      },
+      
+      // Aggiorna anteprima CV
+      updatePreview() {
+        const preview = document.getElementById('cvPreview');
+        const data = this.cvData;
         
-        // FORZA AGGIORNAMENTO CACHE v3.0
-        if ('caches' in window) {
-          caches.keys().then(cacheNames => {
-            cacheNames.forEach(cacheName => {
-              if (cacheName.includes('v2.') || cacheName.includes('v1.')) {
-                console.log('Eliminando cache vecchia:', cacheName);
-                caches.delete(cacheName);
-              }
-            });
+        preview.innerHTML = `
+          <div style="max-width: 800px; margin: 0 auto;">
+            <header style="text-align: center; border-bottom: 2px solid #003d7a; padding-bottom: 20px; margin-bottom: 30px;">
+              <h1 style="color: #003d7a; font-size: 2rem; margin-bottom: 10px;">${data.personal.fullName || 'Il Tuo Nome'}</h1>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 0.9rem; color: #666;">
+                ${data.personal.nationality ? `<div>📍 ${data.personal.nationality}</div>` : ''}
+                ${data.personal.birthDate ? `<div>🎂 ${data.personal.birthDate}</div>` : ''}
+                ${data.personal.phone ? `<div>📞 ${data.personal.phone}</div>` : ''}
+                ${data.personal.email ? `<div>✉️ ${data.personal.email}</div>` : ''}
+                ${data.personal.website ? `<div>🌐 ${data.personal.website}</div>` : ''}
+              </div>
+              ${data.personal.address ? `<div style="margin-top: 10px; color: #666;">📍 ${data.personal.address}</div>` : ''}
+            </header>
+            
+            ${data.profile.text ? `
+              <section style="margin-bottom: 30px;">
+                <h2 style="color: #003d7a; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px;">Profilo Professionale</h2>
+                <p style="line-height: 1.6;">${data.profile.text}</p>
+              </section>
+            ` : ''}
+            
+            ${(!data.personal.fullName && !data.profile.text) ? `
+              <div style="text-align: center; padding: 40px; color: #999; background: #f8f9fa; border-radius: 8px;">
+                <p>👆 Compila i campi sopra per vedere il tuo CV qui!</p>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+    };
+    
+    // === EVENT LISTENERS E INIZIALIZZAZIONE ===
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 CV PWA Editor v5.0 FASE 1 inizializzato');
+      
+      // Carica dati salvati
+      AppState.loadData();
+      
+      // Popola campi con dati salvati
+      Object.keys(AppState.cvData.personal).forEach(field => {
+        const input = document.getElementById(field);
+        if (input && AppState.cvData.personal[field]) {
+          input.value = AppState.cvData.personal[field];
+        }
+      });
+      
+      if (AppState.cvData.profile.text) {
+        document.getElementById('profileText').value = AppState.cvData.profile.text;
+      }
+      
+      // Aggiorna anteprima iniziale
+      AppState.updatePreview();
+      
+      // === INPUT EVENT LISTENERS (NATIVI!) ===
+      
+      // Info Personali - Event listeners nativi per evitare re-render
+      ['fullName', 'nationality', 'birthDate', 'phone', 'email', 'address', 'website'].forEach(fieldId => {
+        const input = document.getElementById(fieldId);
+        if (input) {
+          input.addEventListener('input', function(e) {
+            const fieldName = fieldId;
+            const value = e.target.value;
+            AppState.updateField('personal', fieldName, value);
           });
         }
-        
-        if (savedData) {
-          try {
-            const parsed = JSON.parse(savedData);
-            console.log('PWA v3.0 caricata e funzionante');
-            // Assicurati che i nuovi campi esistano
-            if (!parsed.personalInfo.website) parsed.personalInfo.website = '';
-            if (!parsed.altreCapacita) parsed.altreCapacita = '';
-            if (!parsed.trattamentoDati) parsed.trattamentoDati = { enabled: true, text: 'Autorizzo il trattamento dei miei dati personali...' };
-            if (!parsed.lastUpdated) parsed.lastUpdated = new Date().toISOString();
-            
-            // RETROCOMPATIBILITÀ - Conversione strutture vecchie → nuove
-            
-            // 1. Conversione COMPETENZE DIGITALI
-            if (parsed.skills && parsed.skills.digital) {
-              // Se esiste la vecchia struttura con 'items'
-              if (parsed.skills.digital.items && !parsed.skills.digital.hasOwnProperty('useDigiCompEU')) {
-                console.log('🔄 Conversione competenze digitali: vecchia → nuova struttura');
-                parsed.skills.digital = {
-                  title: parsed.skills.digital.title || 'Competenze Digitali',
-                  genericContent: 'Competenze digitali convertite dal formato precedente.',
-                  useDigiCompEU: true, // Attivo per mantenere i dati esistenti
-                  digiCompItems: parsed.skills.digital.items || []
-                };
-              }
-              
-              // Assicura che tutti i campi esistano
-              if (!parsed.skills.digital.genericContent) parsed.skills.digital.genericContent = '';
-              if (typeof parsed.skills.digital.useDigiCompEU === 'undefined') parsed.skills.digital.useDigiCompEU = false;
-              if (!parsed.skills.digital.digiCompItems) parsed.skills.digital.digiCompItems = [];
-            }
-            
-            // 2. Conversione LINGUE
-            if (parsed.skills && parsed.skills.languages) {
-              // Se esiste la vecchia struttura con 'italian', 'english', 'french'
-              if (parsed.skills.languages.italian && !parsed.skills.languages.motherTongue) {
-                console.log('🔄 Conversione lingue: vecchia → nuova struttura');
-                
-                // Converti lingua madre
-                parsed.skills.languages.motherTongue = {
-                  name: 'Italiano', // Default, l'utente può modificare
-                  level: parsed.skills.languages.italian || 'Madrelingua'
-                };
-                
-                // Converti altre lingue in array
-                const otherLanguages = [];
-                if (parsed.skills.languages.english) {
-                  otherLanguages.push({ 
-                    id: 1, 
-                    name: 'Inglese', 
-                    level: parsed.skills.languages.english 
-                  });
-                }
-                if (parsed.skills.languages.french) {
-                  otherLanguages.push({ 
-                    id: 2, 
-                    name: 'Francese', 
-                    level: parsed.skills.languages.french 
-                  });
-                }
-                parsed.skills.languages.otherLanguages = otherLanguages;
-                
-                // Rimuovi vecchi campi
-                delete parsed.skills.languages.italian;
-                delete parsed.skills.languages.english;
-                delete parsed.skills.languages.french;
-              }
-              
-              // Assicura che tutti i campi esistano
-              if (!parsed.skills.languages.motherTongue) {
-                parsed.skills.languages.motherTongue = { name: 'Italiano', level: 'Madrelingua' };
-              }
-              if (!parsed.skills.languages.otherLanguages) {
-                parsed.skills.languages.otherLanguages = [];
-              }
-            }
-            
-            setCvData(parsed);
-          } catch (error) {
-            console.error('Errore nel caricamento dati salvati:', error);
-          }
-        }
-        
-        // Mostra welcome solo per nuovi utenti
-        if (savedSettings) {
-          try {
-            const parsedSettings = JSON.parse(savedSettings);
-            setAdvancedSettings({
-              showPhoto: parsedSettings.showPhoto ?? true,
-              dateFormat: parsedSettings.dateFormat ?? 'italian',
-              privacyConsent: parsedSettings.privacyConsent ?? true,
-              templateStyle: parsedSettings.templateStyle ?? 'europass'
-            });
-          } catch (error) {
-            console.error('Errore caricamento impostazioni:', error);
-          }
-        }
-
-        if (!hasVisited) {
-          setShowWelcome(true);
-          localStorage.setItem('hasVisited', 'true');
-        }
-
-        // Controlla se mostrare banner aggiornamento versione
-        const currentVersion = '4.4';
-        const lastSeenVersion = localStorage.getItem('lastSeenVersion');
-        if (lastSeenVersion && lastSeenVersion !== currentVersion) {
-          setShowVersionBanner(true);
-          localStorage.setItem('lastSeenVersion', currentVersion);
-          
-          // Reset template selection per nuove versioni
-          const currentSettings = JSON.parse(localStorage.getItem('advancedSettings') || '{}');
-          if (!currentSettings.templateStyle || currentSettings.templateStyle === undefined) {
-            setAdvancedSettings(prev => {
-              const resetSettings = { ...prev, templateStyle: 'europass' };
-              localStorage.setItem('advancedSettings', JSON.stringify(resetSettings));
-              return resetSettings;
-            });
-          }
-        } else if (!lastSeenVersion) {
-          localStorage.setItem('lastSeenVersion', currentVersion);
-        }
-      }, []);
-
-      // Calcola pagine quando cambia il contenuto
-      useEffect(() => {
-        if (previewRef.current && activeTab === 'preview') {
-          const calculatePages = () => {
-            const element = previewRef.current;
-            const height = element.scrollHeight;
-            const pageHeight = 1056; // A4 height at 72 DPI (297mm)
-            const calculatedPages = Math.ceil(height / pageHeight);
-            setPageCount(calculatedPages);
-          };
-          
-          setTimeout(calculatePages, 500); // Delay per rendering
-        }
-      }, [cvData, activeTab]);
-
-      // PWA Setup e Service Worker Registration
-      useEffect(() => {
-        if ('serviceWorker' in navigator) {
-          registerServiceWorker();
-        }
-
-        setupPWAEventListeners();
-
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-          setIsInstalled(true);
-        }
-
-        const handleOnline = () => setIsOnline(true);
-        const handleOffline = () => setIsOnline(false);
-        
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
-
-        return () => {
-          window.removeEventListener('online', handleOnline);
-          window.removeEventListener('offline', handleOffline);
-        };
-      }, []);
-
-      const registerServiceWorker = async () => {
-        if ('serviceWorker' in navigator) {
-          try {
-            const registration = await navigator.serviceWorker.register('./sw.js');
-            console.log('SW registered successfully:', registration);
-            
-            registration.addEventListener('updatefound', () => {
-              const newWorker = registration.installing;
-              if (newWorker) {
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    console.log('🔄 Nuovo aggiornamento disponibile, applicando automaticamente...');
-                    
-                    // AGGIORNAMENTO AUTOMATICO SILENZIOSO
-                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                    
-                    // Piccolo delay e poi reload con notifica
-                    setTimeout(() => {
-                      // Salva in sessionStorage che c'è stato un aggiornamento
-                      sessionStorage.setItem('appUpdated', 'true');
-                      window.location.reload();
-                    }, 100);
-                  }
-                });
-              }
-            });
-
-          } catch (error) {
-            console.error('SW registration failed:', error);
-          }
-        }
-      };
-
-      // Funzione per mostrare notifica discreta dopo aggiornamento
-      const showUpdateNotification = () => {
-        // Crea elemento toast
-        const toast = document.createElement('div');
-        toast.innerHTML = `
-          <div style="
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 9999;
-            font-family: system-ui, -apple-system, sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            animation: slideIn 0.3s ease-out;
-          ">
-            ✨ App aggiornata alla versione più recente
-          </div>
-          <style>
-            @keyframes slideIn {
-              from { transform: translateX(100%); opacity: 0; }
-              to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-              from { transform: translateX(0); opacity: 1; }
-              to { transform: translateX(100%); opacity: 0; }
-            }
-          </style>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        // Rimuovi dopo 4 secondi con animazione
-        setTimeout(() => {
-          toast.firstElementChild.style.animation = 'slideOut 0.3s ease-in';
-          setTimeout(() => {
-            if (toast.parentNode) {
-              toast.parentNode.removeChild(toast);
-            }
-          }, 300);
-        }, 4000);
-      };
-
-      // Controlla se c'è stato un aggiornamento al caricamento della pagina
-      window.addEventListener('load', () => {
-        if (sessionStorage.getItem('appUpdated') === 'true') {
-          sessionStorage.removeItem('appUpdated');
-          // Aspetta un po' prima di mostrare la notifica
-          setTimeout(() => {
-            showUpdateNotification();
-          }, 1000);
-        }
       });
-
-      const setupPWAEventListeners = () => {
-        window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          setDeferredPrompt(e);
-          setShowInstallPrompt(true);
-        });
-
-        window.addEventListener('appinstalled', () => {
-          setIsInstalled(true);
-          setShowInstallPrompt(false);
-          setDeferredPrompt(null);
-        });
-      };
-
-      const installPWA = async () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          console.log('Install prompt result:', outcome);
-          setDeferredPrompt(null);
-          setShowInstallPrompt(false);
-        }
-      };
-
-
-      // Salva automaticamente i dati E aggiorna timestamp
-      useEffect(() => {
-        const dataToSave = {
-          ...cvData,
-          lastUpdated: new Date().toISOString()
-        };
-        localStorage.setItem('cvData', JSON.stringify(dataToSave));
-      }, [cvData]);
-
-      const updatePersonalInfo = (field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          personalInfo: {
-            ...prev.personalInfo,
-            [field]: value
-          }
-        }));
-      };
-
-      // FUNZIONI GESTIONE FOTO PROFILO
-      const handlePhotoUpload = (event) => {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            updatePersonalInfo('photo', e.target.result);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-
-      const handlePhotoDrop = (event) => {
-        event.preventDefault();
-        const file = event.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            updatePersonalInfo('photo', e.target.result);
-          };
-          reader.readAsDataURL(file);
-        }
-      };
-
-      const handlePhotoDragOver = (event) => {
-        event.preventDefault();
-        event.currentTarget.classList.add('dragover');
-      };
-
-      const handlePhotoDragLeave = (event) => {
-        event.preventDefault();
-        event.currentTarget.classList.remove('dragover');
-      };
-
-      const removePhoto = () => {
-        updatePersonalInfo('photo', '');
-      };
-
-      const updateProfile = (value) => {
-        setCvData(prev => ({
-          ...prev,
-          profile: value
-        }));
-      };
-
-      const updateAltreCapacita = (value) => {
-        setCvData(prev => ({
-          ...prev,
-          altreCapacita: value
-        }));
-      };
-
-      const updateTrattamentoDati = (field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          trattamentoDati: {
-            ...prev.trattamentoDati,
-            [field]: value
-          }
-        }));
-      };
-
-      const updateAdvancedSettings = (field, value) => {
-        setAdvancedSettings(prev => {
-          const newSettings = {
-            ...prev,
-            [field]: value
-          };
-          localStorage.setItem('advancedSettings', JSON.stringify(newSettings));
-          return newSettings;
-        });
-      };
-
-      // NUOVE FUNZIONI PER COMPETENZE DIGITALI E LINGUE
       
-      // Gestione competenze digitali
-      const updateDigitalSkills = (field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          skills: {
-            ...prev.skills,
-            digital: {
-              ...prev.skills.digital,
-              [field]: value
-            }
+      // Profilo - Event listener nativo
+      const profileTextarea = document.getElementById('profileText');
+      if (profileTextarea) {
+        profileTextarea.addEventListener('input', function(e) {
+          AppState.updateField('profile', 'text', e.target.value);
+        });
+      }
+      
+      // === NAVIGAZIONE SEZIONI ===
+      
+      const navButtons = document.querySelectorAll('.nav-section');
+      const sections = document.querySelectorAll('.section');
+      
+      navButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const targetSection = this.getAttribute('data-section');
+          
+          // Aggiorna navigazione
+          navButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Aggiorna sezioni
+          sections.forEach(section => section.classList.remove('active'));
+          const targetEl = document.getElementById(targetSection);
+          if (targetEl) {
+            targetEl.classList.add('active');
           }
-        }));
-      };
-
-      // Gestione lingua madre
-      const updateMotherTongue = (field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          skills: {
-            ...prev.skills,
-            languages: {
-              ...prev.skills.languages,
-              motherTongue: {
-                ...prev.skills.languages.motherTongue,
-                [field]: value
-              }
-            }
-          }
-        }));
-      };
-
-      // Gestione altre lingue - Aggiungi
-      const addOtherLanguage = () => {
-        const newLanguage = {
-          id: Date.now(),
-          name: '',
-          level: ''
-        };
-        setCvData(prev => ({
-          ...prev,
-          skills: {
-            ...prev.skills,
-            languages: {
-              ...prev.skills.languages,
-              otherLanguages: [...prev.skills.languages.otherLanguages, newLanguage]
-            }
-          }
-        }));
-      };
-
-      // Gestione altre lingue - Aggiorna
-      const updateOtherLanguage = (id, field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          skills: {
-            ...prev.skills,
-            languages: {
-              ...prev.skills.languages,
-              otherLanguages: prev.skills.languages.otherLanguages.map(lang =>
-                lang.id === id ? { ...lang, [field]: value } : lang
-              )
-            }
-          }
-        }));
-      };
-
-      // Gestione altre lingue - Rimuovi
-      const deleteOtherLanguage = (id) => {
-        setCvData(prev => ({
-          ...prev,
-          skills: {
-            ...prev.skills,
-            languages: {
-              ...prev.skills.languages,
-              otherLanguages: prev.skills.languages.otherLanguages.filter(lang => lang.id !== id)
-            }
-          }
-        }));
-      };
-
-      // Funzioni esistenti per work experience, education, ecc.
-      const addWorkExperience = () => {
-        const newWork = {
-          id: Date.now(),
-          startDate: '',
-          endDate: '',
-          title: '',
-          company: '',
-          description: '',
-          isNew: false
-        };
-        setCvData(prev => ({
-          ...prev,
-          workExperience: [...prev.workExperience, newWork]
-        }));
-      };
-
-      const updateWorkExperience = (id, field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          workExperience: prev.workExperience.map(item =>
-            item.id === id ? { ...item, [field]: value } : item
-          )
-        }));
-      };
-
-      const deleteWorkExperience = (id) => {
-        setCvData(prev => ({
-          ...prev,
-          workExperience: prev.workExperience.filter(item => item.id !== id)
-        }));
-      };
-
-      const addEducation = () => {
-        const newEducation = {
-          id: Date.now(),
-          date: '',
-          title: '',
-          institution: '',
-          description: '',
-          level: '',
-          isNew: false,
-          link: ''
-        };
-        setCvData(prev => ({
-          ...prev,
-          education: [...prev.education, newEducation]
-        }));
-      };
-
-      const updateEducation = (id, field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          education: prev.education.map(item =>
-            item.id === id ? { ...item, [field]: value } : item
-          )
-        }));
-      };
-
-      const deleteEducation = (id) => {
-        setCvData(prev => ({
-          ...prev,
-          education: prev.education.filter(item => item.id !== id)
-        }));
-      };
-
-      const addFormatore = () => {
-        const newFormatore = {
-          id: Date.now(),
-          period: '',
-          title: '',
-          hours: '',
-          institutions: '',
-          topics: '',
-          details: [],
-          isNew: false
-        };
-        setCvData(prev => ({
-          ...prev,
-          formatore: [...prev.formatore, newFormatore]
-        }));
-      };
-
-      const updateFormatore = (id, field, value) => {
-        setCvData(prev => ({
-          ...prev,
-          formatore: prev.formatore.map(item =>
-            item.id === id ? { ...item, [field]: value } : item
-          )
-        }));
-      };
-
-      const deleteFormatore = (id) => {
-        setCvData(prev => ({
-          ...prev,
-          formatore: prev.formatore.filter(item => item.id !== id)
-        }));
-      };
-
-      const updateSkillItem = (section, index, value) => {
-        setCvData(prev => ({
-          ...prev,
-          skills: {
-            ...prev.skills,
-            [section]: {
-              ...prev.skills[section],
-              items: prev.skills[section].items.map((item, i) => 
-                i === index ? value : item
-              )
-            }
-          }
-        }));
-      };
-
-      // Advanced Settings Functions
-      const exportAsJSON = () => {
-        const timestamp = new Date().toISOString().split('T')[0];
-        const fileName = `cv-${cvData.personalInfo.name.replace(/\s+/g, '-').toLowerCase()}-${timestamp}`;
-        
-        const exportData = {
-          meta: {
-            version: '2.0.0',
-            exported: new Date().toISOString(),
-            app: 'CV PWA Editor v4.4',
-            author: 'EduTechLab Italia - Fabio Rizzotto',
-            copyright: '© 2025 EduTechLab Italia - App gratuita',
-            website: 'https://edutechlab-ita.github.io/'
-          },
-          data: {
-            ...cvData,
-            lastUpdated: new Date().toISOString()
-          }
-        };
-        
-        const dataStr = JSON.stringify(exportData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${fileName}.json`;
-        link.click();
-        URL.revokeObjectURL(url);
-        
-        alert('✅ Backup esportato con successo! Conserva questo file per importare i tuoi dati in futuro.');
-      };
-
-
-      const importData = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        
-        if (file.type !== 'application/json') {
-          alert('⚠️ Seleziona un file JSON valido.');
-          return;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          try {
-            const imported = JSON.parse(e.target.result);
-            const importedData = imported.data || imported;
-            
-            if (!importedData.personalInfo || !importedData.personalInfo.name) {
-              throw new Error('File JSON non valido: mancano le informazioni personali');
-            }
-            
-            const confirmImport = window.confirm(
-              `🔄 Importare i dati di "${importedData.personalInfo.name}"?\n\n` +
-              `⚠️ ATTENZIONE: Tutti i dati attuali verranno sostituiti.\n\n` +
-              `💡 Consiglio: Esporta un backup dei dati attuali prima di procedere.`
-            );
-            
-            if (confirmImport) {
-              // Assicurati che i nuovi campi esistano nei dati importati
-              if (!importedData.personalInfo.website) importedData.personalInfo.website = '';
-              if (!importedData.altreCapacita) importedData.altreCapacita = '';
-              if (!importedData.trattamentoDati) importedData.trattamentoDati = { enabled: true, text: 'Autorizzo il trattamento...' };
-              if (!importedData.lastUpdated) importedData.lastUpdated = new Date().toISOString();
-              
-              // RETROCOMPATIBILITÀ IMPORT - Conversione strutture vecchie → nuove
-              
-              // 1. Conversione COMPETENZE DIGITALI
-              if (importedData.skills && importedData.skills.digital) {
-                if (importedData.skills.digital.items && !importedData.skills.digital.hasOwnProperty('useDigiCompEU')) {
-                  console.log('🔄 Import: Conversione competenze digitali');
-                  importedData.skills.digital = {
-                    title: importedData.skills.digital.title || 'Competenze Digitali',
-                    genericContent: 'Competenze digitali importate dal formato precedente.',
-                    useDigiCompEU: true,
-                    digiCompItems: importedData.skills.digital.items || []
-                  };
-                }
-                if (!importedData.skills.digital.genericContent) importedData.skills.digital.genericContent = '';
-                if (typeof importedData.skills.digital.useDigiCompEU === 'undefined') importedData.skills.digital.useDigiCompEU = false;
-                if (!importedData.skills.digital.digiCompItems) importedData.skills.digital.digiCompItems = [];
-              }
-              
-              // 2. Conversione LINGUE
-              if (importedData.skills && importedData.skills.languages) {
-                if (importedData.skills.languages.italian && !importedData.skills.languages.motherTongue) {
-                  console.log('🔄 Import: Conversione lingue');
-                  importedData.skills.languages.motherTongue = {
-                    name: 'Italiano',
-                    level: importedData.skills.languages.italian || 'Madrelingua'
-                  };
-                  const otherLanguages = [];
-                  if (importedData.skills.languages.english) {
-                    otherLanguages.push({ id: 1, name: 'Inglese', level: importedData.skills.languages.english });
-                  }
-                  if (importedData.skills.languages.french) {
-                    otherLanguages.push({ id: 2, name: 'Francese', level: importedData.skills.languages.french });
-                  }
-                  importedData.skills.languages.otherLanguages = otherLanguages;
-                  delete importedData.skills.languages.italian;
-                  delete importedData.skills.languages.english;
-                  delete importedData.skills.languages.french;
-                }
-                if (!importedData.skills.languages.motherTongue) {
-                  importedData.skills.languages.motherTongue = { name: 'Italiano', level: 'Madrelingua' };
-                }
-                if (!importedData.skills.languages.otherLanguages) {
-                  importedData.skills.languages.otherLanguages = [];
-                }
-              }
-              
-              setCvData(importedData);
-              alert('✅ Dati importati con successo!');
-              setEditingSection('personalInfo');
-            }
-          } catch (error) {
-            console.error('Errore importazione:', error);
-            alert(`❌ Errore nell'importazione: ${error.message}\n\nAssicurati che il file sia un backup valido esportato da questa app.`);
-          }
-        };
-        reader.readAsText(file);
-        event.target.value = '';
-      };
-
-      const resetToTemplate = () => {
-        const confirmReset = window.confirm(
-          '🔄 Ripristinare il template iniziale?\n\n' +
-          '⚠️ ATTENZIONE: Tutti i dati attuali verranno cancellati.\n\n' +
-          '💡 Consiglio: Esporta un backup prima di procedere.'
-        );
-        
-        if (confirmReset) {
-          const templateData = {
-            personalInfo: {
-              name: 'Il Tuo Nome',
-              nationality: 'Italiana',
-              birthDate: 'GG/MM/AAAA',
-              phone: '(+39) 123 456 7890',
-              email: 'tuaemail@esempio.com',
-              address: 'Via Esempio 123, 12345 Città (Prov)',
-              website: ''
-            },
-            profile: 'Descrivi qui il tuo profilo professionale, le tue competenze principali e gli obiettivi di carriera.',
-            workExperience: [
-              {
-                id: Date.now(),
-                startDate: 'MM/AAAA',
-                endDate: 'MM/AAAA o "Ad oggi"',
-                title: 'Titolo della Posizione',
-                company: 'Nome Azienda, Città',
-                description: 'Descrivi qui le tue responsabilità, risultati ottenuti e competenze sviluppate.',
-                isNew: false
-              }
-            ],
-            education: [
-              {
-                id: Date.now() + 1,
-                date: 'AAAA',
-                title: 'Titolo di Studio o Certificazione',
-                institution: 'Nome Istituzione, Città',
-                description: 'Descrizione del percorso formativo.',
-                level: '',
-                isNew: false,
-                link: ''
-              }
-            ],
-            skills: cvData.skills,
-            formatore: [],
-            altreCapacita: '',
-            trattamentoDati: {
-              enabled: true,
-              text: 'Autorizzo il trattamento dei miei dati personali presenti nel CV ai sensi dell\'art. 13 d. lgs. 30 giugno 2003 n. 196 - "Codice in materia di protezione dei dati personali" e dell\'art. 13 GDPR 679/16 - "Regolamento europeo sulla protezione dei dati personali".'
-            },
-            lastUpdated: new Date().toISOString()
-          };
-          
-          setCvData(templateData);
-          setEditingSection('personalInfo');
-          alert('✅ Template ripristinato! Puoi iniziare a compilare il tuo CV.');
-        }
-      };
-
-      const shareCV = async () => {
-        const shareData = {
-          title: `CV Europass di ${cvData.personalInfo.name}`,
-          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.4',
-          url: window.location.href
-        };
-        
-        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-          try {
-            await navigator.share(shareData);
-          } catch (error) {
-            console.log('Condivisione annullata');
-          }
-        } else {
-          try {
-            await navigator.clipboard.writeText(window.location.href);
-            alert('🔗 Link copiato negli appunti! Condividilo per far vedere il tuo CV.');
-          } catch (error) {
-            prompt('📋 Copia questo link per condividere:', window.location.href);
-          }
-        }
-      };
-
-      const generatePDF = () => {
-        window.print();
-      };
-
-      // COMPONENTI EDITOR
-      const PersonalInfoEditor = () => (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-blue-800">Informazioni Personali</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Nome Completo</label>
-              <input
-                type="text"
-                value={cvData.personalInfo.name}
-                onChange={(e) => updatePersonalInfo('name', e.target.value)}
-                className="w-full p-2 border rounded-md"
-                placeholder="Il tuo nome completo"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Nazionalità</label>
-              <input
-                type="text"
-                value={cvData.personalInfo.nationality}
-                onChange={(e) => updatePersonalInfo('nationality', e.target.value)}
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Data di Nascita</label>
-              <input
-                type="text"
-                value={cvData.personalInfo.birthDate}
-                onChange={(e) => updatePersonalInfo('birthDate', e.target.value)}
-                className="w-full p-2 border rounded-md"
-                placeholder="GG/MM/AAAA"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Telefono</label>
-              <input
-                type="text"
-                value={cvData.personalInfo.phone}
-                onChange={(e) => updatePersonalInfo('phone', e.target.value)}
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
-              <input
-                type="email"
-                value={cvData.personalInfo.email}
-                onChange={(e) => updatePersonalInfo('email', e.target.value)}
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Indirizzo</label>
-              <input
-                type="text"
-                value={cvData.personalInfo.address}
-                onChange={(e) => updatePersonalInfo('address', e.target.value)}
-                className="w-full p-2 border rounded-md"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">
-                <LucideIcon name="Globe" size={14} className="inline mr-1" />
-                Sito Web (opzionale)
-              </label>
-              <input
-                type="url"
-                value={cvData.personalInfo.website}
-                onChange={(e) => updatePersonalInfo('website', e.target.value)}
-                className="w-full p-2 border rounded-md"
-                placeholder="https://tuosito.com"
-              />
-            </div>
-          </div>
-          
-          {/* SEZIONE UPLOAD FOTO PROFILO */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h4 className="text-md font-medium mb-3">Foto Profilo (Opzionale)</h4>
-            {!cvData.personalInfo.photo ? (
-              <div 
-                className="photo-upload-area text-center cursor-pointer"
-                onDrop={handlePhotoDrop}
-                onDragOver={handlePhotoDragOver}
-                onDragLeave={handlePhotoDragLeave}
-                onClick={() => document.getElementById('photoInput').click()}
-              >
-                <div className="py-8">
-                  <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <p className="mt-2 text-sm text-gray-600">
-                    <span className="font-medium">Clicca per caricare</span> o trascina qui la tua foto
-                  </p>
-                  <p className="text-xs text-gray-500">PNG, JPG fino a 5MB</p>
-                </div>
-                <input 
-                  id="photoInput"
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
-              </div>
-            ) : (
-              <div className="text-center">
-                <img 
-                  src={cvData.personalInfo.photo} 
-                  alt="Foto profilo" 
-                  className="mx-auto h-32 w-32 object-cover rounded-full border-4 border-white shadow-lg"
-                />
-                <div className="mt-3 space-x-2">
-                  <button 
-                    onClick={() => document.getElementById('photoInput').click()}
-                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                  >
-                    Cambia
-                  </button>
-                  <button 
-                    onClick={removePhoto}
-                    className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700"
-                  >
-                    Rimuovi
-                  </button>
-                </div>
-                <input 
-                  id="photoInput"
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      );
-
-      const ProfileEditor = () => (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-blue-800">Profilo Professionale</h3>
-          <div>
-            <label className="block text-sm font-medium mb-1">Descrizione Profilo</label>
-            <textarea
-              value={cvData.profile}
-              onChange={(e) => updateProfile(e.target.value)}
-              className="w-full p-3 border rounded-md h-40"
-              placeholder="Descrivi il tuo profilo professionale, competenze ed obiettivi..."
-            />
-          </div>
-          <div className="text-sm text-gray-500">
-            💡 <strong>Suggerimento:</strong> Scrivi 3-4 righe che riassumano la tua esperienza, competenze chiave e obiettivi di carriera.
-          </div>
-        </div>
-      );
-
-      const AltreCapacitaEditor = () => (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-blue-800">
-            <LucideIcon name="Heart" size={20} className="inline mr-2" />
-            Altre Capacità e Competenze
-          </h3>
-          <div>
-            <label className="block text-sm font-medium mb-1">Interessi, Hobby e Capacità Personali</label>
-            <textarea
-              value={cvData.altreCapacita}
-              onChange={(e) => updateAltreCapacita(e.target.value)}
-              className="w-full p-3 border rounded-md h-32"
-              placeholder="Descrivi i tuoi interessi, hobby, capacità artistiche, musicali o manuali, passioni tecnologiche, ecc..."
-            />
-          </div>
-          <div className="text-sm text-gray-500">
-            💡 <strong>Suggerimento:</strong> Includi passioni come musica, arte, sport, tecnologia, o altre competenze personali che possono arricchire il tuo profilo professionale.
-          </div>
-        </div>
-      );
-
-      // [Continua con tutti gli altri editor esistenti...]
-      const WorkExperienceEditor = () => (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-blue-800">Esperienza Lavorativa</h3>
-            <button
-              onClick={addWorkExperience}
-              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              <LucideIcon name="Plus" size={16} />
-              Aggiungi Esperienza
-            </button>
-          </div>
-          
-          {cvData.workExperience.map((work) => (
-            <div key={work.id} className="border rounded-lg p-4 bg-gray-50">
-              <div className="flex justify-between items-start mb-4">
-                <h4 className="font-semibold">Esperienza #{work.id}</h4>
-                <button
-                  onClick={() => deleteWorkExperience(work.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <LucideIcon name="Trash2" size={16} />
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Data Inizio</label>
-                  <input
-                    type="text"
-                    value={work.startDate}
-                    onChange={(e) => updateWorkExperience(work.id, 'startDate', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="es. 01/2024"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Data Fine</label>
-                  <input
-                    type="text"
-                    value={work.endDate}
-                    onChange={(e) => updateWorkExperience(work.id, 'endDate', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="es. Ad oggi"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Titolo/Ruolo</label>
-                  <input
-                    type="text"
-                    value={work.title}
-                    onChange={(e) => updateWorkExperience(work.id, 'title', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="Titolo del ruolo"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Azienda/Istituzione</label>
-                  <input
-                    type="text"
-                    value={work.company}
-                    onChange={(e) => updateWorkExperience(work.id, 'company', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="Nome azienda, città"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Descrizione</label>
-                <textarea
-                  value={work.description}
-                  onChange={(e) => updateWorkExperience(work.id, 'description', e.target.value)}
-                  className="w-full p-2 border rounded-md h-32"
-                  placeholder="Descrivi le tue responsabilità e achievements..."
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-
-      const EducationEditor = () => (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-blue-800">Istruzione e Formazione</h3>
-            <button
-              onClick={addEducation}
-              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              <LucideIcon name="Plus" size={16} />
-              Aggiungi Formazione
-            </button>
-          </div>
-          
-          {cvData.education.map((edu) => (
-            <div key={edu.id} className={`border rounded-lg p-4 ${edu.isNew ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50'}`}>
-              <div className="flex justify-between items-start mb-4">
-                <h4 className="font-semibold flex items-center gap-2">
-                  Formazione #{edu.id}
-                  {edu.isNew && <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">✨ Nuovo</span>}
-                </h4>
-                <button
-                  onClick={() => deleteEducation(edu.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <LucideIcon name="Trash2" size={16} />
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Data/Periodo</label>
-                  <input
-                    type="text"
-                    value={edu.date}
-                    onChange={(e) => updateEducation(edu.id, 'date', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="es. Settembre 2024"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Livello QEQ (opzionale)</label>
-                  <input
-                    type="text"
-                    value={edu.level}
-                    onChange={(e) => updateEducation(edu.id, 'level', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="es. Livello 8 QEQ"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Titolo Corso/Diploma</label>
-                  <input
-                    type="text"
-                    value={edu.title}
-                    onChange={(e) => updateEducation(edu.id, 'title', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="Nome del corso o diploma"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Istituzione</label>
-                  <input
-                    type="text"
-                    value={edu.institution}
-                    onChange={(e) => updateEducation(edu.id, 'institution', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="Nome istituzione, città"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Link Certificato (opzionale)</label>
-                  <input
-                    type="url"
-                    value={edu.link}
-                    onChange={(e) => updateEducation(edu.id, 'link', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="https://drive.google.com/..."
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Descrizione</label>
-                <textarea
-                  value={edu.description}
-                  onChange={(e) => updateEducation(edu.id, 'description', e.target.value)}
-                  className="w-full p-2 border rounded-md h-24"
-                  placeholder="Descrivi il corso, certificazione o titolo di studio..."
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-
-      const SkillsEditor = () => (
-        <div className="space-y-8">
-          <h3 className="text-lg font-semibold text-blue-800">Competenze</h3>
-          
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">⭐ Specialistiche</span>
-              <h4 className="font-semibold text-blue-800">Competenze del Tuo Settore</h4>
-            </div>
-            <textarea
-              value={cvData.skills.ai.content}
-              onChange={(e) => setCvData(prev => ({ 
-                ...prev, 
-                skills: { 
-                  ...prev.skills, 
-                  ai: { ...prev.skills.ai, content: e.target.value } 
-                } 
-              }))}
-              className="w-full p-3 border rounded-md h-32"
-              placeholder="Descrivi le tue competenze specialistiche, certificazioni e aree di expertise..."
-            />
-          </div>
-
-          {/* NUOVA SEZIONE COMPETENZE DIGITALI FLESSIBILI */}
-          <div className="bg-gray-50 border rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-4">📊 Competenze Digitali</h4>
-            
-            {/* CAMPO GENERICO SEMPRE PRESENTE */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Descrizione Generale</label>
-              <textarea
-                value={cvData.skills.digital.genericContent}
-                onChange={(e) => updateDigitalSkills('genericContent', e.target.value)}
-                className="w-full p-3 border rounded-md h-24"
-                placeholder="Descrivi qui le tue competenze digitali generali, software utilizzati, piattaforme conosciute e livello di utilizzo..."
-              />
-            </div>
-
-            {/* TOGGLE DIGICOMPEU */}
-            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <label className="font-medium text-blue-800">Ho fatto il test DigiCompEU</label>
-                  <p className="text-sm text-blue-600">Aggiungi la griglia delle 5 competenze digitali europee</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    checked={cvData.skills.digital.useDigiCompEU}
-                    onChange={(e) => updateDigitalSkills('useDigiCompEU', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-              
-              {/* GRIGLIA DIGICOMPEU (CONDIZIONALE) */}
-              {cvData.skills.digital.useDigiCompEU && (
-                <div className="space-y-3">
-                  <p className="text-sm text-blue-700 mb-3">📋 Competenze DigiCompEU (Framework Europeo):</p>
-                  {cvData.skills.digital.digiCompItems.map((skill, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white border rounded">
-                      <div className="flex-1 mr-4">
-                        <input
-                          type="text"
-                          value={skill.name}
-                          onChange={(e) => {
-                            const newItems = [...cvData.skills.digital.digiCompItems];
-                            newItems[index] = { ...skill, name: e.target.value };
-                            updateDigitalSkills('digiCompItems', newItems);
-                          }}
-                          className="w-full p-2 border rounded text-sm"
-                          placeholder="Nome competenza"
-                        />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <select
-                          value={skill.level}
-                          onChange={(e) => {
-                            const newItems = [...cvData.skills.digital.digiCompItems];
-                            newItems[index] = { ...skill, level: e.target.value };
-                            updateDigitalSkills('digiCompItems', newItems);
-                          }}
-                          className="px-3 py-1 border rounded text-sm"
-                        >
-                          <option value="BASE">BASE</option>
-                          <option value="INTERMEDIO">INTERMEDIO</option>
-                          <option value="AVANZATO">AVANZATO</option>
-                        </select>
-                        <input
-                          type="text"
-                          value={skill.numeric}
-                          onChange={(e) => {
-                            const newItems = [...cvData.skills.digital.digiCompItems];
-                            newItems[index] = { ...skill, numeric: e.target.value };
-                            updateDigitalSkills('digiCompItems', newItems);
-                          }}
-                          className="w-24 p-1 border rounded text-xs"
-                          placeholder="Livello 6/6"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-gray-50 border rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-4">Software e Piattaforme</h4>
-            <div className="space-y-2">
-              {cvData.skills.platforms.items.map((platform, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                  <input
-                    type="text"
-                    value={platform}
-                    onChange={(e) => {
-                      const newPlatforms = [...cvData.skills.platforms.items];
-                      newPlatforms[index] = e.target.value;
-                      setCvData(prev => ({
-                        ...prev,
-                        skills: {
-                          ...prev.skills,
-                          platforms: {
-                            ...prev.skills.platforms,
-                            items: newPlatforms
-                          }
-                        }
-                      }));
-                    }}
-                    className="flex-1 p-2 border rounded text-sm"
-                    placeholder="Nome piattaforma o software"
-                  />
-                  <button
-                    onClick={() => {
-                      const newPlatforms = cvData.skills.platforms.items.filter((_, i) => i !== index);
-                      setCvData(prev => ({
-                        ...prev,
-                        skills: {
-                          ...prev.skills,
-                          platforms: {
-                            ...prev.skills.platforms,
-                            items: newPlatforms
-                          }
-                        }
-                      }));
-                    }}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <LucideIcon name="Trash2" size={16} />
-                  </button>
-                </div>
-              ))}
-              <button
-                onClick={() => {
-                  setCvData(prev => ({
-                    ...prev,
-                    skills: {
-                      ...prev.skills,
-                      platforms: {
-                        ...prev.skills.platforms,
-                        items: [...prev.skills.platforms.items, '']
-                      }
-                    }
-                  }));
-                }}
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-sm"
-              >
-                <LucideIcon name="Plus" size={14} />
-                Aggiungi piattaforma
-              </button>
-            </div>
-          </div>
-
-          {/* NUOVA SEZIONE LINGUE DINAMICHE */}
-          <div className="bg-gray-50 border rounded-lg p-6">
-            <h4 className="font-semibold text-blue-800 mb-4">🌍 Competenze Linguistiche</h4>
-            
-            {/* LINGUA MADRE SEMPRE PRESENTE */}
-            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <h5 className="font-medium text-green-800 mb-3">Lingua Madre</h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Nome Lingua</label>
-                  <input
-                    type="text"
-                    value={cvData.skills.languages.motherTongue.name}
-                    onChange={(e) => updateMotherTongue('name', e.target.value)}
-                    className="w-full p-2 border rounded text-sm"
-                    placeholder="es. Italiano"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Livello</label>
-                  <input
-                    type="text"
-                    value={cvData.skills.languages.motherTongue.level}
-                    onChange={(e) => updateMotherTongue('level', e.target.value)}
-                    className="w-full p-2 border rounded text-sm"
-                    placeholder="es. Madrelingua"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* ALTRE LINGUE DINAMICHE */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-medium text-blue-800">Altre Lingue</h5>
-                <button
-                  onClick={addOtherLanguage}
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 flex items-center gap-1"
-                >
-                  ➕ Aggiungi Lingua
-                </button>
-              </div>
-              
-              {cvData.skills.languages.otherLanguages.length === 0 ? (
-                <div className="text-center py-6 text-gray-500 bg-white border-2 border-dashed border-gray-300 rounded-lg">
-                  <p>🌐 Nessuna lingua straniera aggiunta</p>
-                  <p className="text-sm">Clicca "Aggiungi Lingua" per iniziare</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {cvData.skills.languages.otherLanguages.map((lang) => (
-                    <div key={lang.id} className="p-4 bg-white border rounded-lg">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Nome Lingua</label>
-                          <input
-                            type="text"
-                            value={lang.name}
-                            onChange={(e) => updateOtherLanguage(lang.id, 'name', e.target.value)}
-                            className="w-full p-2 border rounded text-sm"
-                            placeholder="es. Inglese"
-                          />
-                        </div>
-                        <div className="flex items-end gap-2">
-                          <div className="flex-1">
-                            <label className="block text-sm font-medium mb-1">Livello</label>
-                            <input
-                              type="text"
-                              value={lang.level}
-                              onChange={(e) => updateOtherLanguage(lang.id, 'level', e.target.value)}
-                              className="w-full p-2 border rounded text-sm"
-                              placeholder="es. B2 Intermedio Superiore"
-                            />
-                          </div>
-                          <button
-                            onClick={() => deleteOtherLanguage(lang.id)}
-                            className="bg-red-500 text-white px-3 py-2 rounded text-sm hover:bg-red-600"
-                            title="Rimuovi lingua"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-
-      const FormatoreEditor = () => (
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-blue-800">Esperienza come Formatore</h3>
-            <button
-              onClick={addFormatore}
-              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-            >
-              <LucideIcon name="Plus" size={16} />
-              Aggiungi Esperienza Formativa
-            </button>
-          </div>
-          
-          {cvData.formatore && cvData.formatore.map((form) => (
-            <div key={form.id} className={`border rounded-lg p-4 ${form.isNew ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50'}`}>
-              <div className="flex justify-between items-start mb-4">
-                <h4 className="font-semibold flex items-center gap-2">
-                  Formazione #{form.id}
-                  {form.isNew && <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">✨ Nuovo</span>}
-                </h4>
-                <button
-                  onClick={() => deleteFormatore(form.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <LucideIcon name="Trash2" size={16} />
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Periodo</label>
-                  <input
-                    type="text"
-                    value={form.period}
-                    onChange={(e) => updateFormatore(form.id, 'period', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="es. Ottobre 2023 - Giugno 2025"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Ore Totali</label>
-                  <input
-                    type="text"
-                    value={form.hours}
-                    onChange={(e) => updateFormatore(form.id, 'hours', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="es. 342 ore totali"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Titolo Formazione</label>
-                  <input
-                    type="text"
-                    value={form.title}
-                    onChange={(e) => updateFormatore(form.id, 'title', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="Titolo del corso o progetto formativo"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Istituzioni Coinvolte</label>
-                  <input
-                    type="text"
-                    value={form.institutions}
-                    onChange={(e) => updateFormatore(form.id, 'institutions', e.target.value)}
-                    className="w-full p-2 border rounded-md"
-                    placeholder="Scuole e istituzioni coinvolte"
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">Argomenti Trattati</label>
-                <textarea
-                  value={form.topics}
-                  onChange={(e) => updateFormatore(form.id, 'topics', e.target.value)}
-                  className="w-full p-2 border rounded-md h-20"
-                  placeholder="Tematiche principali del corso..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Dettagli Specifici (uno per riga)</label>
-                <textarea
-                  value={form.details ? form.details.join('\n') : ''}
-                  onChange={(e) => updateFormatore(form.id, 'details', e.target.value.split('\n').filter(line => line.trim()))}
-                  className="w-full p-2 border rounded-md h-32"
-                  placeholder="Esempio: I.C. di Roma: 20 ore - Coding e Robotica&#10;Formazione Milano: 15 ore - Intelligenza Artificiale&#10;..."
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-
-      const AdvancedSettingsEditor = () => {
-        const [activeSettingsTab, setActiveSettingsTab] = useState('export');
-
-        const exportFormats = [];
-
-        const handleExport = (format) => {
-          switch (format) {
-            case 'json':
-              exportAsJSON();
-              break;
-            default:
-              console.log('Formato non supportato:', format);
-          }
-        };
-
-        return (
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold text-blue-800">Impostazioni Avanzate</h3>
-            
-            <div className="flex space-x-4 border-b">
-              {[
-                { id: 'export', label: 'Export & Condivisione', icon: <LucideIcon name="Download" size={16} /> },
-                { id: 'privacy', label: 'Privacy & Trattamento Dati', icon: <LucideIcon name="Shield" size={16} /> },
-                { id: 'templates', label: 'Template', icon: <LucideIcon name="Palette" size={16} /> },
-                { id: 'settings', label: 'Impostazioni', icon: <LucideIcon name="Settings" size={16} /> }
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveSettingsTab(tab.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 border-b-2 transition-colors ${
-                    activeSettingsTab === tab.id
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  {tab.icon}
-                  <span>{tab.label}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Export & Sharing */}
-            {activeSettingsTab === 'export' && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-4">Export e Condivisione</h4>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
-                    <div className="text-4xl mb-4">📄</div>
-                    <h5 className="font-semibold text-gray-800 mb-2">Funzioni di Export Disponibili</h5>
-                    <div className="space-y-2 text-sm text-gray-600">
-                      <div>🖨️ <strong>Stampa PDF:</strong> Pulsante verde in alto a destra</div>
-                      <div>💾 <strong>Backup Dati:</strong> Pulsante verde in fondo alla pagina</div>
-                      <div>🔗 <strong>Condividi:</strong> Pulsante verde qui sotto per condividere il link</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Backup e Ripristino</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <div className="flex items-center mb-2">
-                        <span className="text-2xl mr-2">💾</span>
-                        <h5 className="font-semibold text-green-800">Backup Completo</h5>
-                      </div>
-                      <p className="text-sm text-green-700 mb-3">
-                        Salva tutti i tuoi dati in un file JSON per importarli in futuro.
-                      </p>
-                      <button
-                        onClick={() => handleExport('json')}
-                        className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-                      >
-                        📤 Esporta Backup
-                      </button>
-                    </div>
-                    
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <div className="flex items-center mb-2">
-                        <span className="text-2xl mr-2">📥</span>
-                        <h5 className="font-semibold text-blue-800">Ripristina Backup</h5>
-                      </div>
-                      <p className="text-sm text-blue-700 mb-3">
-                        Carica un file di backup per ripristinare i tuoi dati.
-                      </p>
-                      <label className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 cursor-pointer text-center block">
-                        📂 Carica Backup
-                        <input
-                          type="file"
-                          accept=".json"
-                          onChange={importData}
-                          className="hidden"
-                        />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Condivisione e Collaborazione</h4>
-                  <div className="flex flex-wrap gap-4">
-                    <button
-                      onClick={shareCV}
-                      className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-                    >
-                      <LucideIcon name="Share2" size={16} />
-                      <span>Condividi CV</span>
-                    </button>
-
-                    <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded-md border border-blue-200">
-                      💡 <strong>Per salvare il PDF:</strong> Usa il pulsante verde "Stampa PDF" in alto a destra
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Privacy & Trattamento Dati */}
-            {activeSettingsTab === 'privacy' && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-4">
-                    <LucideIcon name="Shield" size={20} className="inline mr-2" />
-                    Trattamento Dati Personali
-                  </h4>
-                  
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                    <div className="flex items-start space-x-3">
-                      <input
-                        type="checkbox"
-                        id="enablePrivacy"
-                        checked={cvData.trattamentoDati.enabled}
-                        onChange={(e) => updateTrattamentoDati('enabled', e.target.checked)}
-                        className="mt-1"
-                      />
-                      <div className="flex-1">
-                        <label htmlFor="enablePrivacy" className="font-semibold text-blue-800 cursor-pointer">
-                          Includi clausola trattamento dati nel CV
-                        </label>
-                        <p className="text-sm text-blue-700 mt-1">
-                          Se abilitato, verrà inclusa la clausola per il trattamento dei dati personali secondo GDPR
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Testo Clausola Privacy</label>
-                    <textarea
-                      value={cvData.trattamentoDati.text}
-                      onChange={(e) => updateTrattamentoDati('text', e.target.value)}
-                      className="w-full p-3 border rounded-md h-32"
-                      placeholder="Inserisci il testo della clausola per il trattamento dei dati personali..."
-                    />
-                  </div>
-
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <div className="flex items-start space-x-2">
-                      <span className="text-yellow-500">⚠️</span>
-                      <div className="text-sm">
-                        <p className="font-semibold text-yellow-800">Informazione Importante</p>
-                        <p className="text-yellow-700 mt-1">
-                          La clausola privacy è obbligatoria per legge in Italia ed Europa (GDPR). 
-                          Consigliamo di mantenerla sempre attiva quando invii il CV a potenziali datori di lavoro.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Templates */}
-            {activeSettingsTab === 'templates' && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-4">Template Disponibili</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div 
-                      onClick={() => updateAdvancedSettings('templateStyle', 'europass')}
-                      className={`p-6 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                        advancedSettings.templateStyle === 'europass' 
-                          ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200' 
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="text-4xl">🇪🇺</div>
-                        <div className="flex-1">
-                          <h5 className="font-semibold">Europass Standard</h5>
-                          <p className="text-sm text-gray-600">Template ufficiale Europass EU</p>
-                          <span className={`inline-block mt-2 text-xs px-2 py-1 rounded ${
-                            advancedSettings.templateStyle === 'europass'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-gray-100 text-gray-600'
-                          }`}>
-                            {advancedSettings.templateStyle === 'europass' ? '✓ Attivo' : 'Disponibile'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div 
-                      onClick={() => updateAdvancedSettings('templateStyle', 'modern')}
-                      className={`p-6 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                        advancedSettings.templateStyle === 'modern' 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="text-4xl">✨</div>
-                        <div className="flex-1">
-                          <h5 className="font-semibold">Moderno</h5>
-                          <p className="text-sm text-gray-600">Design pulito e contemporaneo</p>
-                          <span className={`inline-block mt-2 text-xs px-2 py-1 rounded ${
-                            advancedSettings.templateStyle === 'modern'
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-gray-100 text-gray-600'
-                          }`}>
-                            {advancedSettings.templateStyle === 'modern' ? '✓ Attivo' : 'Disponibile'}
-                          </span>
-                          {advancedSettings.templateStyle === 'modern' && (
-                            <span className="block mt-2 text-xs text-blue-600 font-medium">
-                              ✓ Attivo
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Settings */}
-            {activeSettingsTab === 'settings' && (
-              <div className="space-y-6">
-                {/* IMPOSTAZIONI VISUALIZZAZIONE */}
-                <div>
-                  <h4 className="font-semibold mb-4">Impostazioni Visualizzazione</h4>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                    
-                    {/* Toggle Foto Profilo */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="font-medium text-gray-700">Mostra Foto Profilo</label>
-                        <p className="text-sm text-gray-500">Visualizza/nascondi la foto nel CV stampato</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          checked={advancedSettings.showPhoto}
-                          onChange={(e) => updateAdvancedSettings('showPhoto', e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-
-                    {/* Formato Date */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="font-medium text-gray-700">Formato Date</label>
-                        <p className="text-sm text-gray-500">Scegli il formato per le date nel CV</p>
-                      </div>
-                      <select 
-                        value={advancedSettings.dateFormat}
-                        onChange={(e) => updateAdvancedSettings('dateFormat', e.target.value)}
-                        className="border rounded-md px-3 py-1 text-sm"
-                      >
-                        <option value="italian">Italiano (MM/AAAA)</option>
-                        <option value="iso">ISO (AAAA-MM)</option>
-                      </select>
-                    </div>
-
-                    {/* Toggle Privacy */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="font-medium text-gray-700">Consenso Privacy</label>
-                        <p className="text-sm text-gray-500">Mostra/nascondi clausola trattamento dati</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          checked={advancedSettings.privacyConsent}
-                          onChange={(e) => updateAdvancedSettings('privacyConsent', e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-
-                    {/* Selezione Template */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="font-medium text-gray-700">Template CV</label>
-                        <p className="text-sm text-gray-500">Scegli lo stile del tuo CV</p>
-                      </div>
-                      <select 
-                        value={advancedSettings.templateStyle}
-                        onChange={(e) => updateAdvancedSettings('templateStyle', e.target.value)}
-                        className="border rounded-md px-3 py-1 text-sm"
-                      >
-                        <option value="europass">Europass Standard</option>
-                        <option value="modern">Moderno</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Informazioni CV</h4>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                    <p><strong>Ultima Modifica:</strong> {new Date(cvData.lastUpdated).toLocaleString('it-IT')}</p>
-                    <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
-                    <p><strong>Versione App:</strong> v4.9-TEST.0</p>
-                    <p><strong>Template:</strong> {advancedSettings.templateStyle === 'modern' ? 'Moderno' : 'Europass Standard'}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Informazioni App</h4>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <div className="text-center">
-                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.4</h5>
-                      <p className="text-sm text-blue-700 mb-2">
-                        Editor professionale per Curriculum Vitae Europass
-                      </p>
-                      <div className="text-xs text-blue-600 space-y-1">
-                        <p><strong>© 2025 EduTechLab Italia</strong></p>
-                        <p>Sviluppato da <strong>Fabio Rizzotto</strong></p>
-                        <p>Applicazione <strong>gratuita</strong> e open source</p>
-                        <p>Progressive Web App (PWA)</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Gestione Dati</h4>
-                  <div className="space-y-4">
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                      <div className="flex items-center mb-2">
-                        <span className="text-2xl mr-2">🔄</span>
-                        <h5 className="font-semibold text-orange-800">Ripristina Template</h5>
-                      </div>
-                      <p className="text-sm text-orange-700 mb-3">
-                        Ripristina il template iniziale con dati di esempio. Utile per iniziare da capo.
-                      </p>
-                      <button 
-                        onClick={resetToTemplate}
-                        className="w-full bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700"
-                      >
-                        🔄 Ripristina Template
-                      </button>
-                    </div>
-                    
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <div className="flex items-center mb-2">
-                        <span className="text-2xl mr-2">🗑️</span>
-                        <h5 className="font-semibold text-red-800">Cancella Tutto</h5>
-                      </div>
-                      <p className="text-sm text-red-700 mb-3">
-                        Cancella permanentemente tutti i dati salvati. Questa azione non può essere annullata.
-                      </p>
-                      <button 
-                        onClick={() => {
-                          if (confirm('🗑️ Sei sicuro di voler cancellare TUTTI i dati?\n\n⚠️ Questa azione non può essere annullata!\n\n💡 Consiglio: Esporta un backup prima di procedere.')) {
-                            localStorage.clear();
-                            window.location.reload();
-                          }
-                        }}
-                        className="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                      >
-                        🗑️ Cancella Tutto
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      };
-
-      const WelcomeModal = () => {
-        if (!showWelcome) return null;
-        
-        return (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
-              <div className="text-center">
-                <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.4!</h2>
-                <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae Europass</p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <span className="text-green-500">✅</span>
-                  <span className="text-sm">Template Europass ufficiale con logo UE</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span className="text-green-500">✅</span>
-                  <span className="text-sm">Funziona completamente offline</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span className="text-green-500">✅</span>
-                  <span className="text-sm">Salvataggio automatico dei dati</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span className="text-green-500">✅</span>
-                  <span className="text-sm">Export PDF professionale</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span className="text-green-500">✅</span>
-                  <span className="text-sm">Sezione "Altre Capacità e Competenze"</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <span className="text-green-500">✅</span>
-                  <span className="text-sm">Trattamento dati GDPR integrato</span>
-                </div>
-              </div>
-              
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <span className="text-blue-500">💡</span>
-                  <div className="text-sm">
-                    <p className="font-semibold text-blue-800">Suggerimento:</p>
-                    <p className="text-blue-700">Inizia compilando le tue <strong>Informazioni Personali</strong>, poi procedi sezione per sezione. L'app salva automaticamente tutto!</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex space-x-3">
-                <button
-                  onClick={() => setShowWelcome(false)}
-                  className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300"
-                >
-                  Chiudi
-                </button>
-                <button
-                  onClick={() => {
-                    setShowWelcome(false);
-                    setEditingSection('personalInfo');
-                  }}
-                  className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
-                >
-                  Inizia Subito!
-                </button>
-              </div>
-              
-              <div className="text-center">
-                <p className="text-xs text-gray-500">
-                  Creato da <strong>EduTechLab Italia - Fabio Rizzotto</strong> - Innovazione Didattica v2.0
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  © 2025 EduTechLab Italia - App gratuita e open source
-                </p>
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      // Logo Europass - Immagine originale di Fabio
-      const EuropassLogo = ({ className = "" }) => (
-        <div className={`flex items-center ${className}`}>
-          <img 
-            src="./CV-EUropass.png" 
-            alt="CV Europass Logo" 
-            className="h-8 w-auto"
-            style={{ maxHeight: '32px' }}
-          />
-        </div>
-      );
-
-      const CVPreview = () => (
-        <div ref={previewRef} className={`cv-preview bg-white shadow-lg ${advancedSettings.templateStyle === 'modern' ? 'modern-template' : ''}`} style={{ minHeight: '297mm', width: '210mm', margin: '0 auto' }}>
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              .cv-preview {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                line-height: 1.6;
-                color: #333333;
-                padding: 40px;
-              }
-              
-              .cv-title {
-                text-align: center;
-                font-size: 1.8em;
-                font-weight: 300;
-                color: #003d7a;
-                margin: 30px 0 20px 0;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-              }
-              
-              .page-bar {
-                width: calc(100% + 80px);
-                margin-left: -40px;
-                margin-right: -40px;
-                height: 8px;
-                background-color: #003d7a;
-                margin-bottom: 30px;
-              }
-              
-              .europass-header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-              }
-              
-              .europass-logo {
-                display: flex;
-                align-items: center;
-                font-size: 1.2em;
-                color: #003d7a;
-              }
-              
-              .europass-logo .eu-flag {
-                background: #003d7a;
-                color: white;
-                padding: 4px 8px;
-                margin-right: 10px;
-                border-radius: 3px;
-                font-weight: bold;
-                font-size: 0.8em;
-              }
-              
-              .personal-info {
-                text-align: center;
-                margin-bottom: 30px;
-              }
-              
-              .personal-info h1 {
-                font-size: 2.2em;
-                font-weight: 300;
-                margin: 0;
-                color: #333333;
-              }
-              
-              .personal-info-grid {
-                margin-top: 15px;
-                font-size: 1em;
-                display: inline-block;
-                text-align: left;
-              }
-              
-              .info-item {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 2px;
-              }
-              
-              .info-item a {
-                color: #003d7a;
-                text-decoration: none;
-              }
-              
-              .info-item a:hover {
-                text-decoration: underline;
-              }
-              
-              .section-title {
-                text-transform: uppercase;
-                font-weight: bold;
-                font-size: 1.2em;
-                color: #003d7a;
-                padding-bottom: 8px;
-                border-bottom: 1px solid #dddddd;
-                margin-top: 30px;
-                margin-bottom: 20px;
-              }
-
-              .section-subtitle {
-                background: #0066cc;
-                color: white;
-                padding: 8px 16px;
-                margin: 20px 0 15px 0;
-                font-size: 1.1em;
-                font-weight: 500;
-                border-radius: 4px;
-              }
-              
-              .work-item {
-                margin-bottom: 25px;
-                background: #f8f9fa;
-                padding: 20px;
-                border-radius: 8px;
-                border-left: 4px solid #003d7a;
-              }
-              
-              .date-range {
-                font-size: 0.9em;
-                font-style: italic;
-                color: #666;
-                margin-bottom: 8px;
-                font-weight: 600;
-              }
-              
-              .item-header {
-                font-weight: bold;
-                font-size: 1.1em;
-                color: #003d7a;
-                margin-bottom: 5px;
-              }
-              
-              .item-subheader {
-                font-weight: normal;
-                color: #666;
-                margin-bottom: 10px;
-              }
-              
-              .new-highlight {
-                background: linear-gradient(45deg, #fff9e6, #ffeaa7) !important;
-                border-left-color: #ffc107 !important;
-              }
-              
-              .certification-badge {
-                display: inline-block;
-                background: #28a745;
-                color: white;
-                padding: 4px 8px;
-                border-radius: 4px;
-                font-size: 0.8em;
-                margin-left: 10px;
-                vertical-align: middle;
-              }
-              
-              .external-link {
-                color: #003d7a;
-                text-decoration: none;
-                font-weight: 600;
-              }
-              
-              .external-link:hover {
-                text-decoration: underline;
-              }
-              
-              .external-link::after {
-                content: " 🔗";
-                font-size: 0.8em;
-              }
-              
-              .digital-skills-grid {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 15px;
-                margin-top: 15px;
-              }
-
-              .skill-item {
-                display: flex;
-                align-items: center;
-                border: 1px solid #e0e0e0;
-                padding: 10px;
-                border-radius: 4px;
-                background: white;
-              }
-              
-              .skill-details {
-                flex-grow: 1;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 10px;
-              }
-              
-              .skill-name {
-                font-weight: bold;
-              }
-              
-              .skill-level {
-                display: flex;
-                gap: 15px;
-                align-items: center;
-              }
-
-              .level-text {
-                background-color: #f8f9fa;
-                padding: 2px 8px;
-                border-radius: 4px;
-                font-weight: bold;
-                font-size: 0.9em;
-              }
-
-              .level-numeric {
-                font-size: 0.9em;
-                color: #666;
-              }
-              
-              .skills-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 30px;
-              }
-
-              .skill-category {
-                background: #f8f9fa;
-                padding: 20px;
-                border-radius: 8px;
-                border-left: 4px solid #003d7a;
-              }
-
-              .skill-title {
-                font-weight: 600;
-                color: #003d7a;
-                margin-bottom: 15px;
-              }
-              
-              .cv-footer {
-                margin-top: 40px;
-                padding-top: 20px;
-                border-top: 1px solid #dddddd;
-                font-size: 0.9em;
-                color: #666;
-              }
-              
-              .privacy-section {
-                background: #f8f9fa;
-                padding: 15px;
-                border-radius: 6px;
-                margin-top: 20px;
-                font-size: 0.9em;
-              }
-              
-              .update-info {
-                text-align: center;
-                color: #666;
-                font-size: 0.8em;
-                margin-top: 10px;
-              }
-              
-              @media print {
-                .cv-preview {
-                  margin: 0;
-                  box-shadow: none;
-                  width: 100%;
-                  padding: 20px;
-                }
-              }
-
-              /* TEMPLATE MODERNO */
-              .modern-template {
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
-                color: #1e293b;
-                font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-                border-left: 8px solid #3b82f6;
-              }
-
-              .modern-template .europass-header {
-                background: linear-gradient(135deg, #3b82f6, #1e40af);
-                border-radius: 15px;
-                margin-bottom: 30px;
-                color: white;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-              }
-
-              .modern-template .cv-title {
-                font-size: 3em;
-                font-weight: 300;
-                text-align: center;
-                margin: 30px 0;
-                color: #1e40af;
-                text-shadow: none;
-              }
-
-              .modern-template .section-title {
-                color: white;
-                background: linear-gradient(135deg, #3b82f6, #1e40af);
-                padding: 15px 20px;
-                border-radius: 8px;
-                margin: 30px 0 20px 0;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                font-weight: 600;
-                border-bottom: none;
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-              }
-
-              .modern-template .section-subtitle {
-                background: linear-gradient(135deg, #6366f1, #4f46e5);
-                border: none;
-                color: white;
-                box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
-              }
-
-              .modern-template .personal-info h1 {
-                color: #1e40af;
-                font-size: 2.5em;
-                font-weight: 600;
-                margin-bottom: 15px;
-                text-shadow: none;
-              }
-
-              .modern-template .personal-info .info-item {
-                color: #475569;
-                background: rgba(255,255,255,0.7);
-                padding: 8px 12px;
-                margin: 4px 0;
-                border-radius: 6px;
-                border-left: 3px solid #3b82f6;
-              }
-
-              .modern-template .work-item,
-              .modern-template .skill-item {
-                background: rgba(255,255,255,0.9);
-                border-radius: 12px;
-                padding: 20px;
-                margin-bottom: 20px;
-                border: 1px solid #e2e8f0;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                color: #334155;
-              }
-
-              .modern-template .work-item h4,
-              .modern-template .work-item h5,
-              .modern-template .item-header,
-              .modern-template .item-subheader {
-                color: #1e293b;
-              }
-
-              .modern-template .date-range {
-                color: #3b82f6;
-                font-weight: 500;
-              }
-
-              .modern-template .skill-category {
-                background: rgba(255,255,255,0.9);
-                border: 1px solid #e2e8f0;
-                border-left: 4px solid #3b82f6;
-                color: #334155;
-              }
-
-              .modern-template .skill-title {
-                color: #1e293b;
-                font-weight: 600;
-              }
-
-              .modern-template .cv-footer {
-                background: rgba(255,255,255,0.9);
-                border-radius: 12px;
-                border-top: none;
-                color: #475569;
-                border: 1px solid #e2e8f0;
-              }
-
-              .modern-template .privacy-section {
-                background: rgba(255,255,255,0.9);
-                border: 1px solid #e2e8f0;
-                color: #475569;
-              }
-            `
-          }} />
-          
-          {/* Europass Header con Logo */}
-          <div className="europass-header">
-            <div className="europass-logo">
-              <EuropassLogo />
-            </div>
-          </div>
-          
-          <div className="cv-title">Curriculum Vitae</div>
-          <div className="page-bar"></div>
-          
-          <div className="personal-info" style={{ position: 'relative' }}>
-            {cvData.personalInfo.photo && advancedSettings.showPhoto && (
-              <div style={{ 
-                position: 'absolute', 
-                top: '0', 
-                right: '0', 
-                width: '120px', 
-                height: '120px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: '3px solid #003d7a',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-              }}>
-                <img 
-                  src={cvData.personalInfo.photo} 
-                  alt="Foto profilo" 
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover' 
-                  }}
-                />
-              </div>
-            )}
-            <h1>{cvData.personalInfo.name}</h1>
-            <div className="personal-info-grid" style={{ marginRight: (cvData.personalInfo.photo && advancedSettings.showPhoto) ? '130px' : '0' }}>
-              <div className="info-item"><strong>Nazionalità:</strong> {cvData.personalInfo.nationality}</div>
-              <div className="info-item"><strong>Data di nascita:</strong> {cvData.personalInfo.birthDate}</div>
-              <div className="info-item"><strong>Numero di telefono:</strong> {cvData.personalInfo.phone}</div>
-              <div className="info-item"><strong>Indirizzo e-mail:</strong> {cvData.personalInfo.email}</div>
-              {cvData.personalInfo.website && (
-                <div className="info-item">
-                  <strong>Sito web:</strong> 
-                  <a href={cvData.personalInfo.website} target="_blank" rel="noopener noreferrer">
-                    {cvData.personalInfo.website}
-                  </a>
-                </div>
-              )}
-              <div className="info-item"><strong>Abitazione:</strong> {cvData.personalInfo.address}</div>
-            </div>
-          </div>
-
-          <section>
-            <h2 className="section-title">Profilo Professionale</h2>
-            <p style={{ textAlign: 'justify' }}>{linkifyText(cvData.profile)}</p>
-          </section>
-
-          <section>
-            <h2 className="section-title">Esperienza Lavorativa</h2>
-            {cvData.workExperience.map((work) => (
-              <div key={work.id} className="work-item">
-                <div className="date-range">{work.startDate} - {work.endDate}</div>
-                <div className="item-header">{work.title}</div>
-                <div className="item-subheader">{work.company}</div>
-                <div style={{ paddingLeft: '5px' }}>
-                  <p style={{ textAlign: 'justify' }}>{linkifyText(work.description)}</p>
-                </div>
-              </div>
-            ))}
-          </section>
-
-          <section>
-            <h2 className="section-title">Istruzione e Formazione</h2>
-            {cvData.education.map((edu) => (
-              <div key={edu.id} className={`work-item ${edu.isNew ? 'new-highlight' : ''}`}>
-                <div className="date-range">{edu.date}</div>
-                <div className="item-header">
-                  {edu.title}
-                  {edu.level && <span className="certification-badge">{edu.level}</span>}
-                </div>
-                <div className="item-subheader">{edu.institution}</div>
-                <div style={{ paddingLeft: '5px' }}>
-                  <p style={{ textAlign: 'justify' }}>
-                    {edu.description}
-                    {edu.link && (
-                      <span> <a href={edu.link} className="external-link" target="_blank" rel="noopener noreferrer">Consultabile qui</a></span>
-                    )}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </section>
-
-          <section>
-            <h2 className="section-title">Competenze Digitali e Linguistiche</h2>
-            
-            <div className={`work-item ${cvData.skills.ai.isNew ? 'new-highlight' : ''}`}>
-              <div className="item-header">{cvData.skills.ai.title}</div>
-              <div style={{ paddingLeft: '5px' }}>
-                <p style={{ textAlign: 'justify' }}>{cvData.skills.ai.content}</p>
-              </div>
-            </div>
-
-            {/* COMPETENZE DIGITALI FLESSIBILI */}
-            <div className="work-item">
-              <div className="item-header">{cvData.skills.digital.title}</div>
-              <div style={{ paddingLeft: '5px' }}>
-                
-                {/* Descrizione generica sempre presente */}
-                {cvData.skills.digital.genericContent && (
-                  <p style={{ textAlign: 'justify', marginBottom: '15px' }}>
-                    {linkifyText(cvData.skills.digital.genericContent)}
-                  </p>
-                )}
-                
-                {/* Griglia DigiCompEU solo se attivata */}
-                {cvData.skills.digital.useDigiCompEU && (
-                  <div>
-                    <h4 style={{ fontSize: '0.9em', fontWeight: 'bold', marginBottom: '10px', color: '#003d7a' }}>
-                      Competenze DigiCompEU (Framework Europeo):
-                    </h4>
-                    <div className="digital-skills-grid">
-                      {cvData.skills.digital.digiCompItems.map((skill, index) => (
-                        <div key={index} className="skill-item">
-                          <div className="skill-details">
-                            <span className="skill-name">{skill.name}</span>
-                            <div className="skill-level">
-                              <span className="level-text">{skill.level}</span>
-                              <span className="level-numeric">{skill.numeric}</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="work-item">
-              <div className="item-header">{cvData.skills.platforms.title}</div>
-              <div style={{ paddingLeft: '5px' }}>
-                <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
-                  {cvData.skills.platforms.items.map((platform, index) => (
-                    <li key={index} style={{ marginBottom: '5px' }}>{platform}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          {/* COMPETENZE LINGUISTICHE DINAMICHE */}
-          <section>
-            <h3 className="section-subtitle">🌍 Lingue Conosciute</h3>
-            <div className="skills-grid">
-              
-              {/* Lingua madre sempre presente */}
-              <div className="skill-category">
-                <div className="skill-title">Madrelingua</div>
-                <div>🗣️ <strong>{cvData.skills.languages.motherTongue.name}</strong> - {cvData.skills.languages.motherTongue.level}</div>
-              </div>
-              
-              {/* Altre lingue dinamiche */}
-              <div className="skill-category">
-                <div className="skill-title">Altre lingue</div>
-                {cvData.skills.languages.otherLanguages.length === 0 ? (
-                  <div style={{ fontStyle: 'italic', color: '#666' }}>
-                    Nessuna lingua straniera dichiarata
-                  </div>
-                ) : (
-                  cvData.skills.languages.otherLanguages.map((lang) => (
-                    <div key={lang.id}>
-                      🌍 <strong>{lang.name}</strong> - {lang.level}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </section>
-
-          {cvData.formatore && cvData.formatore.length > 0 && (
-            <section>
-              <h2 className="section-title">Esperienza come Formatore</h2>
-              {cvData.formatore.map((form) => (
-                <div key={form.id} className={`work-item ${form.isNew ? 'new-highlight' : ''}`}>
-                  <div className="date-range">{form.period}</div>
-                  <div className="item-header">
-                    {form.title}
-                    {form.hours && <span className="certification-badge">{form.hours}</span>}
-                  </div>
-                  <div className="item-subheader">{form.institutions}</div>
-                  <div style={{ paddingLeft: '5px' }}>
-                    <p style={{ textAlign: 'justify', marginBottom: '10px' }}><strong>{form.topics}</strong></p>
-                    {form.details && form.details.length > 0 && (
-                      <>
-                        <p style={{ textAlign: 'justify', marginBottom: '10px' }}><strong>Riepilogo completo delle formazioni erogate:</strong></p>
-                        <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
-                          {form.details.map((detail, index) => (
-                            <li key={index} style={{ marginBottom: '5px' }}>{detail}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {/* NUOVA SEZIONE: Altre Capacità e Competenze */}
-          {cvData.altreCapacita && (
-            <section>
-              <h2 className="section-title">Altre Capacità e Competenze</h2>
-              <div className="work-item">
-                <p style={{ textAlign: 'justify' }}>{linkifyText(cvData.altreCapacita)}</p>
-              </div>
-            </section>
-          )}
-
-          {/* NUOVA SEZIONE: Trattamento Dati Personali */}
-          {cvData.trattamentoDati && cvData.trattamentoDati.enabled && advancedSettings.privacyConsent && (
-            <section>
-              <h2 className="section-title">Trattamento dei Dati Personali</h2>
-              <div className="privacy-section">
-                <p style={{ textAlign: 'justify', fontSize: '0.9em' }}>
-                  {cvData.trattamentoDati.text}
-                </p>
-              </div>
-            </section>
-          )}
-
-          {/* Footer con solo info aggiornamento */}
-          <div className="cv-footer">
-            <div className="update-info" style={{ textAlign: 'center' }}>
-              <strong>CV aggiornato:</strong> {new Date(cvData.lastUpdated).toLocaleDateString('it-IT', { 
-                year: 'numeric', 
-                month: 'long' 
-              })}
-            </div>
-          </div>
-        </div>
-      );
-
-      return (
-        <div className="min-h-screen bg-gray-100">
-          <WelcomeModal />
-          
-          {/* Banner Aggiornamento Versione */}
-          {showVersionBanner && (
-            <div className="bg-green-500 text-white p-3 text-center shadow-lg relative">
-              <div className="flex items-center justify-center space-x-2">
-                <span className="text-lg">🎉</span>
-                <span className="font-medium">
-                  Aggiornato alla versione 4.4! Aggiunta firma sviluppatore nel menu
-                </span>
-                <button
-                  onClick={() => setShowVersionBanner(false)}
-                  className="ml-4 text-white hover:text-gray-200 font-bold text-xl"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          )}
-          
-          {/* Indicatore pagine */}
-          {activeTab === 'preview' && (
-            <div className="page-indicator">
-              📄 Pagina {pageCount > 1 ? `1-${pageCount}` : '1'} di {pageCount}
-            </div>
-          )}
-          
-          {/* Notifiche PWA */}
-          {showInstallPrompt && !isInstalled && (
-            <div className="fixed top-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
-              <div className="flex items-start space-x-3">
-                <LucideIcon name="Download" size={24} className="flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h4 className="font-semibold">Installa CV Editor v2.0</h4>
-                  <p className="text-sm text-blue-100 mt-1">
-                    Installa l'app per usarla offline e accedervi rapidamente!
-                  </p>
-                  <div className="flex space-x-2 mt-3">
-                    <button
-                      onClick={installPWA}
-                      className="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium"
-                    >
-                      Installa
-                    </button>
-                    <button
-                      onClick={() => setShowInstallPrompt(false)}
-                      className="text-blue-100 px-3 py-1 rounded text-sm"
-                    >
-                      Dopo
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-
-          {/* Header */}
-          <header className="bg-white shadow-sm border-b">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between items-center py-4">
-                <div className="flex items-center space-x-3">
-                  <LucideIcon name="FileText" size={32} className="text-blue-600" />
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-                      <span>CV PWA Editor v4.4</span>
-                      <EuropassLogo className="ml-2" />
-                    </h1>
-                    <div className="flex items-center space-x-2 text-sm text-gray-500">
-                      {isOnline ? (
-                        <><LucideIcon name="Wifi" size={14} className="text-green-500" /> <span>Online</span></>
-                      ) : (
-                        <><LucideIcon name="WifiOff" size={14} className="text-red-500" /> <span>Offline</span></>
-                      )}
-                      {isInstalled && (
-                        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
-                          📱 App Installata
-                        </span>
-                      )}
-                      <span className="text-xs text-gray-400">
-                        <LucideIcon name="Calendar" size={12} className="inline mr-1" />
-                        Agg. {new Date(cvData.lastUpdated).toLocaleDateString('it-IT')}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <button
-                    onClick={() => setActiveTab('edit')}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md ${
-                      activeTab === 'edit' 
-                        ? 'bg-blue-600 text-white' 
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    <LucideIcon name="Edit3" size={16} />
-                    <span>Modifica</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('preview')}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md ${
-                      activeTab === 'preview' 
-                        ? 'bg-blue-600 text-white' 
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    }`}
-                  >
-                    <LucideIcon name="Eye" size={16} />
-                    <span>Anteprima</span>
-                  </button>
-                  <button
-                    onClick={generatePDF}
-                    className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-                  >
-                    <LucideIcon name="Download" size={16} />
-                    <span>Stampa PDF</span>
-                  </button>
-                  {!isInstalled && showInstallPrompt && (
-                    <button
-                      onClick={installPWA}
-                      className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                    >
-                      <LucideIcon name="Download" size={16} />
-                      <span>Installa App</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </header>
-
-          {/* Main Content */}
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            {activeTab === 'edit' ? (
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                {/* Sidebar Navigation */}
-                <div className="lg:col-span-1">
-                  <nav className="bg-white rounded-lg shadow-sm p-4">
-                    <h2 className="font-semibold text-gray-900 mb-4">Sezioni</h2>
-                    <ul className="space-y-2">
-                      {[
-                        { id: 'personalInfo', label: 'Info Personali', icon: '👤' },
-                        { id: 'profile', label: 'Profilo', icon: '📝' },
-                        { id: 'workExperience', label: 'Esperienza', icon: '💼' },
-                        { id: 'education', label: 'Formazione', icon: '🎓' },
-                        { id: 'formatore', label: 'Formatore', icon: '🎯' },
-                        { id: 'skills', label: 'Competenze e Lingue', icon: '⚡' },
-                        { id: 'altreCapacita', label: 'Altre Capacità', icon: '❤️' },
-                        { id: 'advanced', label: 'Impostazioni', icon: '⚙️' }
-                      ].map((section) => (
-                        <li key={section.id}>
-                          <button
-                            onClick={() => setEditingSection(section.id)}
-                            className={`w-full text-left flex items-center space-x-3 px-3 py-2 rounded-md transition-colors ${
-                              editingSection === section.id
-                                ? 'bg-blue-100 text-blue-700'
-                                : 'text-gray-700 hover:bg-gray-100'
-                            }`}
-                          >
-                            <span>{section.icon}</span>
-                            <span>{section.label}</span>
-                            {section.id === 'altreCapacita' && (
-                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs ml-auto">Nuovo</span>
-                            )}
-                            {section.id === 'formatore' && (
-                              <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs ml-auto">Pro</span>
-                            )}
-                            {section.id === 'advanced' && (
-                              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs ml-auto">v2.0</span>
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                    
-                    {/* Mini info panel */}
-                    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                      <div className="text-center">
-                        <EuropassLogo className="justify-center mb-2" />
-                        <p className="text-xs text-blue-700">
-                          Template ufficiale Europass UE
-                        </p>
-                        <div className="mt-2 pt-2 border-t border-blue-200">
-                          <p className="text-xs text-gray-600">
-                            💻 Sviluppato da <span className="font-semibold text-blue-800">Fabio Rizzotto</span>
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            EduTechLab Italia
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </nav>
-                </div>
-
-                {/* Editor Content */}
-                <div className="lg:col-span-3">
-                  <div className="bg-white rounded-lg shadow-sm p-6">
-                    {editingSection === 'personalInfo' && <PersonalInfoEditor />}
-                    {editingSection === 'profile' && <ProfileEditor />}
-                    {editingSection === 'workExperience' && <WorkExperienceEditor />}
-                    {editingSection === 'education' && <EducationEditor />}
-                    {editingSection === 'formatore' && <FormatoreEditor />}
-                    {editingSection === 'skills' && <SkillsEditor />}
-                    {editingSection === 'altreCapacita' && <AltreCapacitaEditor />}
-                    {editingSection === 'advanced' && <AdvancedSettingsEditor />}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-center">
-                <CVPreview />
-              </div>
-            )}
-          </main>
-
-          {/* Status Bar */}
-          <div className="fixed bottom-4 right-4 space-y-2">
-            <div className="bg-green-100 text-green-800 px-4 py-2 rounded-md shadow-sm">
-              <div className="flex items-center space-x-2">
-                <LucideIcon name="Save" size={16} />
-                <span className="text-sm">Salvato automaticamente</span>
-              </div>
-            </div>
-            
-            {!isOnline && (
-              <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-md shadow-sm">
-                <div className="flex items-center space-x-2">
-                  <LucideIcon name="WifiOff" size={16} />
-                  <span className="text-sm">Modalità offline attiva</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    };
-
-    ReactDOM.render(<CVEditor />, document.getElementById('root'));
+        });
+      });
+      
+      console.log('✅ Tutti gli event listeners configurati');
+      console.log('🎯 TEST: Prova a digitare nei campi Info Personali!');
+    });
+    
   </script>
-
-  <!-- Fallback per JavaScript disabilitato -->
-  <noscript>
-    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
-      <div style="text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.4</h1>
-        <p style="color: #666; margin-bottom: 1rem;">Questa applicazione richiede JavaScript per funzionare.</p>
-        <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV Europass.</p>
-      </div>
-    </div>
-  </noscript>
-
+  
 </body>
 </html>

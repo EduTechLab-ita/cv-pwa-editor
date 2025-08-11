@@ -1,12 +1,8 @@
-{
-  "name": "project",
-  "version": "1.0.0",
-  "description": "> **Progressive Web App professionale per creare e gestire il tuo Curriculum Vitae**   > *Sviluppato da EduTechLab Italia per l'innovazione didattica*",
-  "main": "sw.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-}
+@@ .. @@
+   "scripts": {
+-    "test": "echo \"Error: no test specified\" && exit 1"
++    "test": "echo \"Error: no test specified\" && exit 1",
++    "dev": "vite --host 0.0.0.0 --port 8000",
++    "build": "vite build",
++    "preview": "vite preview"
+   },

@@ -12,6 +12,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json">
+  
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="./icon-192.png">
   <link rel="icon" type="image/png" sizes="16x16" href="./icon-192.png">
@@ -966,6 +969,120 @@
       
       console.log('✅ App inizializzata - Design upgrade completo!');
     });
+    
+    // === PWA SERVICE WORKER REGISTRATION ===
+    
+    // Registra Service Worker per funzionalità PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        try {
+          const registration = await navigator.serviceWorker.register('./sw.js');
+          console.log('🔄 Service Worker registrato:', registration.scope);
+          
+          // Ascolta aggiornamenti del SW
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // Nuovo SW disponibile - reload silenzioso
+                console.log('🔄 Nuovo Service Worker installato - aggiornamento in corso...');
+                window.location.reload();
+              }
+            });
+          });
+          
+        } catch (error) {
+          console.error('❌ Service Worker registrazione fallita:', error);
+        }
+      });
+    }
+    
+    // === PWA INSTALL PROMPT ===
+    
+    let deferredPrompt;
+    let installButton;
+    
+    // Ascolta evento beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('📲 PWA installabile rilevata');
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Mostra pulsante installa se non già installata
+      if (!window.matchMedia('(display-mode: standalone)').matches) {
+        showInstallButton();
+      }
+    });
+    
+    // Mostra pulsante installazione
+    function showInstallButton() {
+      // Crea pulsante install se non esiste
+      if (!installButton) {
+        installButton = document.createElement('button');
+        installButton.className = 'header-btn primary';
+        installButton.innerHTML = '📲 Installa App';
+        installButton.onclick = installPWA;
+        
+        // Aggiungi al header actions
+        const headerActions = document.querySelector('.header-actions');
+        headerActions.insertBefore(installButton, headerActions.firstChild);
+      }
+      
+      installButton.style.display = 'inline-block';
+    }
+    
+    // Gestisce installazione PWA
+    async function installPWA() {
+      if (!deferredPrompt) return;
+      
+      try {
+        const result = await deferredPrompt.prompt();
+        console.log('📲 Risultato installazione PWA:', result.outcome);
+        
+        if (result.outcome === 'accepted') {
+          // Nascondi pulsante install
+          if (installButton) {
+            installButton.style.display = 'none';
+          }
+        }
+        
+        deferredPrompt = null;
+      } catch (error) {
+        console.error('❌ Errore installazione PWA:', error);
+      }
+    }
+    
+    // Rileva se app è già installata
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PWA installata con successo!');
+      if (installButton) {
+        installButton.style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+    
+    // === PWA OFFLINE/ONLINE STATUS ===
+    
+    // Aggiorna indicatore online/offline
+    function updateOnlineStatus() {
+      const indicator = document.querySelector('.online-indicator');
+      const status = document.querySelector('.app-status span:nth-child(2)');
+      
+      if (navigator.onLine) {
+        indicator.style.background = '#22c55e'; // Verde
+        status.textContent = 'Online';
+      } else {
+        indicator.style.background = '#ef4444'; // Rosso
+        status.textContent = 'Offline';
+      }
+    }
+    
+    // Ascolta cambi di stato rete
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    
+    // Inizializza stato
+    updateOnlineStatus();
     
   </script>
   

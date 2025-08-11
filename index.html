@@ -518,6 +518,205 @@
       background: #f1f5f9;
     }
     
+    /* Photo Upload Styles */
+    .photo-upload-container {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    
+    .photo-upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 8px;
+      padding: 30px 20px;
+      text-align: center;
+      transition: all 0.2s;
+      background: #f9fafb;
+      min-width: 200px;
+    }
+    
+    .photo-upload-area:hover {
+      border-color: #003d7a;
+      background: #f1f5f9;
+    }
+    
+    .photo-upload-area.dragover {
+      border-color: #003d7a;
+      background: #eff6ff;
+      transform: scale(1.02);
+    }
+    
+    .photo-upload-content p {
+      margin: 8px 0;
+      font-size: 0.875rem;
+      color: #374151;
+    }
+    
+    .photo-preview-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .photo-preview {
+      width: 120px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .photo-controls {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .photo-btn {
+      padding: 6px 12px;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #374151;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .photo-btn:hover {
+      background: #f3f4f6;
+      border-color: #9ca3af;
+    }
+    
+    .cv-profile-photo {
+      width: 3.5cm;
+      height: 4.5cm;
+      object-fit: cover;
+      border-radius: 6px;
+      float: right;
+      margin-left: 20px;
+      margin-bottom: 15px;
+      border: 2px solid #e5e7eb;
+    }
+    
+    /* Dynamic Lists */
+    .dynamic-list {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #f9fafb;
+    }
+    
+    .list-item {
+      padding: 20px;
+      border-bottom: 1px solid #e5e7eb;
+      background: white;
+      position: relative;
+    }
+    
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    
+    .list-item-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .list-item-title {
+      font-weight: 600;
+      color: #003d7a;
+      flex: 1;
+    }
+    
+    .list-item-controls {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .list-btn {
+      padding: 4px 8px;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #374151;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .list-btn:hover {
+      background: #f3f4f6;
+    }
+    
+    .list-btn.danger:hover {
+      background: #fef2f2;
+      border-color: #f87171;
+      color: #dc2626;
+    }
+    
+    .add-item-btn {
+      width: 100%;
+      padding: 15px;
+      border: 2px dashed #d1d5db;
+      background: #f9fafb;
+      color: #6b7280;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    .add-item-btn:hover {
+      border-color: #003d7a;
+      color: #003d7a;
+      background: #f1f5f9;
+    }
+    
+    /* Skills and ratings */
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .skill-item:last-child {
+      border-bottom: none;
+    }
+    
+    .skill-name {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .skill-level {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    
+    .level-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #d1d5db;
+      transition: all 0.2s;
+    }
+    
+    .level-dot.active {
+      background: #003d7a;
+      border-color: #003d7a;
+    }
+    
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -577,7 +776,7 @@
     <div class="app-header-content">
       <div class="app-logo-section">
         <div class="app-logo">
-          <div class="europass-logo">EU</div>
+          <img src="./CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
           <div>
             <h1 class="app-title">CV PWA Editor</h1>
             <span class="app-version">v5.1</span>
@@ -620,6 +819,34 @@
         <button class="nav-section" data-section="profile" onclick="switchSection('profile')">
           <span class="nav-icon">📝</span>
           Profilo
+        </button>
+        <button class="nav-section" data-section="experience" onclick="switchSection('experience')">
+          <span class="nav-icon">💼</span>
+          Esperienza
+        </button>
+        <button class="nav-section" data-section="education" onclick="switchSection('education')">
+          <span class="nav-icon">🎓</span>
+          Formazione
+        </button>
+        <button class="nav-section" data-section="skills" onclick="switchSection('skills')">
+          <span class="nav-icon">⚡</span>
+          Competenze
+        </button>
+        <button class="nav-section" data-section="languages" onclick="switchSection('languages')">
+          <span class="nav-icon">🌍</span>
+          Lingue
+        </button>
+        <button class="nav-section" data-section="publications" onclick="switchSection('publications')">
+          <span class="nav-icon">📚</span>
+          Pubblicazioni
+        </button>
+        <button class="nav-section" data-section="other" onclick="switchSection('other')">
+          <span class="nav-icon">✨</span>
+          Altre Info
+        </button>
+        <button class="nav-section" data-section="settings" onclick="switchSection('settings')">
+          <span class="nav-icon">⚙️</span>
+          Impostazioni
         </button>
         <button class="nav-section" data-section="preview" onclick="switchSection('preview')">
           <span class="nav-icon">👁️</span>
@@ -712,6 +939,30 @@
                 placeholder="https://tuosito.com"
               >
             </div>
+            
+            <!-- Upload Foto Profilo -->
+            <div class="form-group full-width">
+              <label class="form-label">Foto Profilo (opzionale)</label>
+              <div class="photo-upload-container">
+                <div class="photo-upload-area" id="photoUpload">
+                  <div class="photo-upload-content">
+                    <span style="font-size: 2rem;">📷</span>
+                    <p><strong>Trascina qui la tua foto</strong></p>
+                    <p>oppure <span style="color: #003d7a; cursor: pointer; text-decoration: underline;" onclick="document.getElementById('photoInput').click()">clicca per selezionare</span></p>
+                    <p style="font-size: 0.75rem; color: #6b7280;">JPG, PNG (max 2MB)</p>
+                  </div>
+                  <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="photo-preview-container" id="photoPreview" style="display: none;">
+                  <img id="photoImg" class="photo-preview" alt="Anteprima foto">
+                  <div class="photo-controls">
+                    <button type="button" class="photo-btn" onclick="removePhoto()">🗑️ Rimuovi</button>
+                    <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">🔄 Cambia</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -738,8 +989,248 @@
         </div>
       </div>
       
+      <!-- Esperienza Lavorativa -->
+      <div class="section" id="experience">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>💼</span>
+            Esperienza Lavorativa
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div id="experienceList" class="dynamic-list">
+            <!-- Le esperienze verranno generate dinamicamente -->
+          </div>
+          
+          <button class="add-item-btn" onclick="addExperience()">
+            <span>➕</span>
+            Aggiungi Esperienza
+          </button>
+        </div>
+      </div>
+      
+      <!-- Formazione -->
+      <div class="section" id="education">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>🎓</span>
+            Istruzione e Formazione
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div id="educationList" class="dynamic-list">
+            <!-- La formazione verrà generata dinamicamente -->
+          </div>
+          
+          <button class="add-item-btn" onclick="addEducation()">
+            <span>➕</span>
+            Aggiungi Formazione
+          </button>
+        </div>
+      </div>
+      
+      <!-- Competenze -->
+      <div class="section" id="skills">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>⚡</span>
+            Competenze
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label" for="aiSkills">Competenze AI e Machine Learning</label>
+              <textarea 
+                id="aiSkills" 
+                class="form-textarea"
+                placeholder="Descrive le tue competenze in Intelligenza Artificiale, Machine Learning, Deep Learning, NLP, Computer Vision, etc."
+                style="min-height: 100px;"
+              ></textarea>
+            </div>
+            
+            <div class="form-group full-width">
+              <label class="form-label" for="digitalSkills">Competenze Digitali</label>
+              <textarea 
+                id="digitalSkills" 
+                class="form-textarea"
+                placeholder="Linguaggi di programmazione, framework, database, sistemi operativi, software specialistici, etc."
+                style="min-height: 120px;"
+              ></textarea>
+            </div>
+            
+            <div class="form-group full-width">
+              <label class="form-label" for="platforms">Piattaforme e Software</label>
+              <textarea 
+                id="platforms" 
+                class="form-textarea"
+                placeholder="Microsoft Office, Google Workspace, Adobe Creative Suite, CRM, LMS, etc."
+                style="min-height: 80px;"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lingue -->
+      <div class="section" id="languages">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>🌍</span>
+            Lingue
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="motherTongue">Madrelingua</label>
+              <input 
+                type="text" 
+                id="motherTongue" 
+                class="form-input"
+                placeholder="Es. Italiano"
+                value="Italiano"
+              >
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="motherTongueLevel">Livello</label>
+              <select id="motherTongueLevel" class="form-input">
+                <option value="C2">C2 - Madrelingua</option>
+              </select>
+            </div>
+          </div>
+          
+          <h4 style="margin: 30px 0 15px 0; color: #003d7a;">Altre Lingue</h4>
+          <div id="languagesList" class="dynamic-list">
+            <!-- Le lingue verranno generate dinamicamente -->
+          </div>
+          
+          <button class="add-item-btn" onclick="addLanguage()">
+            <span>➕</span>
+            Aggiungi Lingua
+          </button>
+        </div>
+      </div>
+      
+      <!-- Pubblicazioni -->
+      <div class="section" id="publications">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>📚</span>
+            Pubblicazioni
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div id="publicationsList" class="dynamic-list">
+            <!-- Le pubblicazioni verranno generate dinamicamente -->
+          </div>
+          
+          <button class="add-item-btn" onclick="addPublication()">
+            <span>➕</span>
+            Aggiungi Pubblicazione
+          </button>
+        </div>
+      </div>
+      
+      <!-- Altre Informazioni -->
+      <div class="section" id="other">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>✨</span>
+            Altre Informazioni
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div class="form-group">
+            <label class="form-label" for="otherSkills">Altre capacità e competenze</label>
+            <textarea 
+              id="otherSkills" 
+              class="form-textarea"
+              placeholder="Soft skills, hobby, interessi, attività extracurriculari, premi, certificazioni, patenti, etc."
+              style="min-height: 120px;"
+            ></textarea>
+          </div>
+          
+          <div class="form-group" style="margin-top: 25px;">
+            <label class="form-label">
+              <input type="checkbox" id="includePrivacy" style="margin-right: 8px;">
+              Includi clausola trattamento dati personali (GDPR)
+            </label>
+          </div>
+          
+          <div class="form-group" id="privacyClause" style="display: none; margin-top: 15px;">
+            <label class="form-label" for="privacyText">Testo clausola privacy</label>
+            <textarea 
+              id="privacyText" 
+              class="form-textarea"
+              placeholder="Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all'art. 13 del D. Lgs. 196/2003 e all'art. 13 GDPR 679/16."
+              style="min-height: 80px;"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Impostazioni -->
+      <div class="section" id="settings">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>⚙️</span>
+            Impostazioni
+          </h2>
+        </div>
+        
+        <div class="content-body">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <h4 style="color: #003d7a; margin-bottom: 15px;">🎨 Personalizzazione</h4>
+              
+              <div style="padding: 15px; background: #f9fafb; border-radius: 6px; margin-bottom: 20px;">
+                <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                  <input type="checkbox" id="showPhoto" checked>
+                  <span>📷 Mostra foto profilo nel CV</span>
+                </label>
+                
+                <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                  <input type="checkbox" id="showPublications" checked>
+                  <span>📚 Mostra sezione pubblicazioni</span>
+                </label>
+                
+                <label class="form-label" style="display: flex; align-items: center; gap: 10px;">
+                  <input type="checkbox" id="italianDateFormat" checked>
+                  <span>📅 Formato date italiano (MM/AAAA invece di AAAA-MM)</span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group full-width">
+              <h4 style="color: #003d7a; margin-bottom: 15px;">💾 Gestione Dati</h4>
+              
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="header-btn" onclick="exportData()">
+                  📤 Esporta Dati
+                </button>
+                <button type="button" class="header-btn" onclick="importData()">
+                  📥 Importa Dati
+                </button>
+                <button type="button" class="header-btn" onclick="resetData()">
+                  🗑️ Reset Dati
+                </button>
+              </div>
+              
+              <input type="file" id="importInput" accept=".json" style="display: none;">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Anteprima -->
-      <div class="section" id="preview">
         <div class="content-header">
           <h2 class="section-title">
             <span>👁️</span>

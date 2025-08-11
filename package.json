@@ -1,8 +1,18 @@
-@@ .. @@
-   "scripts": {
--    "test": "echo \"Error: no test specified\" && exit 1"
-+    "test": "echo \"Error: no test specified\" && exit 1",
-+    "dev": "vite --host 0.0.0.0 --port 8000",
-+    "build": "vite build",
-+    "preview": "vite preview"
-   },
+{
+  "name": "cv-pwa",
+  "version": "1.0.0",
+  "description": "Progressive Web App professionale per creare e gestire il tuo Curriculum Vitae - Sviluppato da EduTechLab Italia per l'innovazione didattica",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite --host 0.0.0.0 --port 8000",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["cv", "curriculum", "pwa", "resume"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

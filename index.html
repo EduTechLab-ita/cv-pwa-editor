@@ -1283,10 +1283,34 @@
           phone: '',
           email: '',
           address: '',
-          website: ''
+          website: '',
+          photo: null // base64 string
         },
         profile: {
           text: ''
+        },
+        experience: [],
+        education: [],
+        skills: {
+          ai: '',
+          digital: '',
+          platforms: ''
+        },
+        languages: {
+          motherTongue: 'Italiano',
+          motherTongueLevel: 'C2',
+          otherLanguages: []
+        },
+        publications: [],
+        other: {
+          skills: '',
+          includePrivacy: false,
+          privacyText: 'Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all\'art. 13 del D. Lgs. 196/2003 e all\'art. 13 GDPR 679/16.'
+        },
+        settings: {
+          showPhoto: true,
+          showPublications: true,
+          italianDateFormat: true
         }
       },
       
@@ -1350,32 +1374,555 @@
           return;
         }
         
-        preview.innerHTML = `
+        let html = `
           <div class="cv-header">
+            ${data.personal.photo && data.settings.showPhoto ? 
+              `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">` : ''}
+            
             <h1 class="cv-name">${data.personal.fullName || 'Il Tuo Nome'}</h1>
             
             <div class="cv-contact-grid">
               ${data.personal.nationality ? `<div class="cv-contact-item">📍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
-              ${data.personal.phone ? `<div class="cv-contact-item">📞 ${data.personal.phone}</div>` : ''}
-              ${data.personal.email ? `<div class="cv-contact-item">✉️ ${data.personal.email}</div>` : ''}
-              ${data.personal.website ? `<div class="cv-contact-item">🌐 ${data.personal.website}</div>` : ''}
+              ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
+              ${data.personal.email ? `<div class="cv-contact-item">✉️ ${this.linkifyText(data.personal.email)}</div>` : ''}
+              ${data.personal.website ? `<div class="cv-contact-item">🌐 ${this.linkifyText(data.personal.website)}</div>` : ''}
             </div>
             
             ${data.personal.address ? `<div class="cv-address">📍 ${data.personal.address}</div>` : ''}
           </div>
-          
-          ${data.profile.text ? `
+        `;
+        
+        // Profilo
+        if (data.profile.text) {
+          html += `
             <div class="cv-section">
               <h2 class="cv-section-title">Profilo Professionale</h2>
-              <div class="cv-content">${data.profile.text}</div>
+              <div class="cv-content">${this.linkifyText(data.profile.text)}</div>
             </div>
-          ` : ''}
-        `;
+          `;
+        }
+        
+        // Esperienza
+        if (data.experience.length > 0) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Esperienza Lavorativa</h2>
+              <div class="cv-content">
+                ${data.experience.map(exp => `
+                  <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
+                      <span>${exp.position}</span>
+                      <span>${exp.startDate} - ${exp.endDate}</span>
+                    </div>
+                    <div style="font-weight: 500; margin: 5px 0;">${exp.company}</div>
+                    ${exp.description ? `<div style="margin-top: 8px;">${this.linkifyText(exp.description)}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+        
+        // Formazione
+        if (data.education.length > 0) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Istruzione e Formazione</h2>
+              <div class="cv-content">
+                ${data.education.map(edu => `
+                  <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
+                      <span>${edu.degree}</span>
+                      <span>${edu.startDate} - ${edu.endDate}</span>
+                    </div>
+                    <div style="font-weight: 500; margin: 5px 0;">${edu.institution}</div>
+                    ${edu.description ? `<div style="margin-top: 8px;">${this.linkifyText(edu.description)}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+        
+        // Competenze
+        if (data.skills.ai || data.skills.digital || data.skills.platforms) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Competenze</h2>
+              <div class="cv-content">
+                ${data.skills.ai ? `<div style="margin-bottom: 15px;"><strong>AI e Machine Learning:</strong><br>${this.linkifyText(data.skills.ai)}</div>` : ''}
+                ${data.skills.digital ? `<div style="margin-bottom: 15px;"><strong>Competenze Digitali:</strong><br>${this.linkifyText(data.skills.digital)}</div>` : ''}
+                ${data.skills.platforms ? `<div style="margin-bottom: 15px;"><strong>Piattaforme e Software:</strong><br>${this.linkifyText(data.skills.platforms)}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }
+        
+        // Lingue
+        if (data.languages.motherTongue || data.languages.otherLanguages.length > 0) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Lingue</h2>
+              <div class="cv-content">
+                <div style="margin-bottom: 10px;"><strong>Madrelingua:</strong> ${data.languages.motherTongue} (${data.languages.motherTongueLevel})</div>
+                ${data.languages.otherLanguages.length > 0 ? `
+                  <div><strong>Altre lingue:</strong></div>
+                  ${data.languages.otherLanguages.map(lang => 
+                    `<div style="margin-left: 20px;">• ${lang.name}: ${lang.level}</div>`
+                  ).join('')}
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }
+        
+        // Pubblicazioni
+        if (data.publications.length > 0 && data.settings.showPublications) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Pubblicazioni</h2>
+              <div class="cv-content">
+                ${data.publications.map(pub => `
+                  <div style="margin-bottom: 15px;">
+                    <div style="font-weight: 600; color: #003d7a;">${pub.title}</div>
+                    <div style="font-style: italic; margin: 5px 0;">${pub.authors} (${pub.year})</div>
+                    ${pub.journal ? `<div style="margin: 5px 0;"><strong>In:</strong> ${pub.journal}</div>` : ''}
+                    ${pub.doi ? `<div style="margin: 5px 0;"><strong>DOI:</strong> ${this.linkifyText(pub.doi)}</div>` : ''}
+                    ${pub.link ? `<div style="margin: 5px 0;"><strong>Link:</strong> ${this.linkifyText(pub.link)}</div>` : ''}
+                    ${pub.description ? `<div style="margin-top: 8px;">${this.linkifyText(pub.description)}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+        
+        // Altre informazioni
+        if (data.other.skills) {
+          html += `
+            <div class="cv-section">
+              <h2 class="cv-section-title">Altre Capacità e Competenze</h2>
+              <div class="cv-content">${this.linkifyText(data.other.skills)}</div>
+            </div>
+          `;
+        }
+        
+        // Privacy
+        if (data.other.includePrivacy && data.other.privacyText) {
+          html += `
+            <div class="cv-section" style="margin-top: 30px; font-size: 0.8rem; color: #6b7280;">
+              <div class="cv-content">${data.other.privacyText}</div>
+            </div>
+          `;
+        }
+        
+        preview.innerHTML = html;
+      },
+      
+      // Link attivi
+      linkifyText(text) {
+        if (!text) return text;
+        
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+        
+        return text
+          .replace(urlRegex, '<a href="$1" target="_blank" style="color: #0066cc; text-decoration: underline;">$1</a>')
+          .replace(emailRegex, '<a href="mailto:$1" style="color: #0066cc; text-decoration: underline;">$1</a>');
       }
     };
     
     // === FUNZIONI GLOBALI ===
+    
+    // === UPLOAD FOTO ===
+    
+    // Gestisce upload foto
+    function handlePhotoUpload(file) {
+      if (file && file.type.startsWith('image/')) {
+        if (file.size > 2 * 1024 * 1024) { // 2MB limit
+          alert('File troppo grande. Massimo 2MB.');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const photoData = e.target.result;
+          AppState.cvData.personal.photo = photoData;
+          AppState.saveData();
+          showPhotoPreview(photoData);
+          AppState.updatePreview();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    // Mostra anteprima foto
+    function showPhotoPreview(photoData) {
+      const uploadArea = document.getElementById('photoUpload');
+      const previewContainer = document.getElementById('photoPreview');
+      const photoImg = document.getElementById('photoImg');
+      
+      uploadArea.style.display = 'none';
+      previewContainer.style.display = 'block';
+      photoImg.src = photoData;
+    }
+    
+    // Rimuove foto
+    function removePhoto() {
+      AppState.cvData.personal.photo = null;
+      AppState.saveData();
+      
+      const uploadArea = document.getElementById('photoUpload');
+      const previewContainer = document.getElementById('photoPreview');
+      
+      uploadArea.style.display = 'block';
+      previewContainer.style.display = 'none';
+      AppState.updatePreview();
+    }
+    
+    // === LISTE DINAMICHE ===
+    
+    // Esperienza lavorativa
+    function addExperience() {
+      const newExp = {
+        id: Date.now(),
+        startDate: '',
+        endDate: '',
+        current: false,
+        position: '',
+        company: '',
+        description: ''
+      };
+      AppState.cvData.experience.push(newExp);
+      AppState.saveData();
+      renderExperienceList();
+      AppState.updatePreview();
+    }
+    
+    function removeExperience(id) {
+      AppState.cvData.experience = AppState.cvData.experience.filter(exp => exp.id !== id);
+      AppState.saveData();
+      renderExperienceList();
+      AppState.updatePreview();
+    }
+    
+    function renderExperienceList() {
+      const container = document.getElementById('experienceList');
+      if (AppState.cvData.experience.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna esperienza aggiunta</div>';
+        return;
+      }
+      
+      container.innerHTML = AppState.cvData.experience.map(exp => `
+        <div class="list-item">
+          <div class="list-item-header">
+            <div class="list-item-title">${exp.position || 'Posizione non specificata'}</div>
+            <div class="list-item-controls">
+              <button class="list-btn danger" onclick="removeExperience(${exp.id})">🗑️</button>
+            </div>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Data inizio</label>
+              <input type="text" class="form-input" placeholder="MM/AAAA" value="${exp.startDate}" 
+                     onchange="updateExperience(${exp.id}, 'startDate', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data fine</label>
+              <input type="text" class="form-input" placeholder="MM/AAAA o 'In corso'" value="${exp.endDate}"
+                     onchange="updateExperience(${exp.id}, 'endDate', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Posizione/Ruolo</label>
+              <input type="text" class="form-input" placeholder="Es. Sviluppatore Software" value="${exp.position}"
+                     onchange="updateExperience(${exp.id}, 'position', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Azienda/Organizzazione</label>
+              <input type="text" class="form-input" placeholder="Nome azienda" value="${exp.company}"
+                     onchange="updateExperience(${exp.id}, 'company', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Descrizione</label>
+              <textarea class="form-textarea" placeholder="Descrivi le tue responsabilità e risultati" 
+                        onchange="updateExperience(${exp.id}, 'description', this.value)">${exp.description}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function updateExperience(id, field, value) {
+      const exp = AppState.cvData.experience.find(e => e.id === id);
+      if (exp) {
+        exp[field] = value;
+        AppState.saveData();
+        AppState.updatePreview();
+      }
+    }
+    
+    // Formazione
+    function addEducation() {
+      const newEdu = {
+        id: Date.now(),
+        startDate: '',
+        endDate: '',
+        degree: '',
+        institution: '',
+        description: ''
+      };
+      AppState.cvData.education.push(newEdu);
+      AppState.saveData();
+      renderEducationList();
+      AppState.updatePreview();
+    }
+    
+    function removeEducation(id) {
+      AppState.cvData.education = AppState.cvData.education.filter(edu => edu.id !== id);
+      AppState.saveData();
+      renderEducationList();
+      AppState.updatePreview();
+    }
+    
+    function renderEducationList() {
+      const container = document.getElementById('educationList');
+      if (AppState.cvData.education.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna formazione aggiunta</div>';
+        return;
+      }
+      
+      container.innerHTML = AppState.cvData.education.map(edu => `
+        <div class="list-item">
+          <div class="list-item-header">
+            <div class="list-item-title">${edu.degree || 'Titolo non specificato'}</div>
+            <div class="list-item-controls">
+              <button class="list-btn danger" onclick="removeEducation(${edu.id})">🗑️</button>
+            </div>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Data inizio</label>
+              <input type="text" class="form-input" placeholder="MM/AAAA" value="${edu.startDate}"
+                     onchange="updateEducation(${edu.id}, 'startDate', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data fine</label>
+              <input type="text" class="form-input" placeholder="MM/AAAA" value="${edu.endDate}"
+                     onchange="updateEducation(${edu.id}, 'endDate', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Titolo/Qualifica</label>
+              <input type="text" class="form-input" placeholder="Es. Laurea in Informatica" value="${edu.degree}"
+                     onchange="updateEducation(${edu.id}, 'degree', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Istituto/Università</label>
+              <input type="text" class="form-input" placeholder="Nome istituzione" value="${edu.institution}"
+                     onchange="updateEducation(${edu.id}, 'institution', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Descrizione</label>
+              <textarea class="form-textarea" placeholder="Materie principali, voto, progetti, etc."
+                        onchange="updateEducation(${edu.id}, 'description', this.value)">${edu.description}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function updateEducation(id, field, value) {
+      const edu = AppState.cvData.education.find(e => e.id === id);
+      if (edu) {
+        edu[field] = value;
+        AppState.saveData();
+        AppState.updatePreview();
+      }
+    }
+    
+    // Lingue
+    function addLanguage() {
+      const newLang = {
+        id: Date.now(),
+        name: '',
+        level: 'A1'
+      };
+      AppState.cvData.languages.otherLanguages.push(newLang);
+      AppState.saveData();
+      renderLanguagesList();
+      AppState.updatePreview();
+    }
+    
+    function removeLanguage(id) {
+      AppState.cvData.languages.otherLanguages = AppState.cvData.languages.otherLanguages.filter(lang => lang.id !== id);
+      AppState.saveData();
+      renderLanguagesList();
+      AppState.updatePreview();
+    }
+    
+    function renderLanguagesList() {
+      const container = document.getElementById('languagesList');
+      if (AppState.cvData.languages.otherLanguages.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna lingua aggiunta</div>';
+        return;
+      }
+      
+      container.innerHTML = AppState.cvData.languages.otherLanguages.map(lang => `
+        <div class="list-item">
+          <div class="list-item-header">
+            <div class="list-item-title">${lang.name || 'Lingua non specificata'}</div>
+            <div class="list-item-controls">
+              <button class="list-btn danger" onclick="removeLanguage(${lang.id})">🗑️</button>
+            </div>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Lingua</label>
+              <input type="text" class="form-input" placeholder="Es. Inglese" value="${lang.name}"
+                     onchange="updateLanguage(${lang.id}, 'name', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Livello</label>
+              <select class="form-input" onchange="updateLanguage(${lang.id}, 'level', this.value)">
+                <option value="A1" ${lang.level === 'A1' ? 'selected' : ''}>A1 - Principiante</option>
+                <option value="A2" ${lang.level === 'A2' ? 'selected' : ''}>A2 - Elementare</option>
+                <option value="B1" ${lang.level === 'B1' ? 'selected' : ''}>B1 - Intermedio</option>
+                <option value="B2" ${lang.level === 'B2' ? 'selected' : ''}>B2 - Intermedio superiore</option>
+                <option value="C1" ${lang.level === 'C1' ? 'selected' : ''}>C1 - Avanzato</option>
+                <option value="C2" ${lang.level === 'C2' ? 'selected' : ''}>C2 - Madrelingua</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function updateLanguage(id, field, value) {
+      const lang = AppState.cvData.languages.otherLanguages.find(l => l.id === id);
+      if (lang) {
+        lang[field] = value;
+        AppState.saveData();
+        AppState.updatePreview();
+      }
+    }
+    
+    // Pubblicazioni
+    function addPublication() {
+      const newPub = {
+        id: Date.now(),
+        title: '',
+        year: '',
+        authors: '',
+        journal: '',
+        doi: '',
+        link: '',
+        description: ''
+      };
+      AppState.cvData.publications.push(newPub);
+      AppState.saveData();
+      renderPublicationsList();
+      AppState.updatePreview();
+    }
+    
+    function removePublication(id) {
+      AppState.cvData.publications = AppState.cvData.publications.filter(pub => pub.id !== id);
+      AppState.saveData();
+      renderPublicationsList();
+      AppState.updatePreview();
+    }
+    
+    function renderPublicationsList() {
+      const container = document.getElementById('publicationsList');
+      if (AppState.cvData.publications.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna pubblicazione aggiunta</div>';
+        return;
+      }
+      
+      container.innerHTML = AppState.cvData.publications.map(pub => `
+        <div class="list-item">
+          <div class="list-item-header">
+            <div class="list-item-title">${pub.title || 'Titolo non specificato'}</div>
+            <div class="list-item-controls">
+              <button class="list-btn danger" onclick="removePublication(${pub.id})">🗑️</button>
+            </div>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Titolo</label>
+              <input type="text" class="form-input" placeholder="Titolo della pubblicazione" value="${pub.title}"
+                     onchange="updatePublication(${pub.id}, 'title', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Anno</label>
+              <input type="text" class="form-input" placeholder="2025" value="${pub.year}"
+                     onchange="updatePublication(${pub.id}, 'year', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Autori</label>
+              <input type="text" class="form-input" placeholder="Nome Cognome, Altri autori" value="${pub.authors}"
+                     onchange="updatePublication(${pub.id}, 'authors', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rivista/Conferenza</label>
+              <input type="text" class="form-input" placeholder="Nome rivista" value="${pub.journal}"
+                     onchange="updatePublication(${pub.id}, 'journal', this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">DOI</label>
+              <input type="text" class="form-input" placeholder="10.1000/xyz123" value="${pub.doi}"
+                     onchange="updatePublication(${pub.id}, 'doi', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Link</label>
+              <input type="text" class="form-input" placeholder="https://..." value="${pub.link}"
+                     onchange="updatePublication(${pub.id}, 'link', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Descrizione</label>
+              <textarea class="form-textarea" placeholder="Breve descrizione del lavoro"
+                        onchange="updatePublication(${pub.id}, 'description', this.value)">${pub.description}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function updatePublication(id, field, value) {
+      const pub = AppState.cvData.publications.find(p => p.id === id);
+      if (pub) {
+        pub[field] = value;
+        AppState.saveData();
+        AppState.updatePreview();
+      }
+    }
+    
+    // === EXPORT/IMPORT DATA ===
+    
+    function exportData() {
+      const dataStr = JSON.stringify(AppState.cvData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `cv-data-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    function importData() {
+      document.getElementById('importInput').click();
+    }
+    
+    function resetData() {
+      if (confirm('Sei sicuro di voler cancellare tutti i dati? Questa azione non può essere annullata.')) {
+        localStorage.removeItem('cvData_v5');
+        location.reload();
+      }
+    }
     
     // Cambia sezione
     function switchSection(sectionId) {
@@ -1451,6 +1998,178 @@
           AppState.updateField('profile', 'text', e.target.value);
         });
       }
+      
+      // Event listeners per competenze
+      ['aiSkills', 'digitalSkills', 'platforms'].forEach(fieldId => {
+        const textarea = document.getElementById(fieldId);
+        if (textarea) {
+          const skillKey = fieldId === 'aiSkills' ? 'ai' : fieldId === 'digitalSkills' ? 'digital' : 'platforms';
+          textarea.addEventListener('input', function(e) {
+            AppState.cvData.skills[skillKey] = e.target.value;
+            AppState.saveData();
+            AppState.updatePreview();
+          });
+        }
+      });
+      
+      // Event listeners per lingue madrelingua
+      const motherTongueInput = document.getElementById('motherTongue');
+      if (motherTongueInput) {
+        motherTongueInput.addEventListener('input', function(e) {
+          AppState.cvData.languages.motherTongue = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      const motherTongueLevelSelect = document.getElementById('motherTongueLevel');
+      if (motherTongueLevelSelect) {
+        motherTongueLevelSelect.addEventListener('change', function(e) {
+          AppState.cvData.languages.motherTongueLevel = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      // Event listener altre informazioni
+      const otherSkillsTextarea = document.getElementById('otherSkills');
+      if (otherSkillsTextarea) {
+        otherSkillsTextarea.addEventListener('input', function(e) {
+          AppState.cvData.other.skills = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      // Event listener privacy
+      const includePrivacyCheckbox = document.getElementById('includePrivacy');
+      if (includePrivacyCheckbox) {
+        includePrivacyCheckbox.addEventListener('change', function(e) {
+          AppState.cvData.other.includePrivacy = e.target.checked;
+          const privacyClause = document.getElementById('privacyClause');
+          privacyClause.style.display = e.target.checked ? 'block' : 'none';
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      const privacyTextTextarea = document.getElementById('privacyText');
+      if (privacyTextTextarea) {
+        privacyTextTextarea.addEventListener('input', function(e) {
+          AppState.cvData.other.privacyText = e.target.value;
+          AppState.saveData();
+          AppState.updatePreview();
+        });
+      }
+      
+      // Event listeners per impostazioni
+      ['showPhoto', 'showPublications', 'italianDateFormat'].forEach(settingId => {
+        const checkbox = document.getElementById(settingId);
+        if (checkbox) {
+          checkbox.addEventListener('change', function(e) {
+            AppState.cvData.settings[settingId] = e.target.checked;
+            AppState.saveData();
+            AppState.updatePreview();
+          });
+        }
+      });
+      
+      // Upload foto eventi
+      const photoInput = document.getElementById('photoInput');
+      if (photoInput) {
+        photoInput.addEventListener('change', function(e) {
+          if (e.target.files[0]) {
+            handlePhotoUpload(e.target.files[0]);
+          }
+        });
+      }
+      
+      // Drag and drop foto
+      const photoUpload = document.getElementById('photoUpload');
+      if (photoUpload) {
+        photoUpload.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          photoUpload.classList.add('dragover');
+        });
+        
+        photoUpload.addEventListener('dragleave', function(e) {
+          e.preventDefault();
+          photoUpload.classList.remove('dragover');
+        });
+        
+        photoUpload.addEventListener('drop', function(e) {
+          e.preventDefault();
+          photoUpload.classList.remove('dragover');
+          if (e.dataTransfer.files[0]) {
+            handlePhotoUpload(e.dataTransfer.files[0]);
+          }
+        });
+      }
+      
+      // Import data event
+      const importInput = document.getElementById('importInput');
+      if (importInput) {
+        importInput.addEventListener('change', function(e) {
+          if (e.target.files[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+              try {
+                const importedData = JSON.parse(event.target.result);
+                AppState.cvData = { ...AppState.cvData, ...importedData };
+                AppState.saveData();
+                location.reload(); // Ricarica per mostrare tutti i dati
+              } catch (error) {
+                alert('Errore nel file JSON: ' + error.message);
+              }
+            };
+            reader.readAsText(file);
+          }
+        });
+      }
+      
+      // Carica dati salvati nei campi
+      if (AppState.cvData.skills.ai) {
+        document.getElementById('aiSkills').value = AppState.cvData.skills.ai;
+      }
+      if (AppState.cvData.skills.digital) {
+        document.getElementById('digitalSkills').value = AppState.cvData.skills.digital;  
+      }
+      if (AppState.cvData.skills.platforms) {
+        document.getElementById('platforms').value = AppState.cvData.skills.platforms;
+      }
+      if (AppState.cvData.languages.motherTongue) {
+        document.getElementById('motherTongue').value = AppState.cvData.languages.motherTongue;
+      }
+      if (AppState.cvData.languages.motherTongueLevel) {
+        document.getElementById('motherTongueLevel').value = AppState.cvData.languages.motherTongueLevel;
+      }
+      if (AppState.cvData.other.skills) {
+        document.getElementById('otherSkills').value = AppState.cvData.other.skills;
+      }
+      if (AppState.cvData.other.includePrivacy) {
+        document.getElementById('includePrivacy').checked = true;
+        document.getElementById('privacyClause').style.display = 'block';
+      }
+      if (AppState.cvData.other.privacyText) {
+        document.getElementById('privacyText').value = AppState.cvData.other.privacyText;
+      }
+      
+      // Carica impostazioni
+      document.getElementById('showPhoto').checked = AppState.cvData.settings.showPhoto;
+      document.getElementById('showPublications').checked = AppState.cvData.settings.showPublications;
+      document.getElementById('italianDateFormat').checked = AppState.cvData.settings.italianDateFormat;
+      
+      // Mostra foto se presente
+      if (AppState.cvData.personal.photo) {
+        showPhotoPreview(AppState.cvData.personal.photo);
+      }
+      
+      // Renderizza liste dinamiche
+      renderExperienceList();
+      renderEducationList();
+      renderLanguagesList();
+      renderPublicationsList();
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');

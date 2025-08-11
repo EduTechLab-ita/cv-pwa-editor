@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CV Editor">
   
-  <title>CV PWA Editor v4.7 - EduTechLab Italia</title>
+  <title>CV PWA Editor v4.8 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <link rel="manifest" href="./manifest.json">
@@ -66,7 +66,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v4.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v4.8 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -254,14 +254,12 @@
       const [isInstalled, setIsInstalled] = useState(false);
       const [pageCount, setPageCount] = useState(1);
       const [showVersionBanner, setShowVersionBanner] = useState(false);
-      const [showCookieInfo, setShowCookieInfo] = useState(false);
 
       // Advanced settings
       const [advancedSettings, setAdvancedSettings] = useState({
         showPhoto: true,
         dateFormat: 'italian',
         privacyConsent: true,
-        preventExitDialogs: false,
         templateStyle: 'europass',
         showPubblicazioni: true
       });
@@ -484,7 +482,6 @@
               showPhoto: parsedSettings.showPhoto ?? true,
               dateFormat: parsedSettings.dateFormat ?? 'italian',
               privacyConsent: parsedSettings.privacyConsent ?? true,
-              preventExitDialogs: parsedSettings.preventExitDialogs ?? false,
               templateStyle: parsedSettings.templateStyle ?? 'europass',
               showPubblicazioni: parsedSettings.showPubblicazioni ?? true
             });
@@ -499,7 +496,7 @@
         }
 
         // Controlla se mostrare banner aggiornamento versione
-        const currentVersion = '4.6';
+        const currentVersion = '4.8';
         const lastSeenVersion = localStorage.getItem('lastSeenVersion');
         if (lastSeenVersion && lastSeenVersion !== currentVersion) {
           setShowVersionBanner(true);
@@ -519,7 +516,7 @@
         }
       }, []);
 
-      // Calcola pagine solo quando in modalità preview (non durante editing per evitare perdita focus)
+      // Calcola pagine quando cambia il contenuto
       useEffect(() => {
         if (previewRef.current && activeTab === 'preview') {
           const calculatePages = () => {
@@ -530,10 +527,9 @@
             setPageCount(calculatedPages);
           };
           
-          const timeoutId = setTimeout(calculatePages, 1000); // Debounce più lungo
-          return () => clearTimeout(timeoutId);
+          setTimeout(calculatePages, 500); // Delay per rendering
         }
-      }, [activeTab]); // Rimosso cvData per evitare re-calcoli durante digitazione
+      }, [cvData, activeTab]);
 
       // PWA Setup e Service Worker Registration
       useEffect(() => {
@@ -550,41 +546,12 @@
         const handleOnline = () => setIsOnline(true);
         const handleOffline = () => setIsOnline(false);
         
-        // Dialog beforeunload - spostato qui per assicurarmi che sia registrato
-        const handleBeforeUnload = (e) => {
-          // Controlla se l'utente ha disabilitato i dialog dalle impostazioni
-          const savedSettings = localStorage.getItem('advancedSettings');
-          if (savedSettings) {
-            try {
-              const settings = JSON.parse(savedSettings);
-              if (settings.preventExitDialogs === true) {
-                return; // Non mostra il dialog se l'utente lo ha disabilitato
-              }
-            } catch (error) {
-              // Se c'è errore nel parsing, procedi con il dialog
-            }
-          }
-          
-          // Solo se ci sono dati CV nel localStorage
-          const savedData = localStorage.getItem('cvData');
-          if (savedData) {
-            // Messaggio breve - i browser moderni ignorano messaggi lunghi per sicurezza
-            const message = 'I tuoi dati CV sono salvati solo in questo browser. Ricorda di esportare un backup dalle Impostazioni prima di uscire.';
-            
-            e.preventDefault();
-            e.returnValue = message;
-            return message;
-          }
-        };
-        
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
-        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
           window.removeEventListener('online', handleOnline);
           window.removeEventListener('offline', handleOffline);
-          window.removeEventListener('beforeunload', handleBeforeUnload);
         };
       }, []);
 
@@ -679,11 +646,6 @@
         }
       });
 
-      // Funzione toggle per modal cookie info
-      const toggleCookieInfo = () => {
-        setShowCookieInfo(!showCookieInfo);
-      };
-
       const setupPWAEventListeners = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
@@ -709,37 +671,16 @@
       };
 
 
-      // Ref per tracciare se l'utente sta digitando
-      const isTypingRef = useRef(false);
-      const saveTimeoutRef = useRef(null);
-
-      // Salva automaticamente i dati con debounce intelligente per evitare perdita focus
+      // Salva automaticamente i dati E aggiorna timestamp
       useEffect(() => {
-        // Cancella timeout precedente
-        if (saveTimeoutRef.current) {
-          clearTimeout(saveTimeoutRef.current);
-        }
-
-        // Imposta nuovo timeout con debounce più lungo durante digitazione
-        const delay = isTypingRef.current ? 2000 : 500;
-        saveTimeoutRef.current = setTimeout(() => {
-          const dataToSave = {
-            ...cvData,
-            lastUpdated: new Date().toISOString()
-          };
-          localStorage.setItem('cvData', JSON.stringify(dataToSave));
-          isTypingRef.current = false; // Reset flag digitazione
-        }, delay);
-
-        return () => {
-          if (saveTimeoutRef.current) {
-            clearTimeout(saveTimeoutRef.current);
-          }
+        const dataToSave = {
+          ...cvData,
+          lastUpdated: new Date().toISOString()
         };
+        localStorage.setItem('cvData', JSON.stringify(dataToSave));
       }, [cvData]);
 
       const updatePersonalInfo = (field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           personalInfo: {
@@ -788,7 +729,6 @@
       };
 
       const updateProfile = (value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           profile: value
@@ -796,7 +736,6 @@
       };
 
       const updateAltreCapacita = (value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           altreCapacita: value
@@ -804,7 +743,6 @@
       };
 
       const updateTrattamentoDati = (field, value) => {
-        if (field === 'text') isTypingRef.current = true; // Imposta flag digitazione solo per testo
         setCvData(prev => ({
           ...prev,
           trattamentoDati: {
@@ -829,7 +767,6 @@
       
       // Gestione competenze digitali
       const updateDigitalSkills = (field, value) => {
-        if (field === 'genericContent') isTypingRef.current = true; // Imposta flag digitazione solo per testo
         setCvData(prev => ({
           ...prev,
           skills: {
@@ -844,7 +781,6 @@
 
       // Gestione lingua madre
       const updateMotherTongue = (field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           skills: {
@@ -881,7 +817,6 @@
 
       // Gestione altre lingue - Aggiorna
       const updateOtherLanguage = (id, field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           skills: {
@@ -928,7 +863,6 @@
       };
 
       const updateWorkExperience = (id, field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           workExperience: prev.workExperience.map(item =>
@@ -962,7 +896,6 @@
       };
 
       const updateEducation = (id, field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           education: prev.education.map(item =>
@@ -996,7 +929,6 @@
       };
 
       const updateFormatore = (id, field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           formatore: prev.formatore.map(item =>
@@ -1033,7 +965,6 @@
       };
 
       const updatePubblicazione = (id, field, value) => {
-        isTypingRef.current = true; // Imposta flag digitazione
         setCvData(prev => ({
           ...prev,
           pubblicazioni: prev.pubblicazioni.map(item =>
@@ -1073,7 +1004,7 @@
           meta: {
             version: '2.0.0',
             exported: new Date().toISOString(),
-            app: 'CV PWA Editor v4.6',
+            app: 'CV PWA Editor v4.8',
             author: 'EduTechLab Italia - Fabio Rizzotto',
             copyright: '© 2025 EduTechLab Italia - App gratuita',
             website: 'https://edutechlab-ita.github.io/'
@@ -1256,7 +1187,7 @@
       const shareCV = async () => {
         const shareData = {
           title: `CV Europass di ${cvData.personalInfo.name}`,
-          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.6',
+          text: 'Ecco il mio Curriculum Vitae Europass creato con CV PWA Editor v4.8',
           url: window.location.href
         };
         
@@ -1289,8 +1220,8 @@
               <label className="block text-sm font-medium mb-1">Nome Completo</label>
               <input
                 type="text"
-                defaultValue={cvData.personalInfo.name}
-                onInput={(e) => updatePersonalInfo('name', e.target.value)}
+                value={cvData.personalInfo.name}
+                onChange={(e) => updatePersonalInfo('name', e.target.value)}
                 className="w-full p-2 border rounded-md"
                 placeholder="Il tuo nome completo"
               />
@@ -2321,7 +2252,7 @@
                         <div className="text-4xl">🇪🇺</div>
                         <div className="flex-1">
                           <h5 className="font-semibold">Europass Standard</h5>
-                          <p className="text-sm text-gray-600">Template Europass EU</p>
+                          <p className="text-sm text-gray-600">Template ufficiale Europass EU</p>
                           <span className={`inline-block mt-2 text-xs px-2 py-1 rounded ${
                             advancedSettings.templateStyle === 'europass'
                               ? 'bg-blue-100 text-blue-800'
@@ -2460,37 +2391,11 @@
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-4">⚙️ Preferenze Utente</h4>
-                  <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h6 className="font-medium text-gray-800">Impedisci avvisi di uscita</h6>
-                        <p className="text-sm text-gray-500">Disabilita il messaggio di conferma quando chiudi l'app</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          checked={advancedSettings.preventExitDialogs}
-                          onChange={(e) => updateAdvancedSettings('preventExitDialogs', e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
-                      <p className="text-xs text-yellow-700">
-                        ⚠️ <strong>Attenzione:</strong> Se disabiliti gli avvisi, ricorda di fare backup regolari dei tuoi dati CV!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
                   <h4 className="font-semibold mb-4">Informazioni CV</h4>
                   <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                     <p><strong>Ultima Modifica:</strong> {new Date(cvData.lastUpdated).toLocaleString('it-IT')}</p>
                     <p><strong>Spazio Utilizzato:</strong> ~{Math.round(JSON.stringify(cvData).length / 1024)} KB</p>
-                    <p><strong>Versione App:</strong> v4.7</p>
+                    <p><strong>Versione App:</strong> v4.3.0</p>
                     <p><strong>Template:</strong> {advancedSettings.templateStyle === 'modern' ? 'Moderno' : 'Europass Standard'}</p>
                   </div>
                 </div>
@@ -2499,7 +2404,7 @@
                   <h4 className="font-semibold mb-4">Informazioni App</h4>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="text-center">
-                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.6</h5>
+                      <h5 className="font-semibold text-blue-800 mb-2">CV PWA Editor v4.8</h5>
                       <p className="text-sm text-blue-700 mb-2">
                         Editor professionale per Curriculum Vitae Europass
                       </p>
@@ -2568,7 +2473,7 @@
             <div className="bg-white rounded-lg max-w-md w-full p-6 space-y-4">
               <div className="text-center">
                 <div className="text-4xl mb-4">👋</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.6!</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Benvenuto nel CV PWA Editor v4.8!</h2>
                 <p className="text-gray-600">L'editor professionale per il tuo Curriculum Vitae Europass</p>
               </div>
               
@@ -2634,65 +2539,6 @@
                 <p className="text-xs text-gray-400 mt-1">
                   © 2025 EduTechLab Italia - App gratuita e open source
                 </p>
-              </div>
-            </div>
-          </div>
-        );
-      };
-
-      // Modal per informazioni cookie e privacy
-      const CookieInfoModal = () => {
-        if (!showCookieInfo) return null;
-        
-        return (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg max-w-2xl w-full p-6 space-y-4 max-h-96 overflow-y-auto">
-              <div className="text-center">
-                <div className="text-4xl mb-4">🍪</div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Informativa Cookie e Privacy</h2>
-              </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">🔒 Privacy dei tuoi dati</h3>
-                  <p className="text-sm text-gray-600">
-                    <strong>I tuoi dati CV rimangono sempre nel tuo browser</strong> e non vengono mai trasmessi a server esterni. 
-                    Utilizziamo solo localStorage del browser per salvare le tue informazioni localmente.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">🍪 Cookie tecnici</h3>
-                  <p className="text-sm text-gray-600">
-                    Questa app utilizza <strong>solo cookie tecnici necessari</strong> per il funzionamento (localStorage). 
-                    <strong>Non utilizziamo cookie di tracciamento, pubblicità o analytics.</strong>
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">💾 Salvataggio dati</h3>
-                  <p className="text-sm text-gray-600">
-                    I dati del CV sono salvati automaticamente nel localStorage del tuo browser. 
-                    Per sicurezza, ti consigliamo di esportare regolarmente un backup dal menu Impostazioni.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">🌐 Funzionamento offline</h3>
-                  <p className="text-sm text-gray-600">
-                    L'app funziona completamente offline dopo il primo caricamento. 
-                    Tutti i tuoi dati rimangono locali e accessibili anche senza connessione internet.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex justify-center mt-6">
-                <button
-                  onClick={toggleCookieInfo}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
-                >
-                  Ho capito
-                </button>
               </div>
             </div>
           </div>
@@ -3372,7 +3218,6 @@
       return (
         <div className="min-h-screen bg-gray-100">
           <WelcomeModal />
-          <CookieInfoModal />
           
           {/* Banner Aggiornamento Versione */}
           {showVersionBanner && (
@@ -3380,7 +3225,7 @@
               <div className="flex items-center justify-center space-x-2">
                 <span className="text-lg">🎉</span>
                 <span className="font-medium">
-                  Aggiornato alla versione 4.6! Correzioni cosmetiche e miglioramenti
+                  Aggiornato alla versione 4.5! Nuova sezione Pubblicazioni disponibile
                 </span>
                 <button
                   onClick={() => setShowVersionBanner(false)}
@@ -3437,7 +3282,7 @@
                   <LucideIcon name="FileText" size={32} className="text-blue-600" />
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-2">
-                      <span>CV PWA Editor v4.6</span>
+                      <span>CV PWA Editor v4.8</span>
                       <EuropassLogo className="ml-2" />
                     </h1>
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -3552,7 +3397,7 @@
                       <div className="text-center">
                         <EuropassLogo className="justify-center mb-2" />
                         <p className="text-xs text-blue-700">
-                          Template Europass UE
+                          Template ufficiale Europass UE
                         </p>
                         <div className="mt-2 pt-2 border-t border-blue-200">
                           <p className="text-xs text-gray-600">
@@ -3607,17 +3452,6 @@
               </div>
             )}
           </div>
-
-          {/* Icona Cookie Permanente - Bottom Left */}
-          <div className="fixed bottom-4 left-4">
-            <button
-              onClick={toggleCookieInfo}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-              title="Informazioni Cookie e Privacy"
-            >
-              <span className="text-lg">🍪</span>
-            </button>
-          </div>
         </div>
       );
     };
@@ -3629,7 +3463,7 @@
   <noscript>
     <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif;">
       <div style="text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.6</h1>
+        <h1 style="color: #003d7a; margin-bottom: 1rem;">📄 CV PWA Editor v4.8</h1>
         <p style="color: #666; margin-bottom: 1rem;">Questa applicazione richiede JavaScript per funzionare.</p>
         <p style="color: #666; font-size: 0.9rem;">Abilita JavaScript nel tuo browser per utilizzare l'editor CV Europass.</p>
       </div>

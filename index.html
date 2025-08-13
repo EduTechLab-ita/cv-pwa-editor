@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV PWA Editor v5.2 - EduTechLab Italia</title>
+  <title>CV PWA Editor v5.2 ENHANCED - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -518,205 +518,6 @@
       background: #f1f5f9;
     }
     
-    /* Photo Upload Styles */
-    .photo-upload-container {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-    
-    .photo-upload-area {
-      border: 2px dashed #d1d5db;
-      border-radius: 8px;
-      padding: 30px 20px;
-      text-align: center;
-      transition: all 0.2s;
-      background: #f9fafb;
-      min-width: 200px;
-    }
-    
-    .photo-upload-area:hover {
-      border-color: #003d7a;
-      background: #f1f5f9;
-    }
-    
-    .photo-upload-area.dragover {
-      border-color: #003d7a;
-      background: #eff6ff;
-      transform: scale(1.02);
-    }
-    
-    .photo-upload-content p {
-      margin: 8px 0;
-      font-size: 0.875rem;
-      color: #374151;
-    }
-    
-    .photo-preview-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-    }
-    
-    .photo-preview {
-      width: 120px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .photo-controls {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .photo-btn {
-      padding: 6px 12px;
-      border: 1px solid #d1d5db;
-      background: white;
-      color: #374151;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .photo-btn:hover {
-      background: #f3f4f6;
-      border-color: #9ca3af;
-    }
-    
-    .cv-profile-photo {
-      width: 3.5cm;
-      height: 4.5cm;
-      object-fit: cover;
-      border-radius: 6px;
-      float: right;
-      margin-left: 20px;
-      margin-bottom: 15px;
-      border: 2px solid #e5e7eb;
-    }
-    
-    /* Dynamic Lists */
-    .dynamic-list {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      background: #f9fafb;
-    }
-    
-    .list-item {
-      padding: 20px;
-      border-bottom: 1px solid #e5e7eb;
-      background: white;
-      position: relative;
-    }
-    
-    .list-item:last-child {
-      border-bottom: none;
-    }
-    
-    .list-item-header {
-      display: flex;
-      justify-content: between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .list-item-title {
-      font-weight: 600;
-      color: #003d7a;
-      flex: 1;
-    }
-    
-    .list-item-controls {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .list-btn {
-      padding: 4px 8px;
-      border: 1px solid #d1d5db;
-      background: white;
-      color: #374151;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .list-btn:hover {
-      background: #f3f4f6;
-    }
-    
-    .list-btn.danger:hover {
-      background: #fef2f2;
-      border-color: #f87171;
-      color: #dc2626;
-    }
-    
-    .add-item-btn {
-      width: 100%;
-      padding: 15px;
-      border: 2px dashed #d1d5db;
-      background: #f9fafb;
-      color: #6b7280;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 15px;
-    }
-    
-    .add-item-btn:hover {
-      border-color: #003d7a;
-      color: #003d7a;
-      background: #f1f5f9;
-    }
-    
-    /* Skills and ratings */
-    .skill-item {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 10px 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    
-    .skill-item:last-child {
-      border-bottom: none;
-    }
-    
-    .skill-name {
-      flex: 1;
-      min-width: 0;
-    }
-    
-    .skill-level {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-    
-    .level-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 2px solid #d1d5db;
-      transition: all 0.2s;
-    }
-    
-    .level-dot.active {
-      background: #003d7a;
-      border-color: #003d7a;
-    }
-    
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -730,6 +531,66 @@
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #a1a1a1;
+    }
+    
+    /* ===== ENHANCEMENT v4.7: NUOVI STILI ===== */
+    
+    /* Stili per collegamenti ipertestuali attivi */
+    .clickable-link {
+      color: #0066cc !important;
+      text-decoration: underline !important;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .clickable-link:hover {
+      color: #004499 !important;
+    }
+    
+    /* Indicatore conteggio pagine */
+    .page-indicator {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 61, 122, 0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 16px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Print styles migliorati */
+    @media print {
+      .page-indicator,
+      .save-indicator,
+      .version-banner,
+      .app-header,
+      .sidebar,
+      .header-actions {
+        display: none !important;
+      }
+      
+      .cv-preview {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 20px !important;
+      }
+      
+      .clickable-link {
+        color: #0066cc !important;
+        text-decoration: underline !important;
+      }
+      
+      @page {
+        margin: 0.5in;
+        size: A4;
+      }
     }
     
     /* Responsive */
@@ -766,7 +627,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.2!</strong> Nuove funzionalità v4.7: Formatore, Competenze DigiCompEU, Upload Foto</span>
+      <span><strong>Aggiornato alla versione 5.2 ENHANCED!</strong> Aggiunti collegamenti attivi e conteggio pagine v4.7</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -776,7 +637,7 @@
     <div class="app-header-content">
       <div class="app-logo-section">
         <div class="app-logo">
-          <img src="./CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
+          <div class="europass-logo">EU</div>
           <div>
             <h1 class="app-title">CV PWA Editor</h1>
             <span class="app-version">v5.2</span>
@@ -819,38 +680,6 @@
         <button class="nav-section" data-section="profile" onclick="switchSection('profile')">
           <span class="nav-icon">📝</span>
           Profilo
-        </button>
-        <button class="nav-section" data-section="experience" onclick="switchSection('experience')">
-          <span class="nav-icon">💼</span>
-          Esperienza
-        </button>
-        <button class="nav-section" data-section="education" onclick="switchSection('education')">
-          <span class="nav-icon">🎓</span>
-          Formazione
-        </button>
-        <button class="nav-section" data-section="formatore" onclick="switchSection('formatore')">
-          <span class="nav-icon">🎯</span>
-          Formatore
-        </button>
-        <button class="nav-section" data-section="skills" onclick="switchSection('skills')">
-          <span class="nav-icon">⚡</span>
-          Competenze
-        </button>
-        <button class="nav-section" data-section="languages" onclick="switchSection('languages')">
-          <span class="nav-icon">🌍</span>
-          Lingue
-        </button>
-        <button class="nav-section" data-section="publications" onclick="switchSection('publications')">
-          <span class="nav-icon">📚</span>
-          Pubblicazioni
-        </button>
-        <button class="nav-section" data-section="other" onclick="switchSection('other')">
-          <span class="nav-icon">❤️</span>
-          Altre Capacità
-        </button>
-        <button class="nav-section" data-section="settings" onclick="switchSection('settings')">
-          <span class="nav-icon">⚙️</span>
-          Impostazioni
         </button>
         <button class="nav-section" data-section="preview" onclick="switchSection('preview')">
           <span class="nav-icon">👁️</span>
@@ -943,30 +772,6 @@
                 placeholder="https://tuosito.com"
               >
             </div>
-            
-            <!-- Upload Foto Profilo -->
-            <div class="form-group full-width">
-              <label class="form-label">Foto Profilo (opzionale)</label>
-              <div class="photo-upload-container">
-                <div class="photo-upload-area" id="photoUpload">
-                  <div class="photo-upload-content">
-                    <span style="font-size: 2rem;">📷</span>
-                    <p><strong>Trascina qui la tua foto</strong></p>
-                    <p>oppure <span style="color: #003d7a; cursor: pointer; text-decoration: underline;" onclick="document.getElementById('photoInput').click()">clicca per selezionare</span></p>
-                    <p style="font-size: 0.75rem; color: #6b7280;">JPG, PNG (max 2MB)</p>
-                  </div>
-                  <input type="file" id="photoInput" accept="image/*" style="display: none;">
-                </div>
-                
-                <div class="photo-preview-container" id="photoPreview" style="display: none;">
-                  <img id="photoImg" class="photo-preview" alt="Anteprima foto">
-                  <div class="photo-controls">
-                    <button type="button" class="photo-btn" onclick="removePhoto()">🗑️ Rimuovi</button>
-                    <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">🔄 Cambia</button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -993,300 +798,8 @@
         </div>
       </div>
       
-      <!-- Esperienza Lavorativa -->
-      <div class="section" id="experience">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>💼</span>
-            Esperienza Lavorativa
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div id="experienceList" class="dynamic-list">
-            <!-- Le esperienze verranno generate dinamicamente -->
-          </div>
-          
-          <button class="add-item-btn" onclick="addExperience()">
-            <span>➕</span>
-            Aggiungi Esperienza
-          </button>
-        </div>
-      </div>
-      
-      <!-- Formazione -->
-      <div class="section" id="education">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>🎓</span>
-            Istruzione e Formazione
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div id="educationList" class="dynamic-list">
-            <!-- La formazione verrà generata dinamicamente -->
-          </div>
-          
-          <button class="add-item-btn" onclick="addEducation()">
-            <span>➕</span>
-            Aggiungi Formazione
-          </button>
-        </div>
-      </div>
-      
-      <!-- Formatore -->
-      <div class="section" id="formatore">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>🎯</span>
-            Esperienza come Formatore
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div id="formatoreList" class="dynamic-list">
-            <!-- Le attività formative verranno generate dinamicamente -->
-          </div>
-          
-          <button class="add-item-btn" onclick="addFormatore()">
-            <span>➕</span>
-            Aggiungi Attività Formativa
-          </button>
-        </div>
-      </div>
-      
-      <!-- Competenze -->
-      <div class="section" id="skills">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>⚡</span>
-            Competenze
-          </h2>
-        </div>
-        
-        <div class="content-body" style="max-width: none;">
-          <!-- Competenze Specialistiche -->
-          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-              <span style="background: #3b82f6; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem;">⭐ Specialistiche</span>
-              <h4 style="font-weight: 600; color: #003d7a; margin: 0;">Competenze del Tuo Settore</h4>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="aiSkills">Competenze Specialistiche</label>
-              <textarea 
-                id="aiSkills" 
-                class="form-textarea"
-                placeholder="Descrivi qui le tue competenze specialistiche, certificazioni, e aree di expertise specifiche del tuo settore professionale."
-                style="min-height: 100px;"
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- Competenze Digitali -->
-          <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; margin-bottom: 24px;">
-            <h4 style="font-weight: 600; color: #003d7a; margin-bottom: 16px;">📊 Competenze Digitali</h4>
-            
-            <!-- Campo Generico sempre presente -->
-            <div class="form-group" style="margin-bottom: 20px;">
-              <label class="form-label" for="digitalSkillsGeneric">Competenze Digitali Generali</label>
-              <textarea 
-                id="digitalSkillsGeneric" 
-                class="form-textarea"
-                placeholder="Descrivi qui le tue competenze digitali generali, software utilizzati, piattaforme conosciute e livello di utilizzo."
-                style="min-height: 120px;"
-              ></textarea>
-            </div>
-
-            <!-- Toggle DigiCompEU -->
-            <div style="margin-bottom: 20px;">
-              <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                <input type="checkbox" id="useDigiCompEU" style="width: 18px; height: 18px;">
-                <span style="font-weight: 500; color: #374151;">Utilizza il Framework DigiCompEU (Competenze Digitali Europee)</span>
-              </label>
-              <p style="font-size: 0.875rem; color: #6b7280; margin-top: 4px; margin-left: 30px;">
-                Attiva per mostrare le competenze secondo il framework europeo DigComp 2.1
-              </p>
-            </div>
-
-            <!-- Sezione DigiCompEU (nascosta di default) -->
-            <div id="digiCompSection" style="display: none; margin-top: 20px;">
-              <p style="font-size: 0.875rem; color: #1d4ed8; margin-bottom: 12px;">📋 Competenze DigiCompEU (Framework Europeo):</p>
-              <div id="digiCompItems" style="display: grid; gap: 12px;">
-                <!-- Le competenze verranno generate dinamicamente -->
-              </div>
-            </div>
-          </div>
-
-          <!-- Piattaforme e Software -->
-          <div class="form-group full-width">
-            <label class="form-label" for="platforms">Piattaforme e Software</label>
-            <textarea 
-              id="platforms" 
-              class="form-textarea"
-              placeholder="Microsoft Office, Google Workspace, Adobe Creative Suite, CRM, LMS, etc."
-              style="min-height: 80px;"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Lingue -->
-      <div class="section" id="languages">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>🌍</span>
-            Lingue
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label" for="motherTongue">Madrelingua</label>
-              <input 
-                type="text" 
-                id="motherTongue" 
-                class="form-input"
-                placeholder="Es. Italiano"
-                value="Italiano"
-              >
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label" for="motherTongueLevel">Livello</label>
-              <select id="motherTongueLevel" class="form-input">
-                <option value="C2">C2 - Madrelingua</option>
-              </select>
-            </div>
-          </div>
-          
-          <h4 style="margin: 30px 0 15px 0; color: #003d7a;">Altre Lingue</h4>
-          <div id="languagesList" class="dynamic-list">
-            <!-- Le lingue verranno generate dinamicamente -->
-          </div>
-          
-          <button class="add-item-btn" onclick="addLanguage()">
-            <span>➕</span>
-            Aggiungi Lingua
-          </button>
-        </div>
-      </div>
-      
-      <!-- Pubblicazioni -->
-      <div class="section" id="publications">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>📚</span>
-            Pubblicazioni
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div id="publicationsList" class="dynamic-list">
-            <!-- Le pubblicazioni verranno generate dinamicamente -->
-          </div>
-          
-          <button class="add-item-btn" onclick="addPublication()">
-            <span>➕</span>
-            Aggiungi Pubblicazione
-          </button>
-        </div>
-      </div>
-      
-      <!-- Altre Informazioni -->
-      <div class="section" id="other">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>✨</span>
-            Altre Informazioni
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div class="form-group">
-            <label class="form-label" for="otherSkills">Altre capacità e competenze</label>
-            <textarea 
-              id="otherSkills" 
-              class="form-textarea"
-              placeholder="Soft skills, hobby, interessi, attività extracurriculari, premi, certificazioni, patenti, etc."
-              style="min-height: 120px;"
-            ></textarea>
-          </div>
-          
-          <div class="form-group" style="margin-top: 25px;">
-            <label class="form-label">
-              <input type="checkbox" id="includePrivacy" style="margin-right: 8px;">
-              Includi clausola trattamento dati personali (GDPR)
-            </label>
-          </div>
-          
-          <div class="form-group" id="privacyClause" style="display: none; margin-top: 15px;">
-            <label class="form-label" for="privacyText">Testo clausola privacy</label>
-            <textarea 
-              id="privacyText" 
-              class="form-textarea"
-              placeholder="Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all'art. 13 del D. Lgs. 196/2003 e all'art. 13 GDPR 679/16."
-              style="min-height: 80px;"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Impostazioni -->
-      <div class="section" id="settings">
-        <div class="content-header">
-          <h2 class="section-title">
-            <span>⚙️</span>
-            Impostazioni
-          </h2>
-        </div>
-        
-        <div class="content-body">
-          <div class="form-grid">
-            <div class="form-group full-width">
-              <h4 style="color: #003d7a; margin-bottom: 15px;">🎨 Personalizzazione</h4>
-              
-              <div style="padding: 15px; background: #f9fafb; border-radius: 6px; margin-bottom: 20px;">
-                <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <input type="checkbox" id="showPhoto" checked>
-                  <span>📷 Mostra foto profilo nel CV</span>
-                </label>
-                
-                <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <input type="checkbox" id="showPublications" checked>
-                  <span>📚 Mostra sezione pubblicazioni</span>
-                </label>
-                
-                <label class="form-label" style="display: flex; align-items: center; gap: 10px;">
-                  <input type="checkbox" id="italianDateFormat" checked>
-                  <span>📅 Formato date italiano (MM/AAAA invece di AAAA-MM)</span>
-                </label>
-              </div>
-            </div>
-            
-            <div class="form-group full-width">
-              <h4 style="color: #003d7a; margin-bottom: 15px;">💾 Gestione Dati</h4>
-              
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button type="button" class="header-btn" onclick="exportData()">
-                  📤 Esporta Dati
-                </button>
-                <button type="button" class="header-btn" onclick="importData()">
-                  📥 Importa Dati
-                </button>
-                <button type="button" class="header-btn" onclick="resetData()">
-                  🗑️ Reset Dati
-                </button>
-              </div>
-              
-              <input type="file" id="importInput" accept=".json" style="display: none;">
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Anteprima -->
+      <div class="section" id="preview">
         <div class="content-header">
           <h2 class="section-title">
             <span>👁️</span>
@@ -1315,7 +828,7 @@
       <a href="#" class="footer-link">Privacy & Cookie</a>
       <a href="#" class="footer-link">GitHub</a>
     </div>
-    <p><strong>CV PWA Editor v5.1</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>CV PWA Editor v5.2 ENHANCED</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -1324,9 +837,64 @@
     ✅ Salvato automaticamente
   </div>
   
+  <!-- Page Counter (Enhancement v4.7) -->
+  <div class="page-indicator" id="pageIndicator" style="display: none;">
+    📄 Pagina 1 di 1
+  </div>
+  
   <!-- JavaScript -->
   <script>
-    // === CV PWA EDITOR v5.1 - DESIGN UPGRADE ===
+    // === CV PWA EDITOR v5.2 ENHANCED - HYBRID VERSION ===
+    
+    // ===== ENHANCEMENT v4.7: UTILITY FUNCTIONS =====
+    
+    // FUNZIONALITÀ KEY v4.7: Collegamenti ipertestuali attivi
+    function linkifyText(text) {
+      if (!text) return text;
+      
+      // Regex per URL e email
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+      
+      // Prima gestisce URL
+      let result = text.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="clickable-link">${url}</a>`;
+      });
+      
+      // Poi gestisce email
+      result = result.replace(emailRegex, (email) => {
+        return `<a href="mailto:${email}" class="clickable-link">${email}</a>`;
+      });
+      
+      return result;
+    }
+    
+    // FUNZIONALITÀ KEY v4.7: Conteggio pagine dinamico
+    function calculatePages() {
+      const preview = document.getElementById('cvPreview');
+      if (!preview) return 1;
+      
+      // Altezza A4 in pixel (approssimativa)
+      const A4_HEIGHT = 1056;
+      const contentHeight = preview.scrollHeight;
+      const pages = Math.ceil(contentHeight / A4_HEIGHT);
+      
+      return Math.max(1, pages);
+    }
+    
+    // Aggiorna indicatore conteggio pagine
+    function updatePageCount() {
+      const pageCount = calculatePages();
+      const indicator = document.getElementById('pageIndicator');
+      
+      if (indicator) {
+        indicator.textContent = `📄 Pagina 1 di ${pageCount}`;
+        
+        // Mostra solo se ci sono dati nel CV
+        const hasContent = AppState.cvData.personal.fullName || AppState.cvData.profile.text;
+        indicator.style.display = hasContent ? 'block' : 'none';
+      }
+    }
     
     // Stato globale applicazione
     const AppState = {
@@ -1339,49 +907,10 @@
           phone: '',
           email: '',
           address: '',
-          website: '',
-          photo: null // base64 string
+          website: ''
         },
         profile: {
           text: ''
-        },
-        experience: [],
-        education: [],
-        formatore: [],
-        skills: {
-          ai: {
-            title: 'Competenze Specialistiche',
-            content: ''
-          },
-          digital: {
-            title: 'Competenze Digitali',
-            genericContent: '',
-            useDigiCompEU: false,
-            digiCompItems: [
-              { name: 'Elaborazione delle informazioni', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Comunicazione digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Creazione di contenuti digitali', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Sicurezza digitale', level: 'INTERMEDIO', numeric: 'Livello 4/6' },
-              { name: 'Risoluzione di problemi digitali', level: 'AVANZATO', numeric: 'Livello 5/6' }
-            ]
-          },
-          platforms: ''
-        },
-        languages: {
-          motherTongue: 'Italiano',
-          motherTongueLevel: 'C2',
-          otherLanguages: []
-        },
-        publications: [],
-        other: {
-          skills: '',
-          includePrivacy: false,
-          privacyText: 'Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all\'art. 13 del D. Lgs. 196/2003 e all\'art. 13 GDPR 679/16.'
-        },
-        settings: {
-          showPhoto: true,
-          showPublications: true,
-          italianDateFormat: true
         }
       },
       
@@ -1427,6 +956,9 @@
         this.cvData[section][field] = value;
         this.saveData();
         this.updatePreview();
+        
+        // Enhancement v4.7: Aggiorna conteggio pagine
+        setTimeout(updatePageCount, 100);
       },
       
       // Aggiorna anteprima CV
@@ -1445,732 +977,32 @@
           return;
         }
         
-        let html = `
+        preview.innerHTML = `
           <div class="cv-header">
-            ${data.personal.photo && data.settings.showPhoto ? 
-              `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">` : ''}
-            
             <h1 class="cv-name">${data.personal.fullName || 'Il Tuo Nome'}</h1>
             
             <div class="cv-contact-grid">
               ${data.personal.nationality ? `<div class="cv-contact-item">📍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
-              ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
-              ${data.personal.email ? `<div class="cv-contact-item">✉️ ${this.linkifyText(data.personal.email)}</div>` : ''}
-              ${data.personal.website ? `<div class="cv-contact-item">🌐 ${this.linkifyText(data.personal.website)}</div>` : ''}
+              ${data.personal.phone ? `<div class="cv-contact-item">📞 ${data.personal.phone}</div>` : ''}
+              ${data.personal.email ? `<div class="cv-contact-item">✉️ ${data.personal.email}</div>` : ''}
+              ${data.personal.website ? `<div class="cv-contact-item">🌐 ${data.personal.website}</div>` : ''}
             </div>
             
             ${data.personal.address ? `<div class="cv-address">📍 ${data.personal.address}</div>` : ''}
           </div>
-        `;
-        
-        // Profilo
-        if (data.profile.text) {
-          html += `
+          
+          ${data.profile.text ? `
             <div class="cv-section">
               <h2 class="cv-section-title">Profilo Professionale</h2>
-              <div class="cv-content">${this.linkifyText(data.profile.text)}</div>
+              <div class="cv-content">${linkifyText(data.profile.text)}</div>
             </div>
-          `;
-        }
-        
-        // Esperienza
-        if (data.experience.length > 0) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Esperienza Lavorativa</h2>
-              <div class="cv-content">
-                ${data.experience.map(exp => `
-                  <div style="margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
-                      <span>${exp.position}</span>
-                      <span>${exp.startDate} - ${exp.endDate}</span>
-                    </div>
-                    <div style="font-weight: 500; margin: 5px 0;">${exp.company}</div>
-                    ${exp.description ? `<div style="margin-top: 8px;">${this.linkifyText(exp.description)}</div>` : ''}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        }
-        
-        // Formazione
-        if (data.education.length > 0) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Istruzione e Formazione</h2>
-              <div class="cv-content">
-                ${data.education.map(edu => `
-                  <div style="margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
-                      <span>${edu.degree}</span>
-                      <span>${edu.startDate} - ${edu.endDate}</span>
-                    </div>
-                    <div style="font-weight: 500; margin: 5px 0;">${edu.institution}</div>
-                    ${edu.description ? `<div style="margin-top: 8px;">${this.linkifyText(edu.description)}</div>` : ''}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        }
-        
-        // Formatore
-        if (data.formatore.length > 0) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Esperienza come Formatore</h2>
-              <div class="cv-content">
-                ${data.formatore.map(form => `
-                  <div style="margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
-                      <span>${form.title}</span>
-                      <span>${form.period}</span>
-                    </div>
-                    ${form.hours ? `<div style="font-weight: 500; color: #1d4ed8; margin: 5px 0;">${form.hours}</div>` : ''}
-                    ${form.institutions ? `<div style="font-weight: 500; margin: 5px 0;">${form.institutions}</div>` : ''}
-                    ${form.topics ? `<div style="margin-top: 8px;"><strong>Tematiche:</strong> ${this.linkifyText(form.topics)}</div>` : ''}
-                    ${form.details && form.details.length > 0 ? `
-                      <div style="margin-top: 8px;">
-                        <strong>Dettaglio attività:</strong>
-                        <ul style="margin: 5px 0 0 20px;">
-                          ${form.details.map(detail => `<li>${this.linkifyText(detail)}</li>`).join('')}
-                        </ul>
-                      </div>
-                    ` : ''}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        }
-        
-        // Competenze
-        if ((data.skills.ai && data.skills.ai.content) || (data.skills.digital && (data.skills.digital.genericContent || data.skills.digital.useDigiCompEU)) || data.skills.platforms) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Competenze</h2>
-              <div class="cv-content">
-                ${data.skills.ai && data.skills.ai.content ? `
-                  <div style="margin-bottom: 20px; padding: 15px; background: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 6px;">
-                    <strong style="color: #003d7a;">${data.skills.ai.title}:</strong><br>
-                    ${this.linkifyText(data.skills.ai.content)}
-                  </div>
-                ` : ''}
-                
-                ${data.skills.digital && (data.skills.digital.genericContent || data.skills.digital.useDigiCompEU) ? `
-                  <div style="margin-bottom: 20px;">
-                    <strong style="color: #003d7a;">Competenze Digitali:</strong><br>
-                    ${data.skills.digital.genericContent ? `<div style="margin: 10px 0;">${this.linkifyText(data.skills.digital.genericContent)}</div>` : ''}
-                    
-                    ${data.skills.digital.useDigiCompEU && data.skills.digital.digiCompItems ? `
-                      <div style="margin-top: 15px; padding: 12px; background: #f9fafb; border-radius: 6px;">
-                        <strong style="color: #1d4ed8; font-size: 0.9em;">Competenze DigiCompEU (Framework Europeo):</strong>
-                        <div style="margin-top: 8px; display: grid; gap: 6px;">
-                          ${data.skills.digital.digiCompItems.map(skill => `
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #e5e7eb;">
-                              <span style="font-weight: 500;">${skill.name}</span>
-                              <span style="background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 12px; font-size: 0.8em;">${skill.level} (${skill.numeric})</span>
-                            </div>
-                          `).join('')}
-                        </div>
-                      </div>
-                    ` : ''}
-                  </div>
-                ` : ''}
-                
-                ${data.skills.platforms ? `<div style="margin-bottom: 15px;"><strong>Piattaforme e Software:</strong><br>${this.linkifyText(data.skills.platforms)}</div>` : ''}
-              </div>
-            </div>
-          `;
-        }
-        
-        // Lingue
-        if (data.languages.motherTongue || data.languages.otherLanguages.length > 0) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Lingue</h2>
-              <div class="cv-content">
-                <div style="margin-bottom: 10px;"><strong>Madrelingua:</strong> ${data.languages.motherTongue} (${data.languages.motherTongueLevel})</div>
-                ${data.languages.otherLanguages.length > 0 ? `
-                  <div><strong>Altre lingue:</strong></div>
-                  ${data.languages.otherLanguages.map(lang => 
-                    `<div style="margin-left: 20px;">• ${lang.name}: ${lang.level}</div>`
-                  ).join('')}
-                ` : ''}
-              </div>
-            </div>
-          `;
-        }
-        
-        // Pubblicazioni
-        if (data.publications.length > 0 && data.settings.showPublications) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Pubblicazioni</h2>
-              <div class="cv-content">
-                ${data.publications.map(pub => `
-                  <div style="margin-bottom: 15px;">
-                    <div style="font-weight: 600; color: #003d7a;">${pub.title}</div>
-                    <div style="font-style: italic; margin: 5px 0;">${pub.authors} (${pub.year})</div>
-                    ${pub.journal ? `<div style="margin: 5px 0;"><strong>In:</strong> ${pub.journal}</div>` : ''}
-                    ${pub.doi ? `<div style="margin: 5px 0;"><strong>DOI:</strong> ${this.linkifyText(pub.doi)}</div>` : ''}
-                    ${pub.link ? `<div style="margin: 5px 0;"><strong>Link:</strong> ${this.linkifyText(pub.link)}</div>` : ''}
-                    ${pub.description ? `<div style="margin-top: 8px;">${this.linkifyText(pub.description)}</div>` : ''}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        }
-        
-        // Altre informazioni
-        if (data.other.skills) {
-          html += `
-            <div class="cv-section">
-              <h2 class="cv-section-title">Altre Capacità e Competenze</h2>
-              <div class="cv-content">${this.linkifyText(data.other.skills)}</div>
-            </div>
-          `;
-        }
-        
-        // Privacy
-        if (data.other.includePrivacy && data.other.privacyText) {
-          html += `
-            <div class="cv-section" style="margin-top: 30px; font-size: 0.8rem; color: #6b7280;">
-              <div class="cv-content">${data.other.privacyText}</div>
-            </div>
-          `;
-        }
-        
-        preview.innerHTML = html;
-      },
-      
-      // Link attivi
-      linkifyText(text) {
-        if (!text) return text;
-        
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
-        
-        return text
-          .replace(urlRegex, '<a href="$1" target="_blank" style="color: #0066cc; text-decoration: underline;">$1</a>')
-          .replace(emailRegex, '<a href="mailto:$1" style="color: #0066cc; text-decoration: underline;">$1</a>');
+          ` : ''}
+        `;
       }
     };
     
     // === FUNZIONI GLOBALI ===
-    
-    // Render DigiCompEU items
-    function renderDigiCompItems() {
-      const container = document.getElementById('digiCompItems');
-      if (!container || !AppState.cvData.skills.digital.digiCompItems) return;
-      
-      container.innerHTML = AppState.cvData.skills.digital.digiCompItems.map((skill, index) => `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: white; border: 1px solid #d1d5db; border-radius: 6px;">
-          <div style="flex: 1; margin-right: 16px;">
-            <input type="text" value="${skill.name}" 
-                   onchange="updateDigiCompItem(${index}, 'name', this.value)"
-                   style="width: 100%; padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem;">
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <select onchange="updateDigiCompItem(${index}, 'level', this.value)" 
-                    style="padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem;">
-              <option value="BASE" ${skill.level === 'BASE' ? 'selected' : ''}>BASE</option>
-              <option value="INTERMEDIO" ${skill.level === 'INTERMEDIO' ? 'selected' : ''}>INTERMEDIO</option>
-              <option value="AVANZATO" ${skill.level === 'AVANZATO' ? 'selected' : ''}>AVANZATO</option>
-            </select>
-            <input type="text" value="${skill.numeric}" placeholder="Livello X/6"
-                   onchange="updateDigiCompItem(${index}, 'numeric', this.value)"
-                   style="width: 80px; padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem;">
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    // Update DigiCompEU item
-    function updateDigiCompItem(index, field, value) {
-      if (AppState.cvData.skills.digital.digiCompItems[index]) {
-        AppState.cvData.skills.digital.digiCompItems[index][field] = value;
-        AppState.saveData();
-        AppState.updatePreview();
-      }
-    }
-    
-    // === UPLOAD FOTO ===
-    
-    // Gestisce upload foto
-    function handlePhotoUpload(file) {
-      if (file && file.type.startsWith('image/')) {
-        if (file.size > 2 * 1024 * 1024) { // 2MB limit
-          alert('File troppo grande. Massimo 2MB.');
-          return;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const photoData = e.target.result;
-          AppState.cvData.personal.photo = photoData;
-          AppState.saveData();
-          showPhotoPreview(photoData);
-          AppState.updatePreview();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-    
-    // Mostra anteprima foto
-    function showPhotoPreview(photoData) {
-      const uploadArea = document.getElementById('photoUpload');
-      const previewContainer = document.getElementById('photoPreview');
-      const photoImg = document.getElementById('photoImg');
-      
-      uploadArea.style.display = 'none';
-      previewContainer.style.display = 'block';
-      photoImg.src = photoData;
-    }
-    
-    // Rimuove foto
-    function removePhoto() {
-      AppState.cvData.personal.photo = null;
-      AppState.saveData();
-      
-      const uploadArea = document.getElementById('photoUpload');
-      const previewContainer = document.getElementById('photoPreview');
-      
-      uploadArea.style.display = 'block';
-      previewContainer.style.display = 'none';
-      AppState.updatePreview();
-    }
-    
-    // === LISTE DINAMICHE ===
-    
-    // Esperienza lavorativa
-    function addExperience() {
-      const newExp = {
-        id: Date.now(),
-        startDate: '',
-        endDate: '',
-        current: false,
-        position: '',
-        company: '',
-        description: ''
-      };
-      AppState.cvData.experience.push(newExp);
-      AppState.saveData();
-      renderExperienceList();
-      AppState.updatePreview();
-    }
-    
-    function removeExperience(id) {
-      AppState.cvData.experience = AppState.cvData.experience.filter(exp => exp.id !== id);
-      AppState.saveData();
-      renderExperienceList();
-      AppState.updatePreview();
-    }
-    
-    function renderExperienceList() {
-      const container = document.getElementById('experienceList');
-      if (AppState.cvData.experience.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna esperienza aggiunta</div>';
-        return;
-      }
-      
-      container.innerHTML = AppState.cvData.experience.map(exp => `
-        <div class="list-item">
-          <div class="list-item-header">
-            <div class="list-item-title">${exp.position || 'Posizione non specificata'}</div>
-            <div class="list-item-controls">
-              <button class="list-btn danger" onclick="removeExperience(${exp.id})">🗑️</button>
-            </div>
-          </div>
-          
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Data inizio</label>
-              <input type="text" class="form-input" placeholder="MM/AAAA" value="${exp.startDate}" 
-                     onchange="updateExperience(${exp.id}, 'startDate', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Data fine</label>
-              <input type="text" class="form-input" placeholder="MM/AAAA o 'In corso'" value="${exp.endDate}"
-                     onchange="updateExperience(${exp.id}, 'endDate', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Posizione/Ruolo</label>
-              <input type="text" class="form-input" placeholder="Es. Sviluppatore Software" value="${exp.position}"
-                     onchange="updateExperience(${exp.id}, 'position', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Azienda/Organizzazione</label>
-              <input type="text" class="form-input" placeholder="Nome azienda" value="${exp.company}"
-                     onchange="updateExperience(${exp.id}, 'company', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Descrizione</label>
-              <textarea class="form-textarea" placeholder="Descrivi le tue responsabilità e risultati" 
-                        onchange="updateExperience(${exp.id}, 'description', this.value)">${exp.description}</textarea>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    function updateExperience(id, field, value) {
-      const exp = AppState.cvData.experience.find(e => e.id === id);
-      if (exp) {
-        exp[field] = value;
-        AppState.saveData();
-        AppState.updatePreview();
-      }
-    }
-    
-    // Formazione
-    function addEducation() {
-      const newEdu = {
-        id: Date.now(),
-        startDate: '',
-        endDate: '',
-        degree: '',
-        institution: '',
-        description: ''
-      };
-      AppState.cvData.education.push(newEdu);
-      AppState.saveData();
-      renderEducationList();
-      AppState.updatePreview();
-    }
-    
-    function removeEducation(id) {
-      AppState.cvData.education = AppState.cvData.education.filter(edu => edu.id !== id);
-      AppState.saveData();
-      renderEducationList();
-      AppState.updatePreview();
-    }
-    
-    function renderEducationList() {
-      const container = document.getElementById('educationList');
-      if (AppState.cvData.education.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna formazione aggiunta</div>';
-        return;
-      }
-      
-      container.innerHTML = AppState.cvData.education.map(edu => `
-        <div class="list-item">
-          <div class="list-item-header">
-            <div class="list-item-title">${edu.degree || 'Titolo non specificato'}</div>
-            <div class="list-item-controls">
-              <button class="list-btn danger" onclick="removeEducation(${edu.id})">🗑️</button>
-            </div>
-          </div>
-          
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Data inizio</label>
-              <input type="text" class="form-input" placeholder="MM/AAAA" value="${edu.startDate}"
-                     onchange="updateEducation(${edu.id}, 'startDate', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Data fine</label>
-              <input type="text" class="form-input" placeholder="MM/AAAA" value="${edu.endDate}"
-                     onchange="updateEducation(${edu.id}, 'endDate', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Titolo/Qualifica</label>
-              <input type="text" class="form-input" placeholder="Es. Laurea in Informatica" value="${edu.degree}"
-                     onchange="updateEducation(${edu.id}, 'degree', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Istituto/Università</label>
-              <input type="text" class="form-input" placeholder="Nome istituzione" value="${edu.institution}"
-                     onchange="updateEducation(${edu.id}, 'institution', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Descrizione</label>
-              <textarea class="form-textarea" placeholder="Materie principali, voto, progetti, etc."
-                        onchange="updateEducation(${edu.id}, 'description', this.value)">${edu.description}</textarea>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    function updateEducation(id, field, value) {
-      const edu = AppState.cvData.education.find(e => e.id === id);
-      if (edu) {
-        edu[field] = value;
-        AppState.saveData();
-        AppState.updatePreview();
-      }
-    }
-    
-    // Formatore
-    function addFormatore() {
-      const newForm = {
-        id: Date.now(),
-        period: '',
-        hours: '',
-        title: '',
-        institutions: '',
-        topics: '',
-        details: []
-      };
-      AppState.cvData.formatore.push(newForm);
-      AppState.saveData();
-      renderFormatoreList();
-      AppState.updatePreview();
-    }
-    
-    function removeFormatore(id) {
-      AppState.cvData.formatore = AppState.cvData.formatore.filter(form => form.id !== id);
-      AppState.saveData();
-      renderFormatoreList();
-      AppState.updatePreview();
-    }
-    
-    function renderFormatoreList() {
-      const container = document.getElementById('formatoreList');
-      if (AppState.cvData.formatore.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna attività formativa aggiunta</div>';
-        return;
-      }
-      
-      container.innerHTML = AppState.cvData.formatore.map(form => `
-        <div class="list-item">
-          <div class="list-item-header">
-            <div class="list-item-title">${form.title || 'Attività Formativa'}</div>
-            <div class="list-item-controls">
-              <button class="list-btn danger" onclick="removeFormatore(${form.id})">🗑️</button>
-            </div>
-          </div>
-          
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Periodo</label>
-              <input type="text" class="form-input" placeholder="es. Ottobre 2023 - Giugno 2025" value="${form.period}"
-                     onchange="updateFormatore(${form.id}, 'period', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Ore Totali</label>
-              <input type="text" class="form-input" placeholder="es. 342 ore totali" value="${form.hours}"
-                     onchange="updateFormatore(${form.id}, 'hours', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Titolo Formazione</label>
-              <input type="text" class="form-input" placeholder="Titolo del corso o progetto formativo" value="${form.title}"
-                     onchange="updateFormatore(${form.id}, 'title', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Enti e Istituzioni</label>
-              <input type="text" class="form-input" placeholder="Scuole e istituzioni coinvolte" value="${form.institutions}"
-                     onchange="updateFormatore(${form.id}, 'institutions', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Tematiche Principali</label>
-              <textarea class="form-textarea" placeholder="Tematiche principali del corso..."
-                        onchange="updateFormatore(${form.id}, 'topics', this.value)">${form.topics}</textarea>
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Dettaglio Attività (una per riga)</label>
-              <textarea class="form-textarea" placeholder="Esempio: I.C. di Roma: 20 ore - Coding e Robotica&#10;Formazione Milano: 15 ore - Intelligenza Artificiale"
-                        onchange="updateFormatore(${form.id}, 'details', this.value.split('\\n').filter(line => line.trim()))">${Array.isArray(form.details) ? form.details.join('\\n') : ''}</textarea>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    function updateFormatore(id, field, value) {
-      const form = AppState.cvData.formatore.find(f => f.id === id);
-      if (form) {
-        form[field] = value;
-        AppState.saveData();
-        AppState.updatePreview();
-      }
-    }
-    
-    // Lingue
-    function addLanguage() {
-      const newLang = {
-        id: Date.now(),
-        name: '',
-        level: 'A1'
-      };
-      AppState.cvData.languages.otherLanguages.push(newLang);
-      AppState.saveData();
-      renderLanguagesList();
-      AppState.updatePreview();
-    }
-    
-    function removeLanguage(id) {
-      AppState.cvData.languages.otherLanguages = AppState.cvData.languages.otherLanguages.filter(lang => lang.id !== id);
-      AppState.saveData();
-      renderLanguagesList();
-      AppState.updatePreview();
-    }
-    
-    function renderLanguagesList() {
-      const container = document.getElementById('languagesList');
-      if (AppState.cvData.languages.otherLanguages.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna lingua aggiunta</div>';
-        return;
-      }
-      
-      container.innerHTML = AppState.cvData.languages.otherLanguages.map(lang => `
-        <div class="list-item">
-          <div class="list-item-header">
-            <div class="list-item-title">${lang.name || 'Lingua non specificata'}</div>
-            <div class="list-item-controls">
-              <button class="list-btn danger" onclick="removeLanguage(${lang.id})">🗑️</button>
-            </div>
-          </div>
-          
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Lingua</label>
-              <input type="text" class="form-input" placeholder="Es. Inglese" value="${lang.name}"
-                     onchange="updateLanguage(${lang.id}, 'name', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Livello</label>
-              <select class="form-input" onchange="updateLanguage(${lang.id}, 'level', this.value)">
-                <option value="A1" ${lang.level === 'A1' ? 'selected' : ''}>A1 - Principiante</option>
-                <option value="A2" ${lang.level === 'A2' ? 'selected' : ''}>A2 - Elementare</option>
-                <option value="B1" ${lang.level === 'B1' ? 'selected' : ''}>B1 - Intermedio</option>
-                <option value="B2" ${lang.level === 'B2' ? 'selected' : ''}>B2 - Intermedio superiore</option>
-                <option value="C1" ${lang.level === 'C1' ? 'selected' : ''}>C1 - Avanzato</option>
-                <option value="C2" ${lang.level === 'C2' ? 'selected' : ''}>C2 - Madrelingua</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    function updateLanguage(id, field, value) {
-      const lang = AppState.cvData.languages.otherLanguages.find(l => l.id === id);
-      if (lang) {
-        lang[field] = value;
-        AppState.saveData();
-        AppState.updatePreview();
-      }
-    }
-    
-    // Pubblicazioni
-    function addPublication() {
-      const newPub = {
-        id: Date.now(),
-        title: '',
-        year: '',
-        authors: '',
-        journal: '',
-        doi: '',
-        link: '',
-        description: ''
-      };
-      AppState.cvData.publications.push(newPub);
-      AppState.saveData();
-      renderPublicationsList();
-      AppState.updatePreview();
-    }
-    
-    function removePublication(id) {
-      AppState.cvData.publications = AppState.cvData.publications.filter(pub => pub.id !== id);
-      AppState.saveData();
-      renderPublicationsList();
-      AppState.updatePreview();
-    }
-    
-    function renderPublicationsList() {
-      const container = document.getElementById('publicationsList');
-      if (AppState.cvData.publications.length === 0) {
-        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna pubblicazione aggiunta</div>';
-        return;
-      }
-      
-      container.innerHTML = AppState.cvData.publications.map(pub => `
-        <div class="list-item">
-          <div class="list-item-header">
-            <div class="list-item-title">${pub.title || 'Titolo non specificato'}</div>
-            <div class="list-item-controls">
-              <button class="list-btn danger" onclick="removePublication(${pub.id})">🗑️</button>
-            </div>
-          </div>
-          
-          <div class="form-grid">
-            <div class="form-group full-width">
-              <label class="form-label">Titolo</label>
-              <input type="text" class="form-input" placeholder="Titolo della pubblicazione" value="${pub.title}"
-                     onchange="updatePublication(${pub.id}, 'title', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Anno</label>
-              <input type="text" class="form-input" placeholder="2025" value="${pub.year}"
-                     onchange="updatePublication(${pub.id}, 'year', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Autori</label>
-              <input type="text" class="form-input" placeholder="Nome Cognome, Altri autori" value="${pub.authors}"
-                     onchange="updatePublication(${pub.id}, 'authors', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Rivista/Conferenza</label>
-              <input type="text" class="form-input" placeholder="Nome rivista" value="${pub.journal}"
-                     onchange="updatePublication(${pub.id}, 'journal', this.value)">
-            </div>
-            <div class="form-group">
-              <label class="form-label">DOI</label>
-              <input type="text" class="form-input" placeholder="10.1000/xyz123" value="${pub.doi}"
-                     onchange="updatePublication(${pub.id}, 'doi', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Link</label>
-              <input type="text" class="form-input" placeholder="https://..." value="${pub.link}"
-                     onchange="updatePublication(${pub.id}, 'link', this.value)">
-            </div>
-            <div class="form-group full-width">
-              <label class="form-label">Descrizione</label>
-              <textarea class="form-textarea" placeholder="Breve descrizione del lavoro"
-                        onchange="updatePublication(${pub.id}, 'description', this.value)">${pub.description}</textarea>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    function updatePublication(id, field, value) {
-      const pub = AppState.cvData.publications.find(p => p.id === id);
-      if (pub) {
-        pub[field] = value;
-        AppState.saveData();
-        AppState.updatePreview();
-      }
-    }
-    
-    // === EXPORT/IMPORT DATA ===
-    
-    function exportData() {
-      const dataStr = JSON.stringify(AppState.cvData, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `cv-data-${new Date().toISOString().split('T')[0]}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-    
-    function importData() {
-      document.getElementById('importInput').click();
-    }
-    
-    function resetData() {
-      if (confirm('Sei sicuro di voler cancellare tutti i dati? Questa azione non può essere annullata.')) {
-        localStorage.removeItem('cvData_v5');
-        location.reload();
-      }
-    }
     
     // Cambia sezione
     function switchSection(sectionId) {
@@ -2193,7 +1025,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.2');
+      localStorage.setItem('lastSeenVersion_v5', '5.1');
     }
     
     // Stampa CV
@@ -2209,7 +1041,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 CV PWA Editor v5.2 con funzionalità v4.7 inizializzato');
+      console.log('🚀 CV PWA Editor v5.1 Design Upgrade inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -2226,34 +1058,11 @@
         document.getElementById('profileText').value = AppState.cvData.profile.text;
       }
       
-      // Popola competenze
-      if (AppState.cvData.skills.ai.content) {
-        document.getElementById('aiSkills').value = AppState.cvData.skills.ai.content;
-      }
-      if (AppState.cvData.skills.digital.genericContent) {
-        document.getElementById('digitalSkillsGeneric').value = AppState.cvData.skills.digital.genericContent;
-      }
-      if (AppState.cvData.skills.platforms) {
-        document.getElementById('platforms').value = AppState.cvData.skills.platforms;
-      }
-      
-      // Toggle DigiCompEU
-      const useDigiCompEUCheckbox = document.getElementById('useDigiCompEU');
-      if (useDigiCompEUCheckbox && AppState.cvData.skills.digital.useDigiCompEU) {
-        useDigiCompEUCheckbox.checked = true;
-        document.getElementById('digiCompSection').style.display = 'block';
-        renderDigiCompItems();
-      }
-      
-      // Render liste dinamiche
-      renderExperienceList();
-      renderEducationList();
-      renderFormatoreList();
-      renderLanguagesList();
-      renderPublicationsList();
-      
       // Aggiorna anteprima
       AppState.updatePreview();
+      
+      // Enhancement v4.7: Inizializza conteggio pagine
+      setTimeout(updatePageCount, 500);
       
       // Event listeners nativi per input
       ['fullName', 'nationality', 'birthDate', 'phone', 'email', 'address', 'website'].forEach(fieldId => {
@@ -2273,211 +1082,9 @@
         });
       }
       
-      // Event listeners per competenze
-      const aiSkillsTextarea = document.getElementById('aiSkills');
-      if (aiSkillsTextarea) {
-        aiSkillsTextarea.addEventListener('input', function(e) {
-          AppState.cvData.skills.ai.content = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      const digitalSkillsGenericTextarea = document.getElementById('digitalSkillsGeneric');
-      if (digitalSkillsGenericTextarea) {
-        digitalSkillsGenericTextarea.addEventListener('input', function(e) {
-          AppState.cvData.skills.digital.genericContent = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      const platformsTextarea = document.getElementById('platforms');
-      if (platformsTextarea) {
-        platformsTextarea.addEventListener('input', function(e) {
-          AppState.cvData.skills.platforms = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      // Toggle DigiCompEU
-      const useDigiCompEUCheckbox = document.getElementById('useDigiCompEU');
-      if (useDigiCompEUCheckbox) {
-        useDigiCompEUCheckbox.addEventListener('change', function(e) {
-          AppState.cvData.skills.digital.useDigiCompEU = e.target.checked;
-          const digiCompSection = document.getElementById('digiCompSection');
-          digiCompSection.style.display = e.target.checked ? 'block' : 'none';
-          if (e.target.checked) {
-            renderDigiCompItems();
-          }
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      // Event listeners per lingue madrelingua
-      const motherTongueInput = document.getElementById('motherTongue');
-      if (motherTongueInput) {
-        motherTongueInput.addEventListener('input', function(e) {
-          AppState.cvData.languages.motherTongue = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      const motherTongueLevelSelect = document.getElementById('motherTongueLevel');
-      if (motherTongueLevelSelect) {
-        motherTongueLevelSelect.addEventListener('change', function(e) {
-          AppState.cvData.languages.motherTongueLevel = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      // Event listener altre informazioni
-      const otherSkillsTextarea = document.getElementById('otherSkills');
-      if (otherSkillsTextarea) {
-        otherSkillsTextarea.addEventListener('input', function(e) {
-          AppState.cvData.other.skills = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      // Event listener privacy
-      const includePrivacyCheckbox = document.getElementById('includePrivacy');
-      if (includePrivacyCheckbox) {
-        includePrivacyCheckbox.addEventListener('change', function(e) {
-          AppState.cvData.other.includePrivacy = e.target.checked;
-          const privacyClause = document.getElementById('privacyClause');
-          privacyClause.style.display = e.target.checked ? 'block' : 'none';
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      const privacyTextTextarea = document.getElementById('privacyText');
-      if (privacyTextTextarea) {
-        privacyTextTextarea.addEventListener('input', function(e) {
-          AppState.cvData.other.privacyText = e.target.value;
-          AppState.saveData();
-          AppState.updatePreview();
-        });
-      }
-      
-      // Event listeners per impostazioni
-      ['showPhoto', 'showPublications', 'italianDateFormat'].forEach(settingId => {
-        const checkbox = document.getElementById(settingId);
-        if (checkbox) {
-          checkbox.addEventListener('change', function(e) {
-            AppState.cvData.settings[settingId] = e.target.checked;
-            AppState.saveData();
-            AppState.updatePreview();
-          });
-        }
-      });
-      
-      // Upload foto eventi
-      const photoInput = document.getElementById('photoInput');
-      if (photoInput) {
-        photoInput.addEventListener('change', function(e) {
-          if (e.target.files[0]) {
-            handlePhotoUpload(e.target.files[0]);
-          }
-        });
-      }
-      
-      // Drag and drop foto
-      const photoUpload = document.getElementById('photoUpload');
-      if (photoUpload) {
-        photoUpload.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          photoUpload.classList.add('dragover');
-        });
-        
-        photoUpload.addEventListener('dragleave', function(e) {
-          e.preventDefault();
-          photoUpload.classList.remove('dragover');
-        });
-        
-        photoUpload.addEventListener('drop', function(e) {
-          e.preventDefault();
-          photoUpload.classList.remove('dragover');
-          if (e.dataTransfer.files[0]) {
-            handlePhotoUpload(e.dataTransfer.files[0]);
-          }
-        });
-      }
-      
-      // Import data event
-      const importInput = document.getElementById('importInput');
-      if (importInput) {
-        importInput.addEventListener('change', function(e) {
-          if (e.target.files[0]) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-              try {
-                const importedData = JSON.parse(event.target.result);
-                AppState.cvData = { ...AppState.cvData, ...importedData };
-                AppState.saveData();
-                location.reload(); // Ricarica per mostrare tutti i dati
-              } catch (error) {
-                alert('Errore nel file JSON: ' + error.message);
-              }
-            };
-            reader.readAsText(file);
-          }
-        });
-      }
-      
-      // Carica dati salvati nei campi
-      if (AppState.cvData.skills.ai) {
-        document.getElementById('aiSkills').value = AppState.cvData.skills.ai;
-      }
-      if (AppState.cvData.skills.digital) {
-        document.getElementById('digitalSkills').value = AppState.cvData.skills.digital;  
-      }
-      if (AppState.cvData.skills.platforms) {
-        document.getElementById('platforms').value = AppState.cvData.skills.platforms;
-      }
-      if (AppState.cvData.languages.motherTongue) {
-        document.getElementById('motherTongue').value = AppState.cvData.languages.motherTongue;
-      }
-      if (AppState.cvData.languages.motherTongueLevel) {
-        document.getElementById('motherTongueLevel').value = AppState.cvData.languages.motherTongueLevel;
-      }
-      if (AppState.cvData.other.skills) {
-        document.getElementById('otherSkills').value = AppState.cvData.other.skills;
-      }
-      if (AppState.cvData.other.includePrivacy) {
-        document.getElementById('includePrivacy').checked = true;
-        document.getElementById('privacyClause').style.display = 'block';
-      }
-      if (AppState.cvData.other.privacyText) {
-        document.getElementById('privacyText').value = AppState.cvData.other.privacyText;
-      }
-      
-      // Carica impostazioni
-      document.getElementById('showPhoto').checked = AppState.cvData.settings.showPhoto;
-      document.getElementById('showPublications').checked = AppState.cvData.settings.showPublications;
-      document.getElementById('italianDateFormat').checked = AppState.cvData.settings.italianDateFormat;
-      
-      // Mostra foto se presente
-      if (AppState.cvData.personal.photo) {
-        showPhotoPreview(AppState.cvData.personal.photo);
-      }
-      
-      // Renderizza liste dinamiche
-      renderExperienceList();
-      renderEducationList();
-      renderLanguagesList();
-      renderPublicationsList();
-      
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.2') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.1') {
         document.getElementById('versionBanner').classList.add('show');
       }
       

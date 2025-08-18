@@ -1644,7 +1644,19 @@
           `;
         }
         
+        // Footer con conteggio pagine
+        html += `
+          <div class="page-counter" style="position: fixed; bottom: 20px; right: 20px; font-size: 0.75rem; color: #6b7280; background: white; padding: 4px 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            Pagina 1 di 1
+          </div>
+        `;
+        
         preview.innerHTML = html;
+        
+        // Calcola pagine dopo il rendering
+        setTimeout(() => {
+          calculatePages();
+        }, 100);
       },
       
       // Link attivi
@@ -1661,6 +1673,45 @@
     };
     
     // === FUNZIONI GLOBALI ===
+    
+    // Utility function for creating clickable links
+    function linkifyText(text) {
+      if (!text) return text;
+      
+      // Regex per URL e email
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+      
+      // Sostituisce URL
+      let result = text.replace(urlRegex, (url) => {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">${url}</a>`;
+      });
+      
+      // Sostituisce email
+      result = result.replace(emailRegex, (email) => {
+        return `<a href="mailto:${email}" style="color: #0066cc; text-decoration: underline;">${email}</a>`;
+      });
+      
+      return result;
+    }
+    
+    // Function to calculate pages for CV
+    function calculatePages() {
+      const element = document.querySelector('.cv-preview');
+      if (!element) return 1;
+      
+      const height = element.scrollHeight;
+      const pageHeight = 1056; // A4 height at 72 DPI (297mm)
+      const calculatedPages = Math.ceil(height / pageHeight);
+      
+      // Update page count in footer
+      const pageCounter = document.querySelector('.page-counter');
+      if (pageCounter) {
+        pageCounter.textContent = `Pagina 1 di ${calculatedPages}`;
+      }
+      
+      return calculatedPages;
+    }
     
     // Render DigiCompEU items
     function renderDigiCompItems() {

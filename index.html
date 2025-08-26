@@ -2484,11 +2484,11 @@
       }
       
       // Carica dati salvati nei campi
-      if (AppState.cvData.skills.ai) {
-        document.getElementById('aiSkills').value = AppState.cvData.skills.ai;
+      if (AppState.cvData.skills.ai.content) {
+        document.getElementById('aiSkills').value = AppState.cvData.skills.ai.content;
       }
-      if (AppState.cvData.skills.digital) {
-        document.getElementById('digitalSkills').value = AppState.cvData.skills.digital;  
+      if (AppState.cvData.skills.digital.genericContent) {
+        document.getElementById('digitalSkillsGeneric').value = AppState.cvData.skills.digital.genericContent;  
       }
       if (AppState.cvData.skills.platforms) {
         document.getElementById('platforms').value = AppState.cvData.skills.platforms;
@@ -2519,12 +2519,6 @@
       if (AppState.cvData.personal.photo) {
         showPhotoPreview(AppState.cvData.personal.photo);
       }
-      
-      // Renderizza liste dinamiche
-      renderExperienceList();
-      renderEducationList();
-      renderLanguagesList();
-      renderPublicationsList();
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');

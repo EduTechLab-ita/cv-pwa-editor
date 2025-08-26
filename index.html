@@ -2352,8 +2352,7 @@
         });
       }
       
-      // Toggle DigiCompEU
-      const useDigiCompEUCheckbox = document.getElementById('useDigiCompEU');
+      // Toggle DigiCompEU Event Listener
       if (useDigiCompEUCheckbox) {
         useDigiCompEUCheckbox.addEventListener('change', function(e) {
           AppState.cvData.skills.digital.useDigiCompEU = e.target.checked;

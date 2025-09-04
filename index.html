@@ -1269,23 +1269,6 @@
               style="min-height: 120px;"
             ></textarea>
           </div>
-          
-          <div class="form-group" style="margin-top: 25px;">
-            <label class="form-label">
-              <input type="checkbox" id="includePrivacy" checked style="margin-right: 8px;">
-              Includi clausola trattamento dati personali (GDPR)
-            </label>
-          </div>
-          
-          <div class="form-group" id="privacyClause" style="margin-top: 15px;">
-            <label class="form-label" for="privacyText">Testo clausola privacy</label>
-            <textarea 
-              id="privacyText" 
-              class="form-textarea"
-              placeholder="Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all'art. 13 del D. Lgs. 196/2003 e all'art. 13 GDPR 679/16."
-              style="min-height: 80px;"
-            ></textarea>
-          </div>
         </div>
       </div>
       
@@ -1365,14 +1348,31 @@
           <div class="settings-tab-content" id="settings-privacy">
             <h4 style="color: #003d7a; margin-bottom: 15px;">🛡️ Trattamento Dati Personali</h4>
             
+            <!-- Gestione Clausola Privacy -->
             <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
               <h5 style="margin-bottom: 12px;">📋 Clausola Privacy nel CV</h5>
-              <label class="form-label" style="display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" id="showPrivacyConsent" checked>
-                <span>Includi clausola trattamento dati nel CV stampato</span>
+              
+              <!-- Toggle Inclusione -->
+              <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <input type="checkbox" id="includePrivacy" checked>
+                <span><strong>Includi clausola trattamento dati nel CV stampato</strong></span>
               </label>
-              <p style="color: #6b7280; font-size: 14px; margin-top: 8px;">
-                Consigliato: Include automaticamente il consenso per il trattamento dei dati personali
+              
+              <!-- Campo Testo Clausola -->
+              <div id="privacyClause" style="margin-top: 15px;">
+                <label class="form-label" for="privacyText" style="margin-bottom: 8px;"><strong>Testo clausola privacy:</strong></label>
+                <textarea 
+                  id="privacyText" 
+                  style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; line-height: 1.5; min-height: 80px; resize: vertical;"
+                  placeholder="Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all'art. 13 del D. Lgs. 196/2003 e all'art. 13 GDPR 679/16."
+                ></textarea>
+                <p style="color: #6b7280; font-size: 12px; margin-top: 6px;">
+                  💡 <em>Questo testo apparirà in piccolo alla fine del tuo CV stampato</em>
+                </p>
+              </div>
+              
+              <p style="color: #16a34a; font-size: 14px; margin-top: 12px; padding: 8px 12px; background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 4px;">
+                ✅ <strong>Consigliato:</strong> Include automaticamente il consenso per il trattamento dei dati personali (richiesto per legge in Italia)
               </p>
             </div>
 
@@ -1627,10 +1627,8 @@
           showPhoto: true,
           showPublications: true,
           italianDateFormat: true,
-          showPrivacyConsent: true,
           templateStyle: 'europass',
-          dateFormat: 'italian',
-          privacyConsent: true
+          dateFormat: 'italian'
         }
       },
       
@@ -2554,8 +2552,6 @@
       const showPublicationsCheckbox = document.getElementById('showPublications');
       if (showPublicationsCheckbox) showPublicationsCheckbox.checked = settings.showPublications;
       
-      const showPrivacyConsentCheckbox = document.getElementById('showPrivacyConsent');
-      if (showPrivacyConsentCheckbox) showPrivacyConsentCheckbox.checked = settings.showPrivacyConsent;
       
       // Aggiorna select
       const dateFormatSelect = document.getElementById('dateFormat');
@@ -2607,12 +2603,6 @@
         });
       }
       
-      const showPrivacyConsentCheckbox = document.getElementById('showPrivacyConsent');
-      if (showPrivacyConsentCheckbox) {
-        showPrivacyConsentCheckbox.addEventListener('change', (e) => {
-          updateSetting('showPrivacyConsent', e.target.checked);
-        });
-      }
       
       // Select handlers
       const dateFormatSelect = document.getElementById('dateFormat');
@@ -2781,8 +2771,6 @@
       if (includePrivacyCheckbox) {
         includePrivacyCheckbox.addEventListener('change', function(e) {
           AppState.cvData.other.includePrivacy = e.target.checked;
-          const privacyClause = document.getElementById('privacyClause');
-          privacyClause.style.display = e.target.checked ? 'block' : 'none';
           AppState.saveData();
         });
       }
@@ -2881,7 +2869,6 @@
       }
       if (AppState.cvData.other.includePrivacy) {
         document.getElementById('includePrivacy').checked = true;
-        document.getElementById('privacyClause').style.display = 'block';
       }
       if (AppState.cvData.other.privacyText) {
         document.getElementById('privacyText').value = AppState.cvData.other.privacyText;

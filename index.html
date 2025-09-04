@@ -813,6 +813,106 @@
       border-color: #2563eb !important;
       background: #eff6ff !important;
     }
+
+    /* === Template Styles === */
+    
+    /* TEMPLATE MODERNO */
+    .cv-preview.modern-template {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+      color: #1e293b;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      border-left: 8px solid #3b82f6;
+    }
+
+    .modern-template .cv-header {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      border-radius: 15px;
+      margin-bottom: 30px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      padding: 25px;
+    }
+
+    .modern-template .cv-name {
+      font-size: 2.5em;
+      font-weight: 300;
+      text-align: center;
+      margin: 20px 0;
+      color: white;
+      text-shadow: none;
+    }
+
+    .modern-template .cv-section-title {
+      color: white;
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      border-bottom: none;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .modern-template .cv-contact-item {
+      color: white;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 6px;
+      border-left: 3px solid rgba(255,255,255,0.5);
+    }
+
+    .modern-template .cv-experience-item,
+    .modern-template .cv-education-item,
+    .modern-template .cv-formatore-item {
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      color: #334155;
+    }
+
+    .modern-template .cv-experience-item h4,
+    .modern-template .cv-experience-item h5,
+    .modern-template .cv-education-item h4,
+    .modern-template .cv-formatore-item h4 {
+      color: #1e293b;
+    }
+
+    .modern-template .cv-experience-date,
+    .modern-template .cv-education-date,
+    .modern-template .cv-formatore-date {
+      color: #3b82f6;
+      font-weight: 500;
+    }
+
+    .modern-template .cv-skills-category {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #3b82f6;
+      color: #334155;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .modern-template .cv-skills-title {
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .modern-template .cv-address {
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* Default Europass mantiene gli stili esistenti */
+    .cv-preview:not(.modern-template) {
+      /* Stili Europass di default già definiti sopra */
+    }
     
   </style>
 </head>
@@ -1680,6 +1780,12 @@
         const preview = document.getElementById('cvPreview');
         const data = this.cvData;
         
+        // Applica la classe del template selezionato
+        preview.className = 'cv-preview';
+        if (data.settings.templateStyle === 'modern') {
+          preview.classList.add('modern-template');
+        }
+        
         // Se non ci sono dati, mostra empty state
         if (!data.personal.fullName && !data.profile.text) {
           preview.innerHTML = `
@@ -2532,9 +2638,14 @@
       document.getElementById('templateStyle').value = templateId;
       
       // Salva la preferenza
-      if (typeof AppState !== 'undefined' && AppState.settings) {
-        AppState.settings.templateStyle = templateId;
-        AppState.saveSettings();
+      if (typeof AppState !== 'undefined') {
+        AppState.cvData.settings.templateStyle = templateId;
+        AppState.saveData();
+        
+        // Aggiorna l'anteprima se siamo nella sezione preview
+        if (AppState.currentSection === 'preview') {
+          AppState.updatePreview();
+        }
       }
       
       console.log(`Template selezionato: ${templateId}`);

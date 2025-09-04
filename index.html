@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV PWA Editor v5.2 - EduTechLab Italia</title>
+  <title>CV PWA Editor v5.3 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1309,7 +1309,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.2!</strong> Nuove funzionalità v4.7: Formatore, Competenze DigiCompEU, Upload Foto</span>
+      <span><strong>Aggiornato alla versione 5.3!</strong> Template fissi, stampa PDF corretta, logo Europass, correzioni JavaScript</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -1322,7 +1322,7 @@
           <img src="CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
           <div>
             <h1 class="app-title">CV PWA Editor</h1>
-            <span class="app-version">v5.2</span>
+            <span class="app-version">v5.3</span>
           </div>
         </div>
         
@@ -1330,7 +1330,7 @@
           <div class="online-indicator"></div>
           <span>Online</span>
           <span>•</span>
-          <span>Agg. 11/08/2025</span>
+          <span>Agg. 04/09/2025</span>
         </div>
       </div>
       
@@ -1963,7 +1963,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h5 style="margin-bottom: 8px;">📊 Informazioni CV</h5>
               <div style="font-size: 14px; color: #6b7280;">
-                <p><strong>Versione App:</strong> v5.2.0</p>
+                <p><strong>Versione App:</strong> v5.3.0</p>
                 <p><strong>Template:</strong> <span id="currentTemplate">Europass Standard</span></p>
                 <p><strong>Ultima Modifica:</strong> <span id="lastModified">-</span></p>
               </div>
@@ -2007,7 +2007,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>CV PWA Editor v5.2</strong><br>
+                <strong>CV PWA Editor v5.3</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -2047,7 +2047,7 @@
       <a href="#" class="footer-link">Privacy & Cookie</a>
       <a href="#" class="footer-link">GitHub</a>
     </div>
-    <p><strong>CV PWA Editor v5.1</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>CV PWA Editor v5.3</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3143,7 +3143,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 CV PWA Editor v5.2 con funzionalità v4.7 inizializzato');
+      console.log('🚀 CV PWA Editor v5.3 con template e stampa corretti inizializzato');
       
       // Carica dati
       AppState.loadData();

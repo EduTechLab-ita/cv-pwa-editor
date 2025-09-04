@@ -1,9 +1,9 @@
 // Service Worker per CV PWA Editor - EduTechLab Italia
 // Per forzare aggiornamenti PWA: incrementare i numeri di versione qui sotto
 
-const CACHE_NAME = 'cv-pwa-editor-v5.1.0';
-const STATIC_CACHE = 'cv-static-v5.1.0';
-const DYNAMIC_CACHE = 'cv-dynamic-v5.1.0';
+const CACHE_NAME = 'cv-pwa-editor-v5.3.0';
+const STATIC_CACHE = 'cv-static-v5.3.0';
+const DYNAMIC_CACHE = 'cv-dynamic-v5.3.0';
 
 // File da cachare immediatamente (cache statica)
 const STATIC_FILES = [

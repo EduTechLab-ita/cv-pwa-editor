@@ -814,9 +814,56 @@
       background: #eff6ff !important;
     }
 
-    /* === CV Base Styles (dalla v4.7) === */
+    /* === CV Base Styles (dalla v4.7) - LAYOUT EUROPASS ORIGINALE === */
     
-    /* CV Foto Profile - FOTO TONDA */
+    /* CV Structure */
+    .cv-preview {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      padding: 40px;
+      position: relative;
+    }
+    
+    /* Europass Header con logo - Universale per entrambi i template */
+    .europass-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .europass-logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.2em;
+      color: #003d7a;
+      font-weight: 500;
+    }
+    
+    /* CV Title - Grande e blu */
+    .cv-title {
+      text-align: center;
+      font-size: 2.2em;
+      font-weight: 300;
+      color: #003d7a;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Barra blu spessa sotto il titolo */
+    .page-bar {
+      width: calc(100% + 80px);
+      margin-left: -40px;
+      margin-right: -40px;
+      height: 12px;
+      background-color: #003d7a;
+      margin-bottom: 40px;
+    }
+    
+    /* Foto tonda in alto a destra */
     .cv-profile-photo {
       width: 120px;
       height: 120px;
@@ -825,36 +872,55 @@
       border: 3px solid #003d7a;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 40px;
+      right: 40px;
     }
     
-    /* Stili base CV */
-    .cv-title {
+    /* Header con foto - aggiusta il margin */
+    .cv-header {
       text-align: center;
-      font-size: 1.8em;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    
+    /* Nome grande centrato */
+    .cv-name {
+      font-size: 2.5em;
       font-weight: 300;
-      color: #003d7a;
-      margin: 30px 0 20px 0;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      margin: 20px 0;
+      color: #333333;
+      text-align: center;
     }
     
-    .page-bar {
-      width: calc(100% + 80px);
-      margin-left: -40px;
-      margin-right: -40px;
-      height: 8px;
-      background-color: #003d7a;
-      margin-bottom: 30px;
+    /* Griglia contatti - centrata con spazio per foto */
+    .cv-contact-grid {
+      margin-top: 20px;
+      font-size: 1em;
+      display: inline-block;
+      text-align: left;
     }
     
-    .europass-header {
+    .cv-contact-item {
       display: flex;
       align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+      color: #333333;
+    }
+    
+    /* Sezioni con titoli blu */
+    .cv-section-title {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 1.3em;
+      color: #003d7a;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #dddddd;
+      margin-top: 40px;
       margin-bottom: 20px;
     }
     
+    /* Cards esperienza con bordi blu a sinistra */
     .cv-experience-item, .cv-education-item, .cv-formatore-item {
       margin-bottom: 25px;
       background: #f8f9fa;
@@ -863,6 +929,7 @@
       border-left: 4px solid #003d7a;
     }
     
+    /* Date in corsivo */
     .cv-experience-date, .cv-education-date, .cv-formatore-date {
       font-size: 0.9em;
       font-style: italic;
@@ -871,6 +938,7 @@
       font-weight: 600;
     }
     
+    /* Titoli sezioni blu */
     .cv-experience-item h4, .cv-education-item h4, .cv-formatore-item h4 {
       font-weight: bold;
       font-size: 1.1em;
@@ -878,25 +946,37 @@
       margin-bottom: 5px;
     }
     
+    /* Sottotitoli grigi */
     .cv-experience-item h5, .cv-education-item h5, .cv-formatore-item h5 {
       font-weight: normal;
       color: #666;
       margin-bottom: 10px;
     }
     
+    /* Competenze con background colorato */
     .cv-skills-category {
       background: #0066cc;
       color: white;
-      padding: 8px 16px;
-      margin: 20px 0 15px 0;
+      padding: 12px 20px;
+      margin: 25px 0 15px 0;
       font-size: 1.1em;
-      font-weight: 500;
+      font-weight: 600;
       border-radius: 4px;
+      text-transform: uppercase;
+    }
+    
+    /* Skills items */
+    .cv-skills-item {
+      background: #f8f9fa;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #0066cc;
     }
 
     /* === Template Styles === */
     
-    /* TEMPLATE MODERNO */
+    /* TEMPLATE MODERNO - Completo dal backup funzionante */
     .cv-preview.modern-template {
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
       color: #1e293b;
@@ -904,39 +984,21 @@
       border-left: 8px solid #3b82f6;
     }
 
-    .modern-template .cv-header {
+    .modern-template .europass-header {
       background: linear-gradient(135deg, #3b82f6, #1e40af);
       border-radius: 15px;
       margin-bottom: 30px;
       color: white;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      padding: 25px;
+      padding: 15px 20px;
     }
-    
-    .modern-template .cv-profile-photo {
-      border: 3px solid #3b82f6;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    }
-    
+
     .modern-template .cv-title {
       font-size: 3em;
       font-weight: 300;
       text-align: center;
       margin: 30px 0;
       color: #1e40af;
-      text-shadow: none;
-    }
-    
-    .modern-template .page-bar {
-      background: linear-gradient(135deg, #3b82f6, #1e40af);
-    }
-
-    .modern-template .cv-name {
-      font-size: 2.5em;
-      font-weight: 300;
-      text-align: center;
-      margin: 20px 0;
-      color: white;
       text-shadow: none;
     }
 
@@ -953,15 +1015,35 @@
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
     }
 
-    .modern-template .cv-contact-item {
+    .modern-template .section-subtitle {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
       color: white;
-      background: rgba(255,255,255,0.2);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 20px 0 15px 0;
+    }
+
+    .modern-template .personal-info h1 {
+      color: #1e40af;
+      font-size: 2.5em;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-shadow: none;
+    }
+
+    .modern-template .personal-info .info-item {
+      color: #475569;
+      background: rgba(255,255,255,0.7);
       padding: 8px 12px;
       margin: 4px 0;
       border-radius: 6px;
-      border-left: 3px solid rgba(255,255,255,0.5);
+      border-left: 3px solid #3b82f6;
     }
 
+    .modern-template .work-item,
+    .modern-template .skill-item,
     .modern-template .cv-experience-item,
     .modern-template .cv-education-item,
     .modern-template .cv-formatore-item {
@@ -974,13 +1056,17 @@
       color: #334155;
     }
 
+    .modern-template .work-item h4,
+    .modern-template .work-item h5,
+    .modern-template .item-header,
+    .modern-template .item-subheader,
     .modern-template .cv-experience-item h4,
-    .modern-template .cv-experience-item h5,
     .modern-template .cv-education-item h4,
     .modern-template .cv-formatore-item h4 {
       color: #1e293b;
     }
 
+    .modern-template .date-range,
     .modern-template .cv-experience-date,
     .modern-template .cv-education-date,
     .modern-template .cv-formatore-date {
@@ -988,28 +1074,231 @@
       font-weight: 500;
     }
 
+    .modern-template .skill-category,
     .modern-template .cv-skills-category {
       background: rgba(255,255,255,0.9);
       border: 1px solid #e2e8f0;
       border-left: 4px solid #3b82f6;
       color: #334155;
-      border-radius: 8px;
       padding: 15px;
       margin-bottom: 15px;
+      border-radius: 8px;
     }
 
+    .modern-template .skill-title,
     .modern-template .cv-skills-title {
       color: #1e293b;
       font-weight: 600;
     }
 
-    .modern-template .cv-address {
-      color: rgba(255,255,255,0.9);
+    .modern-template .cv-footer {
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      border-top: none;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      margin-top: 30px;
     }
 
-    /* Default Europass mantiene gli stili esistenti */
-    .cv-preview:not(.modern-template) {
-      /* Stili Europass di default già definiti sopra */
+    .modern-template .privacy-section {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .modern-template .cv-contact-item {
+      color: #475569;
+      background: rgba(255,255,255,0.7);
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .modern-template .cv-profile-photo {
+      border: 3px solid #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .modern-template .page-bar {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+    }
+
+    /* TEMPLATE EUROPASS - Basato su PDF di riferimento v4.7 */
+    .cv-preview.europass-template {
+      background: white;
+      color: #333333;
+      font-family: 'Calibri', 'Arial', sans-serif;
+      border: none;
+      position: relative;
+      padding: 40px;
+    }
+    
+    .europass-template::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #003d7a 0%, #0066cc 100%);
+    }
+    
+    .europass-template .cv-header {
+      border-bottom: 3px solid #003d7a;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      position: relative;
+      background: transparent;
+    }
+    
+    .europass-template .cv-title {
+      text-align: center;
+      font-size: 2.2em;
+      font-weight: 300;
+      color: #003d7a;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .europass-template .cv-name {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: #003d7a;
+      text-align: left;
+      margin: 15px 0 10px 0;
+    }
+    
+    .europass-template .cv-profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50% !important;
+      object-fit: cover;
+      border: 3px solid #003d7a;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 40px;
+      right: 40px;
+    }
+    
+    .europass-template .cv-section-title {
+      color: #003d7a;
+      background-color: transparent;
+      border-left: none;
+      border-bottom: 2px solid #003d7a;
+      padding: 5px 0 8px 0;
+      margin: 25px 0 15px 0;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 1.1em;
+    }
+    
+    .europass-template .personal-info {
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+    
+    .europass-template .personal-info strong {
+      color: #003d7a;
+      font-weight: 600;
+    }
+    
+    .europass-template .cv-contact-item {
+      color: #333333;
+      background: transparent;
+      padding: 2px 0;
+      margin: 2px 0;
+      border: none;
+    }
+    
+    .europass-template .cv-experience-item,
+    .europass-template .cv-education-item,
+    .europass-template .cv-formatore-item {
+      background: transparent;
+      border: none;
+      padding: 10px 0 15px 0;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #333333;
+    }
+    
+    .europass-template .cv-experience-item:last-child,
+    .europass-template .cv-education-item:last-child,
+    .europass-template .cv-formatore-item:last-child {
+      border-bottom: none;
+    }
+    
+    .europass-template .cv-experience-item h4,
+    .europass-template .cv-education-item h4,
+    .europass-template .cv-formatore-item h4 {
+      color: #003d7a;
+      font-weight: 600;
+      font-size: 1.05em;
+    }
+    
+    .europass-template .cv-experience-date,
+    .europass-template .cv-education-date,
+    .europass-template .cv-formatore-date {
+      color: #666666;
+      font-weight: 500;
+      font-size: 0.9em;
+    }
+    
+    .europass-template .cv-skills-category {
+      background: transparent;
+      border: none;
+      border-left: 3px solid #003d7a;
+      color: #333333;
+      padding: 10px 0 10px 15px;
+      margin-bottom: 12px;
+    }
+    
+    .europass-template .cv-skills-title {
+      color: #003d7a;
+      font-weight: 600;
+      font-size: 1em;
+    }
+    
+    /* Header Europass nel template Europass */
+    .europass-template .europass-header {
+      border-bottom: 2px solid #003d7a;
+      padding: 12px 0;
+      margin-bottom: 25px;
+    }
+    
+    .europass-template .europass-header div {
+      color: #003d7a;
+      font-weight: 600;
+    }
+    
+    /* Default per template senza classe specifica mantiene gli stili esistenti */
+    .cv-preview:not(.modern-template):not(.europass-template) {
+      /* Stili di default già definiti sopra */
+    }
+    
+    /* === STILI STAMPA PDF - Semplificati dal backup funzionante === */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .cv-preview, .cv-preview * {
+        visibility: visible;
+      }
+      .cv-preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        box-shadow: none;
+        width: 100%;
+        padding: 20px;
+      }
     }
     
   </style>
@@ -1030,7 +1319,7 @@
     <div class="app-header-content">
       <div class="app-logo-section">
         <div class="app-logo">
-          <img src="./CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
+          <img src="CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
           <div>
             <h1 class="app-title">CV PWA Editor</h1>
             <span class="app-version">v5.2</span>
@@ -1882,6 +2171,8 @@
         preview.className = 'cv-preview';
         if (data.settings.templateStyle === 'modern') {
           preview.classList.add('modern-template');
+        } else if (data.settings.templateStyle === 'europass') {
+          preview.classList.add('europass-template');
         }
         
         // Se non ci sono dati, mostra empty state
@@ -1896,11 +2187,11 @@
         }
         
         let html = `
-          <!-- Europass Header -->
+          <!-- Europass Header - Sempre presente in entrambi i template -->
           <div class="europass-header">
-            <div style="font-size: 1.2em; color: #003d7a;">
-              <span style="background: #003d7a; color: white; padding: 4px 8px; margin-right: 10px; border-radius: 3px; font-weight: bold; font-size: 0.8em;">🇪🇺</span>
-              europass
+            <div style="display: flex; align-items: center; font-size: 1.2em; color: #003d7a;">
+              <img src="./CV-EUropass.png" alt="Europass" style="height: 30px; width: auto; margin-right: 12px;">
+              <span style="font-weight: 500; letter-spacing: 0.5px;">europass</span>
             </div>
           </div>
           
@@ -2743,18 +3034,16 @@
         'modern': 'Moderno'
       };
       
-      document.getElementById('currentTemplate').textContent = templateNames[templateId];
-      document.getElementById('templateStyle').value = templateId;
+      const currentTemplateEl = document.getElementById('currentTemplate');
+      if (currentTemplateEl) currentTemplateEl.textContent = templateNames[templateId];
       
       // Salva la preferenza
       if (typeof AppState !== 'undefined') {
         AppState.cvData.settings.templateStyle = templateId;
         AppState.saveData();
         
-        // Aggiorna l'anteprima se siamo nella sezione preview
-        if (AppState.currentSection === 'preview') {
-          AppState.updatePreview();
-        }
+        // SEMPRE aggiorna l'anteprima quando cambia template
+        AppState.updatePreview();
       }
       
       console.log(`Template selezionato: ${templateId}`);
@@ -3088,16 +3377,22 @@
         document.getElementById('otherSkills').value = AppState.cvData.other.skills;
       }
       if (AppState.cvData.other.includePrivacy) {
-        document.getElementById('includePrivacy').checked = true;
+        const includePrivacyEl = document.getElementById('includePrivacy');
+        if (includePrivacyEl) includePrivacyEl.checked = true;
       }
       if (AppState.cvData.other.privacyText) {
         document.getElementById('privacyText').value = AppState.cvData.other.privacyText;
       }
       
-      // Carica impostazioni
-      document.getElementById('showPhoto').checked = AppState.cvData.settings.showPhoto;
-      document.getElementById('showPublications').checked = AppState.cvData.settings.showPublications;
-      document.getElementById('italianDateFormat').checked = AppState.cvData.settings.italianDateFormat;
+      // Carica impostazioni con controlli di sicurezza
+      const showPhotoEl = document.getElementById('showPhoto');
+      if (showPhotoEl) showPhotoEl.checked = AppState.cvData.settings.showPhoto;
+      
+      const showPublicationsEl = document.getElementById('showPublications');
+      if (showPublicationsEl) showPublicationsEl.checked = AppState.cvData.settings.showPublications;
+      
+      const italianDateFormatEl = document.getElementById('italianDateFormat');
+      if (italianDateFormatEl) italianDateFormatEl.checked = AppState.cvData.settings.italianDateFormat;
       
       // Mostra foto se presente
       if (AppState.cvData.personal.photo) {

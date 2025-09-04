@@ -814,6 +814,86 @@
       background: #eff6ff !important;
     }
 
+    /* === CV Base Styles (dalla v4.7) === */
+    
+    /* CV Foto Profile - FOTO TONDA */
+    .cv-profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50% !important;
+      object-fit: cover;
+      border: 3px solid #003d7a;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    
+    /* Stili base CV */
+    .cv-title {
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: 300;
+      color: #003d7a;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .page-bar {
+      width: calc(100% + 80px);
+      margin-left: -40px;
+      margin-right: -40px;
+      height: 8px;
+      background-color: #003d7a;
+      margin-bottom: 30px;
+    }
+    
+    .europass-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .cv-experience-item, .cv-education-item, .cv-formatore-item {
+      margin-bottom: 25px;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #003d7a;
+    }
+    
+    .cv-experience-date, .cv-education-date, .cv-formatore-date {
+      font-size: 0.9em;
+      font-style: italic;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .cv-experience-item h4, .cv-education-item h4, .cv-formatore-item h4 {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #003d7a;
+      margin-bottom: 5px;
+    }
+    
+    .cv-experience-item h5, .cv-education-item h5, .cv-formatore-item h5 {
+      font-weight: normal;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .cv-skills-category {
+      background: #0066cc;
+      color: white;
+      padding: 8px 16px;
+      margin: 20px 0 15px 0;
+      font-size: 1.1em;
+      font-weight: 500;
+      border-radius: 4px;
+    }
+
     /* === Template Styles === */
     
     /* TEMPLATE MODERNO */
@@ -831,6 +911,24 @@
       color: white;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
       padding: 25px;
+    }
+    
+    .modern-template .cv-profile-photo {
+      border: 3px solid #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .modern-template .cv-title {
+      font-size: 3em;
+      font-weight: 300;
+      text-align: center;
+      margin: 30px 0;
+      color: #1e40af;
+      text-shadow: none;
+    }
+    
+    .modern-template .page-bar {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
     }
 
     .modern-template .cv-name {
@@ -1798,13 +1896,24 @@
         }
         
         let html = `
-          <div class="cv-header">
+          <!-- Europass Header -->
+          <div class="europass-header">
+            <div style="font-size: 1.2em; color: #003d7a;">
+              <span style="background: #003d7a; color: white; padding: 4px 8px; margin-right: 10px; border-radius: 3px; font-weight: bold; font-size: 0.8em;">🇪🇺</span>
+              europass
+            </div>
+          </div>
+          
+          <div class="cv-title">Curriculum Vitae</div>
+          <div class="page-bar"></div>
+          
+          <div class="cv-header" style="position: relative;">
             ${data.personal.photo && data.settings.showPhoto ? 
               `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">` : ''}
             
             <h1 class="cv-name">${data.personal.fullName || 'Il Tuo Nome'}</h1>
             
-            <div class="cv-contact-grid">
+            <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto ? 'margin-right: 140px;' : ''}">
               ${data.personal.nationality ? `<div class="cv-contact-item">📍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
               ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}

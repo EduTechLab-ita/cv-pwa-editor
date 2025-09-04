@@ -1469,27 +1469,6 @@
                     <option value="iso">ISO (AAAA-MM)</option>
                   </select>
                 </div>
-
-                <!-- Toggle Consenso Privacy -->
-                <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
-                  <div>
-                    <strong>🛡️ Consenso Privacy</strong>
-                    <p style="color: #6b7280; font-size: 14px; margin-top: 4px;">Mostra/nascondi clausola trattamento dati</p>
-                  </div>
-                  <input type="checkbox" id="privacyConsent" checked style="transform: scale(1.2);">
-                </label>
-
-                <!-- Template Style -->
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                  <div>
-                    <strong>🎨 Template CV</strong>
-                    <p style="color: #6b7280; font-size: 14px; margin-top: 4px;">Scegli lo stile del tuo CV</p>
-                  </div>
-                  <select id="templateStyle" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;">
-                    <option value="europass">Europass Standard</option>
-                    <option value="modern">Moderno</option>
-                  </select>
-                </div>
               </div>
             </div>
 
@@ -2591,15 +2570,9 @@
       const showPrivacyConsentCheckbox = document.getElementById('showPrivacyConsent');
       if (showPrivacyConsentCheckbox) showPrivacyConsentCheckbox.checked = settings.showPrivacyConsent;
       
-      const privacyConsentCheckbox = document.getElementById('privacyConsent');
-      if (privacyConsentCheckbox) privacyConsentCheckbox.checked = settings.privacyConsent;
-      
       // Aggiorna select
       const dateFormatSelect = document.getElementById('dateFormat');
       if (dateFormatSelect) dateFormatSelect.value = settings.dateFormat;
-      
-      const templateStyleSelect = document.getElementById('templateStyle');
-      if (templateStyleSelect) templateStyleSelect.value = settings.templateStyle;
       
       // Aggiorna informazioni
       const templateNames = {
@@ -2655,26 +2628,11 @@
         });
       }
       
-      const privacyConsentCheckbox = document.getElementById('privacyConsent');
-      if (privacyConsentCheckbox) {
-        privacyConsentCheckbox.addEventListener('change', (e) => {
-          updateSetting('privacyConsent', e.target.checked);
-        });
-      }
-      
       // Select handlers
       const dateFormatSelect = document.getElementById('dateFormat');
       if (dateFormatSelect) {
         dateFormatSelect.addEventListener('change', (e) => {
           updateSetting('dateFormat', e.target.value);
-        });
-      }
-      
-      const templateStyleSelect = document.getElementById('templateStyle');
-      if (templateStyleSelect) {
-        templateStyleSelect.addEventListener('change', (e) => {
-          updateSetting('templateStyle', e.target.value);
-          selectTemplate(e.target.value);
         });
       }
       

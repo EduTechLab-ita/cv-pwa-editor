@@ -1372,14 +1372,15 @@
     }
     .professional-template .page-bar { background: #ffa500; height: 3px; margin: 0 -20px 16px; }
     .professional-template .cv-profile-photo {
-      border-radius: 50%;
-      border: 3px solid rgba(255,255,255,0.5);
       position: static !important;
       flex-shrink: 0;
       order: -1;
-      width: 80px !important;
-      height: 80px !important;
-      margin-right: 16px;
+      width: 130px !important;
+      height: 130px !important;
+      margin-right: 20px;
+      border: 3px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      overflow: hidden !important;
     }
 
     /* Default per template senza classe specifica mantiene gli stili esistenti */
@@ -2415,6 +2416,16 @@
               parsed.personal.firstName = parts.length > 1 ? parts.slice(0, -1).join(' ') : (parts[0] || '');
               parsed.personal.lastName = parts.length > 1 ? parts[parts.length - 1] : '';
               delete parsed.personal.fullName;
+            }
+            // Migrazione: cognome finito nel campo nationality (bug vecchie versioni)
+            if (!parsed.personal.lastName && parsed.personal.nationality) {
+              const NAZIONALITA_VALIDE = ['Italiana','Francese','Tedesca','Spagnola','Inglese',
+                'Americana','Svizzera','Belga','Olandese','Portoghese','Rumena','Polacca',
+                'Russa','Cinese','Giapponese','Brasiliana','Argentina','Australiana','Canadese'];
+              if (!NAZIONALITA_VALIDE.includes(parsed.personal.nationality)) {
+                parsed.personal.lastName = parsed.personal.nationality;
+                parsed.personal.nationality = 'Italiana';
+              }
             }
             this.cvData = { ...this.cvData, ...parsed };
             console.log('✅ Dati caricati da sessionStorage');
@@ -4067,6 +4078,16 @@
                     data.personal.firstName = parts.length > 1 ? parts.slice(0, -1).join(' ') : (parts[0] || '');
                     data.personal.lastName = parts.length > 1 ? parts[parts.length - 1] : '';
                     delete data.personal.fullName;
+                }
+                // Migrazione: cognome finito nel campo nationality (bug vecchie versioni)
+                if (!data.personal.lastName && data.personal.nationality) {
+                  const NAZIONALITA_VALIDE = ['Italiana','Francese','Tedesca','Spagnola','Inglese',
+                    'Americana','Svizzera','Belga','Olandese','Portoghese','Rumena','Polacca',
+                    'Russa','Cinese','Giapponese','Brasiliana','Argentina','Australiana','Canadese'];
+                  if (!NAZIONALITA_VALIDE.includes(data.personal.nationality)) {
+                    data.personal.lastName = data.personal.nationality;
+                    data.personal.nationality = 'Italiana';
+                  }
                 }
                 AppState.cvData = Object.assign(AppState.cvData, data);
                 sessionStorage.setItem('cvData_session', JSON.stringify(AppState.cvData));

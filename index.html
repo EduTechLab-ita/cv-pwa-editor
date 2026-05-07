@@ -1158,6 +1158,12 @@
     }
 
     .modern-template .cv-profile-photo {
+      position: static !important;
+      float: right !important;
+      margin-left: 20px !important;
+      margin-bottom: 10px !important;
+      top: auto !important;
+      right: auto !important;
       border: 3px solid #3b82f6;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
@@ -1519,12 +1525,22 @@
         <div class="content-body">
           <div class="form-grid">
             <div class="form-group">
-              <label class="form-label required" for="fullName">Nome Completo</label>
-              <input 
-                type="text" 
-                id="fullName" 
+              <label class="form-label required" for="firstName">Nome</label>
+              <input
+                type="text"
+                id="firstName"
                 class="form-input"
-                placeholder="Il tuo nome completo"
+                placeholder="Es. Mario"
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="form-label required" for="lastName">Cognome</label>
+              <input
+                type="text"
+                id="lastName"
+                class="form-input"
+                placeholder="Es. Rossi"
               >
             </div>
             
@@ -2274,7 +2290,8 @@
       currentSection: 'personal',
       cvData: {
         personal: {
-          fullName: '',
+          firstName: '',
+          lastName: '',
           nationality: 'Italiana',
           birthDate: '',
           phone: '',
@@ -2337,6 +2354,13 @@
           const saved = sessionStorage.getItem('cvData_session');
           if (saved) {
             const parsed = JSON.parse(saved);
+            // Migrazione: fullName → firstName + lastName (dati salvati con versioni precedenti)
+            if (parsed.personal?.fullName && !parsed.personal?.firstName) {
+              const parts = (parsed.personal.fullName || '').trim().split(/\s+/);
+              parsed.personal.firstName = parts.length > 1 ? parts.slice(0, -1).join(' ') : (parts[0] || '');
+              parsed.personal.lastName = parts.length > 1 ? parts[parts.length - 1] : '';
+              delete parsed.personal.fullName;
+            }
             this.cvData = { ...this.cvData, ...parsed };
             console.log('✅ Dati caricati da sessionStorage');
           }
@@ -2390,7 +2414,7 @@
         }
         
         // Se non ci sono dati, mostra empty state
-        if (!data.personal.fullName && !data.profile.text) {
+        if (!data.personal.firstName && !data.personal.lastName && !data.profile.text) {
           preview.innerHTML = `
             <div class="empty-state">
               <h3>Anteprima del tuo CV</h3>
@@ -2421,9 +2445,9 @@
               return `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">`;
             })() : ''}
             
-            <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto ? 'style="padding-right:140px;"' : ''}>${data.personal.fullName || 'Il Tuo Nome'}</h1>
-            
-            <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto ? 'margin-right: 140px;' : ''}">
+            <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'style="padding-right:140px;"' : ''}>${[data.personal.firstName, data.personal.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome'}</h1>
+
+            <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'margin-right: 140px;' : ''}">
               ${data.personal.nationality ? `<div class="cv-contact-item">📍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
               ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
@@ -3456,7 +3480,7 @@
       AppState.updatePreview();
       
       // Event listeners nativi per input
-      ['fullName', 'nationality', 'birthDate', 'phone', 'email', 'address', 'website'].forEach(fieldId => {
+      ['firstName', 'lastName', 'nationality', 'birthDate', 'phone', 'email', 'address', 'website'].forEach(fieldId => {
         const input = document.getElementById(fieldId);
         if (input) {
           input.addEventListener('input', function(e) {
@@ -3982,6 +4006,13 @@
             if (!resp.ok) throw new Error('HTTP ' + resp.status);
             const data = await resp.json();
             if (data && data.personal !== undefined) {
+                // Migrazione: fullName → firstName + lastName
+                if (data.personal?.fullName && !data.personal?.firstName) {
+                    const parts = (data.personal.fullName || '').trim().split(/\s+/);
+                    data.personal.firstName = parts.length > 1 ? parts.slice(0, -1).join(' ') : (parts[0] || '');
+                    data.personal.lastName = parts.length > 1 ? parts[parts.length - 1] : '';
+                    delete data.personal.fullName;
+                }
                 AppState.cvData = Object.assign(AppState.cvData, data);
                 sessionStorage.setItem('cvData_session', JSON.stringify(AppState.cvData));
                 // Aggiorna tutti i campi nel form
@@ -4089,7 +4120,7 @@
     function populateFormFromData() {
         const d = AppState.cvData;
         // Campi personali
-        ['fullName','nationality','birthDate','phone','email','address','website'].forEach(field => {
+        ['firstName','lastName','nationality','birthDate','phone','email','address','website'].forEach(field => {
             const el = document.getElementById(field);
             if (el && d.personal[field] !== undefined) el.value = d.personal[field];
         });

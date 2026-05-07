@@ -1351,12 +1351,13 @@
     .professional-template .cv-header {
       background: #003d7a;
       color: white;
-      padding: 24px 28px;
+      padding: 20px 28px;
       margin: -20px -20px 20px -20px;
       display: grid !important;
       grid-template-columns: 150px 1fr;
       align-items: center;
-      gap: 6px 20px;
+      gap: 4px 20px;
+      min-height: 160px;
     }
     .professional-template .cv-name { color: white; font-size: 1.6rem; }
     .professional-template .cv-contact-grid { color: rgba(255,255,255,0.85); }
@@ -1375,7 +1376,7 @@
     .professional-template .cv-profile-photo {
       position: relative !important;
       grid-column: 1;
-      grid-row: 1 / 5;
+      grid-row: 1 / -1;
       align-self: center;
       justify-self: center;
       width: 130px !important;
@@ -1400,12 +1401,13 @@
         visibility: visible;
       }
       .cv-preview {
-        position: absolute;
-        left: 0;
-        top: 0;
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
         width: 100% !important;
         margin: 0 !important;
         box-shadow: none !important;
+        border: none !important;
         padding: 20px;
       }
       

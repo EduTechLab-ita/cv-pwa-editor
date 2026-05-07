@@ -2,7 +2,7 @@
   "name": "CV PWA Editor - EduTechLab Italia",
   "short_name": "CV Editor",
   "description": "Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia",
-  "version": "5.1.0",
+  "version": "5.5.0",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f1f5f9",

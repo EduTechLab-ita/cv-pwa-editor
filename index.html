@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV PWA Editor v5.2 - EduTechLab Italia</title>
+  <title>CV PWA Editor v5.5 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -207,7 +207,44 @@
     .header-btn.success:hover {
       background: #15803d;
     }
-    
+
+    /* Drive Button */
+    .drive-button {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #374151;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .drive-button:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .drive-button.connected { background: #eff6ff; border-color: #003d7a; color: #003d7a; font-weight: 500; }
+    .drive-button.syncing { background: #fefce8; border-color: #ca8a04; color: #92400e; }
+    .drive-button.error { background: #fef2f2; border-color: #dc2626; color: #dc2626; }
+
+    /* Drive Toast */
+    .drive-toast {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      background: #1e3a5f;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 1002;
+    }
+    .drive-toast.show { opacity: 1; transform: translateY(0); }
+
     /* Main Layout */
     .main-container {
       max-width: 1200px;
@@ -757,6 +794,579 @@
         padding: 20px;
       }
     }
+
+    /* === Settings Tabs Styles === */
+    .settings-tabs {
+      display: flex;
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .settings-tab-btn {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .settings-tab-btn:hover {
+      color: #374151;
+      background: #f9fafb;
+    }
+
+    .settings-tab-btn.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .settings-tab-content {
+      display: none;
+    }
+
+    .settings-tab-content.active {
+      display: block;
+    }
+
+    .template-card {
+      transition: all 0.2s ease;
+    }
+
+    .template-card:hover {
+      border-color: #9ca3af !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .template-card.active {
+      border-color: #2563eb !important;
+      background: #eff6ff !important;
+    }
+
+    /* === CV Base Styles (dalla v4.7) - LAYOUT EUROPASS ORIGINALE === */
+    
+    /* CV Structure */
+    .cv-preview {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      padding: 40px;
+      position: relative;
+    }
+    
+    /* Europass Header con logo - Universale per entrambi i template */
+    .europass-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .europass-logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.2em;
+      color: #003d7a;
+      font-weight: 500;
+    }
+    
+    /* CV Title - Grande e blu */
+    .cv-title {
+      text-align: center;
+      font-size: 2.2em;
+      font-weight: 300;
+      color: #003d7a;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Barra blu spessa sotto il titolo */
+    .page-bar {
+      width: calc(100% + 80px);
+      margin-left: -40px;
+      margin-right: -40px;
+      height: 12px;
+      background-color: #003d7a;
+      margin-bottom: 40px;
+    }
+    
+    /* Foto tonda in alto a destra */
+    .cv-profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50% !important;
+      object-fit: cover;
+      border: 3px solid #003d7a;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 10px;
+      right: 40px;
+    }
+    
+    /* Header con foto - aggiusta il margin */
+    .cv-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    
+    /* Nome grande centrato */
+    .cv-name {
+      font-size: 2.5em;
+      font-weight: 300;
+      margin: 20px 0;
+      color: #333333;
+      text-align: center;
+    }
+    
+    /* Griglia contatti - centrata con spazio per foto */
+    .cv-contact-grid {
+      margin-top: 20px;
+      font-size: 1em;
+      display: inline-block;
+      text-align: left;
+    }
+    
+    .cv-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+      color: #333333;
+    }
+    
+    /* Sezioni con titoli blu */
+    .cv-section-title {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 1.3em;
+      color: #003d7a;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #dddddd;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    
+    /* Cards esperienza con bordi blu a sinistra */
+    .cv-experience-item, .cv-education-item, .cv-formatore-item {
+      margin-bottom: 25px;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #003d7a;
+    }
+    
+    /* Date in corsivo */
+    .cv-experience-date, .cv-education-date, .cv-formatore-date {
+      font-size: 0.9em;
+      font-style: italic;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    /* Titoli sezioni blu */
+    .cv-experience-item h4, .cv-education-item h4, .cv-formatore-item h4 {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #003d7a;
+      margin-bottom: 5px;
+    }
+    
+    /* Sottotitoli grigi */
+    .cv-experience-item h5, .cv-education-item h5, .cv-formatore-item h5 {
+      font-weight: normal;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    /* Competenze con background colorato */
+    .cv-skills-category {
+      background: #0066cc;
+      color: white;
+      padding: 12px 20px;
+      margin: 25px 0 15px 0;
+      font-size: 1.1em;
+      font-weight: 600;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    
+    /* Skills items */
+    .cv-skills-item {
+      background: #f8f9fa;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #0066cc;
+    }
+
+    /* === Template Styles === */
+    
+    /* TEMPLATE MODERNO - Completo dal backup funzionante */
+    .cv-preview.modern-template {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+      color: #1e293b;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      border-left: 8px solid #3b82f6;
+    }
+
+    .modern-template .europass-header {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      border-radius: 15px;
+      margin-bottom: 30px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      padding: 15px 20px;
+    }
+
+    .modern-template .cv-title {
+      font-size: 3em;
+      font-weight: 300;
+      text-align: center;
+      margin: 30px 0;
+      color: #1e40af;
+      text-shadow: none;
+    }
+
+    .modern-template .cv-section-title {
+      color: white;
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      border-bottom: none;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    }
+
+    .modern-template .section-subtitle {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border: none;
+      color: white;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin: 20px 0 15px 0;
+    }
+
+    .modern-template .personal-info h1 {
+      color: #1e40af;
+      font-size: 2.5em;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-shadow: none;
+    }
+
+    .modern-template .personal-info .info-item {
+      color: #475569;
+      background: rgba(255,255,255,0.7);
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .modern-template .work-item,
+    .modern-template .skill-item,
+    .modern-template .cv-experience-item,
+    .modern-template .cv-education-item,
+    .modern-template .cv-formatore-item {
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      color: #334155;
+    }
+
+    .modern-template .work-item h4,
+    .modern-template .work-item h5,
+    .modern-template .item-header,
+    .modern-template .item-subheader,
+    .modern-template .cv-experience-item h4,
+    .modern-template .cv-education-item h4,
+    .modern-template .cv-formatore-item h4 {
+      color: #1e293b;
+    }
+
+    .modern-template .date-range,
+    .modern-template .cv-experience-date,
+    .modern-template .cv-education-date,
+    .modern-template .cv-formatore-date {
+      color: #3b82f6;
+      font-weight: 500;
+    }
+
+    .modern-template .skill-category,
+    .modern-template .cv-skills-category {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #3b82f6;
+      color: #334155;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .modern-template .skill-title,
+    .modern-template .cv-skills-title {
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .modern-template .cv-footer {
+      background: rgba(255,255,255,0.9);
+      border-radius: 12px;
+      border-top: none;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .modern-template .privacy-section {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .modern-template .cv-contact-item {
+      color: #475569;
+      background: rgba(255,255,255,0.7);
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: 6px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .modern-template .cv-profile-photo {
+      border: 3px solid #3b82f6;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .modern-template .page-bar {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+    }
+
+    /* TEMPLATE EUROPASS - Basato su PDF di riferimento v4.7 */
+    .cv-preview.europass-template {
+      background: white;
+      color: #333333;
+      font-family: 'Calibri', 'Arial', sans-serif;
+      border: none;
+      position: relative;
+      padding: 40px;
+    }
+    
+    .europass-template::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #003d7a 0%, #0066cc 100%);
+    }
+    
+    .europass-template .cv-header {
+      border-bottom: 3px solid #003d7a;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+      position: relative;
+      background: transparent;
+    }
+    
+    .europass-template .cv-title {
+      text-align: center;
+      font-size: 2.2em;
+      font-weight: 300;
+      color: #003d7a;
+      margin: 30px 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .europass-template .cv-name {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: #003d7a;
+      text-align: left;
+      margin: 15px 0 10px 0;
+    }
+    
+    .europass-template .cv-profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50% !important;
+      object-fit: cover;
+      border: 3px solid #003d7a;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 10px;
+      right: 40px;
+    }
+    
+    .europass-template .cv-section-title {
+      color: #003d7a;
+      background-color: transparent;
+      border-left: none;
+      border-bottom: 2px solid #003d7a;
+      padding: 5px 0 8px 0;
+      margin: 25px 0 15px 0;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 1.1em;
+    }
+    
+    .europass-template .personal-info {
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+    
+    .europass-template .personal-info strong {
+      color: #003d7a;
+      font-weight: 600;
+    }
+    
+    .europass-template .cv-contact-item {
+      color: #333333;
+      background: transparent;
+      padding: 2px 0;
+      margin: 2px 0;
+      border: none;
+    }
+    
+    .europass-template .cv-experience-item,
+    .europass-template .cv-education-item,
+    .europass-template .cv-formatore-item {
+      background: transparent;
+      border: none;
+      padding: 10px 0 15px 0;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #333333;
+    }
+    
+    .europass-template .cv-experience-item:last-child,
+    .europass-template .cv-education-item:last-child,
+    .europass-template .cv-formatore-item:last-child {
+      border-bottom: none;
+    }
+    
+    .europass-template .cv-experience-item h4,
+    .europass-template .cv-education-item h4,
+    .europass-template .cv-formatore-item h4 {
+      color: #003d7a;
+      font-weight: 600;
+      font-size: 1.05em;
+    }
+    
+    .europass-template .cv-experience-date,
+    .europass-template .cv-education-date,
+    .europass-template .cv-formatore-date {
+      color: #666666;
+      font-weight: 500;
+      font-size: 0.9em;
+    }
+    
+    .europass-template .cv-skills-category {
+      background: transparent;
+      border: none;
+      border-left: 3px solid #003d7a;
+      color: #333333;
+      padding: 10px 0 10px 15px;
+      margin-bottom: 12px;
+    }
+    
+    .europass-template .cv-skills-title {
+      color: #003d7a;
+      font-weight: 600;
+      font-size: 1em;
+    }
+    
+    /* Header Europass nel template Europass */
+    .europass-template .europass-header {
+      border-bottom: 2px solid #003d7a;
+      padding: 12px 0;
+      margin-bottom: 25px;
+    }
+    
+    .europass-template .europass-header div {
+      color: #003d7a;
+      font-weight: 600;
+    }
+    
+    /* Default per template senza classe specifica mantiene gli stili esistenti */
+    .cv-preview:not(.modern-template):not(.europass-template) {
+      /* Stili di default già definiti sopra */
+    }
+    
+    /* === STILI STAMPA PDF - Dal backup v4.5 funzionante === */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .cv-preview, .cv-preview * {
+        visibility: visible;
+      }
+      .cv-preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        padding: 20px;
+      }
+      
+      /* Hide tutto tranne il CV */
+      header, .fixed, nav, button, .page-indicator {
+        display: none !important;
+      }
+      
+      /* Ensure links are clickable in print */
+      .cv-preview a {
+        color: #0066cc !important;
+        text-decoration: underline !important;
+      }
+      
+      /* Nasconde header e footer del browser e aggiunge il nostro */
+      @page {
+        margin: 0.5in;
+        size: A4;
+        /* Rimuove header e footer del browser */
+        @top-left { content: ""; }
+        @top-center { content: ""; }
+        @top-right { content: ""; }
+        @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con CV PWA Editor v5.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-right { content: ""; }
+      }
+      
+      /* Stile per stampa pulita */
+      html, body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
     
   </style>
 </head>
@@ -766,7 +1376,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.2!</strong> Nuove funzionalità v4.7: Formatore, Competenze DigiCompEU, Upload Foto</span>
+      <span><strong>Aggiornato alla versione 5.4!</strong> Correzioni stampe PDF, posizionamento foto, testo europass duplicato risolto</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -776,10 +1386,10 @@
     <div class="app-header-content">
       <div class="app-logo-section">
         <div class="app-logo">
-          <img src="./CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
+          <img src="CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
           <div>
             <h1 class="app-title">CV PWA Editor</h1>
-            <span class="app-version">v5.2</span>
+            <span class="app-version">v5.5</span>
           </div>
         </div>
         
@@ -787,11 +1397,14 @@
           <div class="online-indicator"></div>
           <span>Online</span>
           <span>•</span>
-          <span>Agg. 11/08/2025</span>
+          <span>Agg. 04/09/2025</span>
         </div>
       </div>
       
       <div class="header-actions">
+        <button class="drive-button no-print" id="drive-btn" onclick="connectToDrive()" title="Collega Google Drive per salvare il CV in modo sicuro">
+          <span>☁️</span><span id="drive-btn-label">Drive</span>
+        </button>
         <button class="header-btn" onclick="switchSection('preview')">
           👁️ Anteprima
         </button>
@@ -1213,80 +1826,269 @@
               style="min-height: 120px;"
             ></textarea>
           </div>
-          
-          <div class="form-group" style="margin-top: 25px;">
-            <label class="form-label">
-              <input type="checkbox" id="includePrivacy" style="margin-right: 8px;">
-              Includi clausola trattamento dati personali (GDPR)
-            </label>
-          </div>
-          
-          <div class="form-group" id="privacyClause" style="display: none; margin-top: 15px;">
-            <label class="form-label" for="privacyText">Testo clausola privacy</label>
-            <textarea 
-              id="privacyText" 
-              class="form-textarea"
-              placeholder="Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all'art. 13 del D. Lgs. 196/2003 e all'art. 13 GDPR 679/16."
-              style="min-height: 80px;"
-            ></textarea>
-          </div>
         </div>
       </div>
       
-      <!-- Impostazioni -->
+      <!-- Impostazioni Avanzate -->
       <div class="section" id="settings">
         <div class="content-header">
           <h2 class="section-title">
             <span>⚙️</span>
-            Impostazioni
+            Impostazioni Avanzate
           </h2>
         </div>
         
         <div class="content-body">
-          <div class="form-grid">
-            <div class="form-group full-width">
-              <h4 style="color: #003d7a; margin-bottom: 15px;">🎨 Personalizzazione</h4>
-              
-              <div style="padding: 15px; background: #f9fafb; border-radius: 6px; margin-bottom: 20px;">
-                <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <input type="checkbox" id="showPhoto" checked>
-                  <span>📷 Mostra foto profilo nel CV</span>
-                </label>
-                
-                <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                  <input type="checkbox" id="showPublications" checked>
-                  <span>📚 Mostra sezione pubblicazioni</span>
-                </label>
-                
-                <label class="form-label" style="display: flex; align-items: center; gap: 10px;">
-                  <input type="checkbox" id="italianDateFormat" checked>
-                  <span>📅 Formato date italiano (MM/AAAA invece di AAAA-MM)</span>
-                </label>
-              </div>
-            </div>
+          <!-- Tab Navigation -->
+          <div class="settings-tabs" style="display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 24px;">
+            <button class="settings-tab-btn active" data-tab="export" onclick="switchSettingsTab('export')">
+              <span style="margin-right: 8px;">⬇️</span>
+              Export & Condivisione
+            </button>
+            <button class="settings-tab-btn" data-tab="privacy" onclick="switchSettingsTab('privacy')">
+              <span style="margin-right: 8px;">🛡️</span>
+              Privacy & Trattamento Dati
+            </button>
+            <button class="settings-tab-btn" data-tab="templates" onclick="switchSettingsTab('templates')">
+              <span style="margin-right: 8px;">🎨</span>
+              Template
+            </button>
+            <button class="settings-tab-btn" data-tab="settings" onclick="switchSettingsTab('settings')">
+              <span style="margin-right: 8px;">⚙️</span>
+              Impostazioni
+            </button>
+            <button class="settings-tab-btn" data-tab="help" onclick="switchSettingsTab('help')">
+              <span style="margin-right: 8px;">❓</span>
+              Aiuto & Assistenza
+            </button>
+          </div>
+
+          <!-- Tab: Export & Condivisione -->
+          <div class="settings-tab-content active" id="settings-export">
+            <h4 style="color: #003d7a; margin-bottom: 15px;">📤 Export e Condivisione</h4>
             
-            <div class="form-group full-width">
-              <h4 style="color: #003d7a; margin-bottom: 15px;">💾 Gestione Dati</h4>
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
+              <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+              <h5 style="margin-bottom: 8px;">Esporta il tuo CV</h5>
+              <p style="color: #6b7280; margin-bottom: 16px;">Scarica il tuo CV in formato PDF per la stampa</p>
+              <button class="header-btn" onclick="printCV()" style="background: #059669; color: white;">
+                📄 Scarica PDF
+              </button>
+            </div>
+
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h5 style="margin-bottom: 12px;">🔄 Backup e Ripristino</h5>
+              <p style="color: #6b7280; margin-bottom: 16px;">Salva una copia dei tuoi dati per poterli importare in futuro</p>
               
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
                 <button type="button" class="header-btn" onclick="exportData()">
-                  📤 Esporta Dati
+                  📤 Esporta Backup Completo
                 </button>
                 <button type="button" class="header-btn" onclick="importData()">
-                  📥 Importa Dati
+                  📥 Importa Backup
                 </button>
-                <button type="button" class="header-btn" onclick="resetData()">
-                  🗑️ Reset Dati
+                <button type="button" class="header-btn" onclick="resetData()" style="background: #dc2626; color: white;">
+                  🗑️ Reset Completo
                 </button>
               </div>
               
               <input type="file" id="importInput" accept=".json" style="display: none;">
+            </div>
+
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 16px; border-radius: 8px;">
+              <h6 style="color: #92400e; margin-bottom: 8px;">⚠️ Importante:</h6>
+              <p style="color: #92400e; font-size: 14px;">I tuoi dati sono salvati solo in questo browser. Esporta un backup per non perdere il lavoro!</p>
+            </div>
+          </div>
+
+          <!-- Tab: Privacy & Trattamento Dati -->
+          <div class="settings-tab-content" id="settings-privacy">
+            <h4 style="color: #003d7a; margin-bottom: 15px;">🛡️ Trattamento Dati Personali</h4>
+            
+            <!-- Gestione Clausola Privacy -->
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h5 style="margin-bottom: 12px;">📋 Clausola Privacy nel CV</h5>
+              
+              <!-- Toggle Inclusione -->
+              <label class="form-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <input type="checkbox" id="includePrivacy" checked>
+                <span><strong>Includi clausola trattamento dati nel CV stampato</strong></span>
+              </label>
+              
+              <!-- Campo Testo Clausola -->
+              <div id="privacyClause" style="margin-top: 15px;">
+                <label class="form-label" for="privacyText" style="margin-bottom: 8px;"><strong>Testo clausola privacy:</strong></label>
+                <textarea 
+                  id="privacyText" 
+                  style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; line-height: 1.5; min-height: 80px; resize: vertical;"
+                  placeholder="Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all'art. 13 del D. Lgs. 196/2003 e all'art. 13 GDPR 679/16."
+                ></textarea>
+                <p style="color: #6b7280; font-size: 12px; margin-top: 6px;">
+                  💡 <em>Questo testo apparirà in piccolo alla fine del tuo CV stampato</em>
+                </p>
+              </div>
+              
+              <p style="color: #16a34a; font-size: 14px; margin-top: 12px; padding: 8px 12px; background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 4px;">
+                ✅ <strong>Consigliato:</strong> Include automaticamente il consenso per il trattamento dei dati personali (richiesto per legge in Italia)
+              </p>
+            </div>
+
+            <div style="background: #ecfdf5; border: 1px solid #10b981; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+              <h6 style="color: #047857; margin-bottom: 8px;">✅ La tua privacy è garantita</h6>
+              <ul style="color: #047857; font-size: 14px; margin-left: 16px;">
+                <li>Tutti i dati sono salvati solo nel TUO browser</li>
+                <li>Nessun dato viene mai trasmesso a server esterni</li>
+                <li>Zero tracking, zero cookies di profilazione</li>
+                <li>App completamente offline dopo il primo caricamento</li>
+              </ul>
+            </div>
+
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px;">
+              <h6 style="margin-bottom: 12px;">📋 Cosa salviamo e dove:</h6>
+              <ul style="color: #374151; font-size: 14px; margin-left: 16px;">
+                <li><strong>Dati del CV</strong>: Nel tuo Google Drive privato (se connesso), altrimenti solo nella sessione corrente del browser (si cancellano alla chiusura)</li>
+                <li><strong>Impostazioni app</strong>: Solo nel localStorage del browser (non dati sensibili)</li>
+                <li><strong>Stato connessione Drive</strong>: Solo nel localStorage del browser (token e fileId, nessun contenuto CV)</li>
+                <li><strong>Zero dati su server esterni</strong>: Mai trasmesso nulla</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tab: Template -->
+          <div class="settings-tab-content" id="settings-templates">
+            <h4 style="color: #003d7a; margin-bottom: 15px;">🎨 Template Disponibili</h4>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+              <!-- Template Europass -->
+              <div class="template-card active" data-template="europass" onclick="selectTemplate('europass')" 
+                   style="padding: 20px; border: 2px solid #2563eb; border-radius: 8px; cursor: pointer; background: #eff6ff;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="font-size: 48px;">🇪🇺</div>
+                  <div>
+                    <h6 style="color: #1e40af; margin-bottom: 4px;">Europass Standard</h6>
+                    <p style="color: #3730a3; font-size: 14px; margin-bottom: 8px;">Template ufficiale Europass EU</p>
+                    <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                      ✓ Attivo
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Template Moderno -->
+              <div class="template-card" data-template="modern" onclick="selectTemplate('modern')" 
+                   style="padding: 20px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="font-size: 48px;">✨</div>
+                  <div>
+                    <h6 style="color: #374151; margin-bottom: 4px;">Moderno</h6>
+                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">Design pulito e contemporaneo</p>
+                    <span style="background: #f3f4f6; color: #6b7280; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                      Disponibile
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: Impostazioni -->
+          <div class="settings-tab-content" id="settings-settings">
+            <h4 style="color: #003d7a; margin-bottom: 15px;">⚙️ Impostazioni Visualizzazione</h4>
+            
+            <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <div style="display: grid; gap: 16px;">
+                <!-- Toggle Foto Profilo -->
+                <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <strong>📷 Foto Profilo</strong>
+                    <p style="color: #6b7280; font-size: 14px; margin-top: 4px;">Visualizza/nascondi la foto nel CV stampato</p>
+                  </div>
+                  <input type="checkbox" id="showPhoto" checked style="transform: scale(1.2);">
+                </label>
+
+                <!-- Toggle Pubblicazioni -->
+                <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <strong>📚 Sezione Pubblicazioni</strong>
+                    <p style="color: #6b7280; font-size: 14px; margin-top: 4px;">Visualizza/nascondi la sezione pubblicazioni nel CV stampato</p>
+                  </div>
+                  <input type="checkbox" id="showPublications" checked style="transform: scale(1.2);">
+                </label>
+
+                <!-- Formato Date -->
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <strong>📅 Formato Date</strong>
+                    <p style="color: #6b7280; font-size: 14px; margin-top: 4px;">Scegli il formato per le date nel CV</p>
+                  </div>
+                  <select id="dateFormat" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;">
+                    <option value="italian">Italiano (MM/AAAA)</option>
+                    <option value="iso">ISO (AAAA-MM)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Informazioni CV -->
+            <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
+              <h5 style="margin-bottom: 8px;">📊 Informazioni CV</h5>
+              <div style="font-size: 14px; color: #6b7280;">
+                <p><strong>Versione App:</strong> v5.5</p>
+                <p><strong>Template:</strong> <span id="currentTemplate">Europass Standard</span></p>
+                <p><strong>Ultima Modifica:</strong> <span id="lastModified">-</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: Aiuto & Assistenza -->
+          <div class="settings-tab-content" id="settings-help">
+            <h4 style="color: #003d7a; margin-bottom: 15px;">❓ Aiuto & Assistenza</h4>
+            
+            <div style="background: #f0fdf4; border: 1px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+              <h5 style="color: #15803d; margin-bottom: 12px;">🆘 Hai bisogno di aiuto?</h5>
+              <p style="color: #15803d; margin-bottom: 16px;">Per supporto tecnico o domande sull'utilizzo dell'app:</p>
+              
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <a href="https://github.com/EduTechLab-ita/cv-pwa-editor/issues" target="_blank" class="header-btn" 
+                   style="background: #059669; color: white; text-decoration: none;">
+                  🐛 Segnala Bug
+                </a>
+                <a href="https://github.com/EduTechLab-ita/cv-pwa-editor" target="_blank" class="header-btn" 
+                   style="background: #0891b2; color: white; text-decoration: none;">
+                  📖 Documentazione
+                </a>
+                <a href="mailto:info@edutechlab.it" class="header-btn" 
+                   style="background: #7c3aed; color: white; text-decoration: none;">
+                  ✉️ Contatta Supporto
+                </a>
+              </div>
+            </div>
+
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+              <h6 style="color: #92400e; margin-bottom: 8px;">💡 Suggerimenti utili:</h6>
+              <ul style="color: #92400e; font-size: 14px; margin-left: 16px;">
+                <li>Fai un backup regolare dei tuoi dati (tab "Export & Condivisione")</li>
+                <li>Utilizza il formato PDF per la stampa professionale</li>
+                <li>La foto profilo è opzionale - puoi disattivarla nelle impostazioni</li>
+                <li>L'app funziona completamente offline dopo il primo caricamento</li>
+              </ul>
+            </div>
+
+            <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
+              <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
+              <p style="color: #6b7280; font-size: 14px;">
+                <strong>CV PWA Editor v5.3</strong><br>
+                Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
+                App gratuita per la creazione di CV formato Europass<br>
+                © 2025 EduTechLab Italia - Licenza MIT
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Anteprima -->
+      <div class="section" id="preview">
         <div class="content-header">
           <h2 class="section-title">
             <span>👁️</span>
@@ -1315,7 +2117,7 @@
       <a href="#" class="footer-link">Privacy & Cookie</a>
       <a href="#" class="footer-link">GitHub</a>
     </div>
-    <p><strong>CV PWA Editor v5.1</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>CV PWA Editor v5.5</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -1323,6 +2125,12 @@
   <div class="save-indicator" id="saveIndicator">
     ✅ Salvato automaticamente
   </div>
+
+  <!-- Drive Toast -->
+  <div class="drive-toast" id="driveToast"></div>
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <!-- JavaScript -->
   <script>
@@ -1375,36 +2183,40 @@
         publications: [],
         other: {
           skills: '',
-          includePrivacy: false,
+          includePrivacy: true,
           privacyText: 'Autorizzo il trattamento dei dati personali contenuti nel mio curriculum vitae in base all\'art. 13 del D. Lgs. 196/2003 e all\'art. 13 GDPR 679/16.'
         },
         settings: {
           showPhoto: true,
           showPublications: true,
-          italianDateFormat: true
+          italianDateFormat: true,
+          templateStyle: 'europass',
+          dateFormat: 'italian'
         }
       },
       
-      // Carica dati da localStorage
+      // Carica dati da sessionStorage (buffer temporaneo di sessione)
       loadData() {
         try {
-          const saved = localStorage.getItem('cvData_v5');
+          // Rimuovi eventuali dati sensibili lasciati da versioni precedenti
+          localStorage.removeItem('cvData_v5');
+          const saved = sessionStorage.getItem('cvData_session');
           if (saved) {
             const parsed = JSON.parse(saved);
             this.cvData = { ...this.cvData, ...parsed };
-            console.log('✅ Dati caricati da localStorage');
+            console.log('✅ Dati caricati da sessionStorage');
           }
         } catch (error) {
           console.log('⚠️ Errore caricamento dati:', error);
         }
       },
-      
-      // Salva dati in localStorage
+
+      // Salva dati in sessionStorage + schedula auto-save su Drive
       saveData() {
         try {
-          localStorage.setItem('cvData_v5', JSON.stringify(this.cvData));
+          sessionStorage.setItem('cvData_session', JSON.stringify(this.cvData));
           this.showSaveIndicator();
-          console.log('✅ Dati salvati in localStorage');
+          if (typeof scheduleDriveSave === 'function') scheduleDriveSave();
         } catch (error) {
           console.error('❌ Errore salvataggio:', error);
         }
@@ -1426,13 +2238,20 @@
         }
         this.cvData[section][field] = value;
         this.saveData();
-        this.updatePreview();
       },
       
       // Aggiorna anteprima CV
       updatePreview() {
         const preview = document.getElementById('cvPreview');
         const data = this.cvData;
+        
+        // Applica la classe del template selezionato
+        preview.className = 'cv-preview';
+        if (data.settings.templateStyle === 'modern') {
+          preview.classList.add('modern-template');
+        } else if (data.settings.templateStyle === 'europass') {
+          preview.classList.add('europass-template');
+        }
         
         // Se non ci sono dati, mostra empty state
         if (!data.personal.fullName && !data.profile.text) {
@@ -1446,13 +2265,23 @@
         }
         
         let html = `
-          <div class="cv-header">
+          <!-- Europass Header - Sempre presente in entrambi i template -->
+          <div class="europass-header">
+            <div style="display: flex; align-items: center; font-size: 1.2em; color: #003d7a;">
+              <img src="./CV-EUropass.png" alt="Europass" style="height: 30px; width: auto;">
+            </div>
+          </div>
+          
+          <div class="cv-title">Curriculum Vitae</div>
+          <div class="page-bar"></div>
+          
+          <div class="cv-header" style="position: relative;">
             ${data.personal.photo && data.settings.showPhoto ? 
               `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">` : ''}
             
             <h1 class="cv-name">${data.personal.fullName || 'Il Tuo Nome'}</h1>
             
-            <div class="cv-contact-grid">
+            <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto ? 'margin-right: 140px;' : ''}">
               ${data.personal.nationality ? `<div class="cv-contact-item">📍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
               ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
@@ -1745,7 +2574,6 @@
       if (AppState.cvData.skills.digital.digiCompItems[index]) {
         AppState.cvData.skills.digital.digiCompItems[index][field] = value;
         AppState.saveData();
-        AppState.updatePreview();
       }
     }
     
@@ -1765,7 +2593,6 @@
           AppState.cvData.personal.photo = photoData;
           AppState.saveData();
           showPhotoPreview(photoData);
-          AppState.updatePreview();
         };
         reader.readAsDataURL(file);
       }
@@ -1792,7 +2619,6 @@
       
       uploadArea.style.display = 'block';
       previewContainer.style.display = 'none';
-      AppState.updatePreview();
     }
     
     // === LISTE DINAMICHE ===
@@ -1811,14 +2637,12 @@
       AppState.cvData.experience.push(newExp);
       AppState.saveData();
       renderExperienceList();
-      AppState.updatePreview();
     }
     
     function removeExperience(id) {
       AppState.cvData.experience = AppState.cvData.experience.filter(exp => exp.id !== id);
       AppState.saveData();
       renderExperienceList();
-      AppState.updatePreview();
     }
     
     function renderExperienceList() {
@@ -1873,7 +2697,6 @@
       if (exp) {
         exp[field] = value;
         AppState.saveData();
-        AppState.updatePreview();
       }
     }
     
@@ -1890,14 +2713,12 @@
       AppState.cvData.education.push(newEdu);
       AppState.saveData();
       renderEducationList();
-      AppState.updatePreview();
     }
     
     function removeEducation(id) {
       AppState.cvData.education = AppState.cvData.education.filter(edu => edu.id !== id);
       AppState.saveData();
       renderEducationList();
-      AppState.updatePreview();
     }
     
     function renderEducationList() {
@@ -1952,7 +2773,6 @@
       if (edu) {
         edu[field] = value;
         AppState.saveData();
-        AppState.updatePreview();
       }
     }
     
@@ -1970,14 +2790,12 @@
       AppState.cvData.formatore.push(newForm);
       AppState.saveData();
       renderFormatoreList();
-      AppState.updatePreview();
     }
     
     function removeFormatore(id) {
       AppState.cvData.formatore = AppState.cvData.formatore.filter(form => form.id !== id);
       AppState.saveData();
       renderFormatoreList();
-      AppState.updatePreview();
     }
     
     function renderFormatoreList() {
@@ -2037,7 +2855,6 @@
       if (form) {
         form[field] = value;
         AppState.saveData();
-        AppState.updatePreview();
       }
     }
     
@@ -2051,14 +2868,12 @@
       AppState.cvData.languages.otherLanguages.push(newLang);
       AppState.saveData();
       renderLanguagesList();
-      AppState.updatePreview();
     }
     
     function removeLanguage(id) {
       AppState.cvData.languages.otherLanguages = AppState.cvData.languages.otherLanguages.filter(lang => lang.id !== id);
       AppState.saveData();
       renderLanguagesList();
-      AppState.updatePreview();
     }
     
     function renderLanguagesList() {
@@ -2104,7 +2919,6 @@
       if (lang) {
         lang[field] = value;
         AppState.saveData();
-        AppState.updatePreview();
       }
     }
     
@@ -2123,14 +2937,12 @@
       AppState.cvData.publications.push(newPub);
       AppState.saveData();
       renderPublicationsList();
-      AppState.updatePreview();
     }
     
     function removePublication(id) {
       AppState.cvData.publications = AppState.cvData.publications.filter(pub => pub.id !== id);
       AppState.saveData();
       renderPublicationsList();
-      AppState.updatePreview();
     }
     
     function renderPublicationsList() {
@@ -2195,7 +3007,6 @@
       if (pub) {
         pub[field] = value;
         AppState.saveData();
-        AppState.updatePreview();
       }
     }
     
@@ -2218,7 +3029,9 @@
     
     function resetData() {
       if (confirm('Sei sicuro di voler cancellare tutti i dati? Questa azione non può essere annullata.')) {
+        sessionStorage.removeItem('cvData_session');
         localStorage.removeItem('cvData_v5');
+        if (typeof disconnectDrive === 'function') disconnectDrive(true);
         location.reload();
       }
     }
@@ -2239,12 +3052,161 @@
         section.classList.remove('active');
       });
       document.getElementById(sectionId).classList.add('active');
+      
+      // Aggiorna anteprima SOLO quando si accede alla sezione preview
+      if (sectionId === 'preview') {
+        AppState.updatePreview();
+      }
+    }
+    
+    // === Settings Tabs Functions ===
+    function switchSettingsTab(tabId) {
+      // Rimuovi classe active da tutti i tab buttons
+      document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Aggiungi classe active al button cliccato
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      
+      // Nascendi tutti i contenuti tab
+      document.querySelectorAll('.settings-tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Mostra il contenuto del tab selezionato
+      document.getElementById(`settings-${tabId}`).classList.add('active');
+    }
+    
+    function selectTemplate(templateId) {
+      // Rimuovi active da tutte le template cards
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('active');
+        card.style.border = '2px solid #d1d5db';
+        card.style.background = '#f9fafb';
+      });
+      
+      // Aggiungi active alla card selezionata
+      const selectedCard = document.querySelector(`[data-template="${templateId}"]`);
+      selectedCard.classList.add('active');
+      selectedCard.style.border = '2px solid #2563eb';
+      selectedCard.style.background = '#eff6ff';
+      
+      // Aggiorna le spans di stato
+      document.querySelectorAll('.template-card span').forEach(span => {
+        if (span.textContent.includes('✓ Attivo')) {
+          span.textContent = 'Disponibile';
+          span.style.background = '#f3f4f6';
+          span.style.color = '#6b7280';
+        }
+      });
+      
+      // Aggiorna la span della card attiva
+      const activeSpan = selectedCard.querySelector('span');
+      activeSpan.textContent = '✓ Attivo';
+      activeSpan.style.background = '#dbeafe';
+      activeSpan.style.color = '#1e40af';
+      
+      // Aggiorna le informazioni
+      const templateNames = {
+        'europass': 'Europass Standard',
+        'modern': 'Moderno'
+      };
+      
+      const currentTemplateEl = document.getElementById('currentTemplate');
+      if (currentTemplateEl) currentTemplateEl.textContent = templateNames[templateId];
+      
+      // Salva la preferenza
+      if (typeof AppState !== 'undefined') {
+        AppState.cvData.settings.templateStyle = templateId;
+        AppState.saveData();
+        
+        // SEMPRE aggiorna l'anteprima quando cambia template
+        AppState.updatePreview();
+      }
+      
+      console.log(`Template selezionato: ${templateId}`);
+    }
+    
+    // === Settings Management Functions ===
+    function initializeSettings() {
+      // Carica le impostazioni dai dati salvati e aggiorna i controlli UI
+      const settings = AppState.cvData.settings;
+      
+      // Aggiorna checkboxes
+      const showPhotoCheckbox = document.getElementById('showPhoto');
+      if (showPhotoCheckbox) showPhotoCheckbox.checked = settings.showPhoto;
+      
+      const showPublicationsCheckbox = document.getElementById('showPublications');
+      if (showPublicationsCheckbox) showPublicationsCheckbox.checked = settings.showPublications;
+      
+      
+      // Aggiorna select
+      const dateFormatSelect = document.getElementById('dateFormat');
+      if (dateFormatSelect) dateFormatSelect.value = settings.dateFormat;
+      
+      // Aggiorna informazioni
+      const templateNames = {
+        'europass': 'Europass Standard',
+        'modern': 'Moderno'
+      };
+      
+      const currentTemplateSpan = document.getElementById('currentTemplate');
+      if (currentTemplateSpan) currentTemplateSpan.textContent = templateNames[settings.templateStyle] || 'Europass Standard';
+      
+      const lastModifiedSpan = document.getElementById('lastModified');
+      if (lastModifiedSpan) {
+        const lastModified = localStorage.getItem('cvData_v5_lastModified') || new Date().toISOString();
+        lastModifiedSpan.textContent = new Date(lastModified).toLocaleString('it-IT');
+      }
+      
+      console.log('✅ Impostazioni inizializzate');
+    }
+    
+    function updateSetting(settingKey, value) {
+      // Aggiorna l'impostazione in AppState
+      AppState.cvData.settings[settingKey] = value;
+      AppState.saveData();
+      
+      // Salva timestamp ultima modifica
+      localStorage.setItem('cvData_v5_lastModified', new Date().toISOString());
+      
+      console.log(`⚙️ Impostazione aggiornata: ${settingKey} = ${value}`);
+    }
+    
+    // Event handlers per i controlli delle impostazioni
+    function attachSettingsHandlers() {
+      // Checkbox handlers
+      const showPhotoCheckbox = document.getElementById('showPhoto');
+      if (showPhotoCheckbox) {
+        showPhotoCheckbox.addEventListener('change', (e) => {
+          updateSetting('showPhoto', e.target.checked);
+        });
+      }
+      
+      const showPublicationsCheckbox = document.getElementById('showPublications');
+      if (showPublicationsCheckbox) {
+        showPublicationsCheckbox.addEventListener('change', (e) => {
+          updateSetting('showPublications', e.target.checked);
+        });
+      }
+      
+      
+      // Select handlers
+      const dateFormatSelect = document.getElementById('dateFormat');
+      if (dateFormatSelect) {
+        dateFormatSelect.addEventListener('change', (e) => {
+          updateSetting('dateFormat', e.target.value);
+        });
+      }
+      
+      console.log('✅ Event handlers impostazioni collegati');
     }
     
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.2');
+      localStorage.setItem('lastSeenVersion_v5', '5.5');
     }
     
     // Stampa CV
@@ -2260,7 +3222,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 CV PWA Editor v5.2 con funzionalità v4.7 inizializzato');
+      console.log('🚀 CV PWA Editor v5.3 con template e stampa corretti inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -2303,6 +3265,10 @@
       renderLanguagesList();
       renderPublicationsList();
       
+      // Inizializza impostazioni avanzate
+      initializeSettings();
+      attachSettingsHandlers();
+      
       // Aggiorna anteprima
       AppState.updatePreview();
       
@@ -2330,7 +3296,6 @@
         aiSkillsTextarea.addEventListener('input', function(e) {
           AppState.cvData.skills.ai.content = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2339,7 +3304,6 @@
         digitalSkillsGenericTextarea.addEventListener('input', function(e) {
           AppState.cvData.skills.digital.genericContent = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2348,7 +3312,6 @@
         platformsTextarea.addEventListener('input', function(e) {
           AppState.cvData.skills.platforms = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2362,7 +3325,6 @@
             renderDigiCompItems();
           }
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2372,7 +3334,6 @@
         motherTongueInput.addEventListener('input', function(e) {
           AppState.cvData.languages.motherTongue = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2381,7 +3342,6 @@
         motherTongueLevelSelect.addEventListener('change', function(e) {
           AppState.cvData.languages.motherTongueLevel = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2391,7 +3351,6 @@
         otherSkillsTextarea.addEventListener('input', function(e) {
           AppState.cvData.other.skills = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2400,10 +3359,7 @@
       if (includePrivacyCheckbox) {
         includePrivacyCheckbox.addEventListener('change', function(e) {
           AppState.cvData.other.includePrivacy = e.target.checked;
-          const privacyClause = document.getElementById('privacyClause');
-          privacyClause.style.display = e.target.checked ? 'block' : 'none';
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2412,7 +3368,6 @@
         privacyTextTextarea.addEventListener('input', function(e) {
           AppState.cvData.other.privacyText = e.target.value;
           AppState.saveData();
-          AppState.updatePreview();
         });
       }
       
@@ -2423,7 +3378,6 @@
           checkbox.addEventListener('change', function(e) {
             AppState.cvData.settings[settingId] = e.target.checked;
             AppState.saveData();
-            AppState.updatePreview();
           });
         }
       });
@@ -2502,17 +3456,22 @@
         document.getElementById('otherSkills').value = AppState.cvData.other.skills;
       }
       if (AppState.cvData.other.includePrivacy) {
-        document.getElementById('includePrivacy').checked = true;
-        document.getElementById('privacyClause').style.display = 'block';
+        const includePrivacyEl = document.getElementById('includePrivacy');
+        if (includePrivacyEl) includePrivacyEl.checked = true;
       }
       if (AppState.cvData.other.privacyText) {
         document.getElementById('privacyText').value = AppState.cvData.other.privacyText;
       }
       
-      // Carica impostazioni
-      document.getElementById('showPhoto').checked = AppState.cvData.settings.showPhoto;
-      document.getElementById('showPublications').checked = AppState.cvData.settings.showPublications;
-      document.getElementById('italianDateFormat').checked = AppState.cvData.settings.italianDateFormat;
+      // Carica impostazioni con controlli di sicurezza
+      const showPhotoEl = document.getElementById('showPhoto');
+      if (showPhotoEl) showPhotoEl.checked = AppState.cvData.settings.showPhoto;
+      
+      const showPublicationsEl = document.getElementById('showPublications');
+      if (showPublicationsEl) showPublicationsEl.checked = AppState.cvData.settings.showPublications;
+      
+      const italianDateFormatEl = document.getElementById('italianDateFormat');
+      if (italianDateFormatEl) italianDateFormatEl.checked = AppState.cvData.settings.italianDateFormat;
       
       // Mostra foto se presente
       if (AppState.cvData.personal.photo) {
@@ -2521,9 +3480,12 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.2') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.5') {
         document.getElementById('versionBanner').classList.add('show');
       }
+
+      // Avvia connessione Drive (carica stato salvato e rinnova token se necessario)
+      loadDriveConfig();
       
       console.log('✅ App inizializzata - Design upgrade completo!');
     });
@@ -2532,23 +3494,19 @@
     
     // Registra Service Worker per funzionalità PWA
     if ('serviceWorker' in navigator) {
+      // Listener controllerchange: si attiva quando il nuovo SW prende controllo
+      // (dopo skipWaiting + clients.claim) → reload automatico senza intervento manuale
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('🔄 Nuovo SW attivo — ricarico automaticamente');
+        window.location.reload();
+      });
+
       window.addEventListener('load', async () => {
         try {
           const registration = await navigator.serviceWorker.register('./sw.js');
           console.log('🔄 Service Worker registrato:', registration.scope);
-          
-          // Ascolta aggiornamenti del SW
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            newWorker.addEventListener('statechange', () => {
-              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // Nuovo SW disponibile - reload silenzioso
-                console.log('🔄 Nuovo Service Worker installato - aggiornamento in corso...');
-                window.location.reload();
-              }
-            });
-          });
-          
+          // Controlla aggiornamenti ogni volta che l'app si apre
+          registration.update();
         } catch (error) {
           console.error('❌ Service Worker registrazione fallita:', error);
         }
@@ -2638,10 +3596,335 @@
     // Ascolta cambi di stato rete
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
-    
+
     // Inizializza stato
     updateOnlineStatus();
-    
+
+
+    // ========== DRIVE INTEGRATION (OAuth2 + Drive API) ==========
+
+    const DRIVE_CLIENT_ID   = '374342529488-c123a5j5v8hnfs241udbl55fos5thfq6.apps.googleusercontent.com';
+    const DRIVE_SCOPE       = 'https://www.googleapis.com/auth/drive.file email profile';
+    const DRIVE_FOLDER_NAME = 'CV-Editor-Dati';
+    const DRIVE_FILE_NAME   = 'cv-data.json';
+
+    // Stato Drive — solo metadati di connessione (nessun dato CV), salvato in localStorage
+    let driveState = {
+        enabled:     false,
+        accessToken: null,
+        tokenExpiry: 0,
+        fileId:      null,
+        folderId:    null,
+        userEmail:   ''
+    };
+
+    // Debounce auto-save: salva su Drive 2 secondi dopo l'ultima modifica
+    let _driveSaveTimer = null;
+    function scheduleDriveSave() {
+        if (!driveState.enabled || !driveState.accessToken) return;
+        clearTimeout(_driveSaveTimer);
+        _driveSaveTimer = setTimeout(() => syncToDrive(), 2000);
+    }
+
+    // ── Carica/salva stato Drive in localStorage ──────────────────────────
+    function loadDriveConfig() {
+        try {
+            const saved = localStorage.getItem('driveState_cv');
+            if (saved) driveState = Object.assign(driveState, JSON.parse(saved));
+        } catch(e) {}
+        updateDriveButton();
+        if (driveState.enabled && driveState.accessToken && Date.now() < driveState.tokenExpiry - 30000) {
+            syncFromDrive(false);
+        } else if (driveState.enabled) {
+            trySilentAuth();
+        }
+    }
+
+    function saveDriveStateConfig() {
+        localStorage.setItem('driveState_cv', JSON.stringify(driveState));
+    }
+
+    // ── Aggiorna aspetto pulsante Drive ───────────────────────────────────
+    function updateDriveButton(state) {
+        const btn   = document.getElementById('drive-btn');
+        const label = document.getElementById('drive-btn-label');
+        if (!btn) return;
+        btn.className = 'drive-button no-print';
+        if (state === 'syncing') {
+            btn.classList.add('syncing');
+            label.textContent = 'Salvataggio…';
+        } else if (state === 'error') {
+            btn.classList.add('error');
+            label.textContent = 'Drive ⚠️';
+        } else if (driveState.enabled && driveState.accessToken) {
+            btn.classList.add('connected');
+            const name = driveState.userEmail ? driveState.userEmail.split('@')[0] : 'Drive';
+            label.textContent = name + ' ✓';
+            // Aggiorna onclick per mostrare menu disconnect
+            btn.onclick = showDriveMenu;
+        } else {
+            label.textContent = 'Drive';
+            btn.onclick = connectToDrive;
+        }
+    }
+
+    // ── Mostra menu contestuale Drive (disconnect / ricarica) ─────────────
+    function showDriveMenu() {
+        const email = driveState.userEmail || 'utente connesso';
+        const scelta = confirm(
+            '☁️ Drive connesso come: ' + email +
+            '\n\nClicca OK per DISCONNETTERE Drive (i dati rimangono al sicuro sul tuo Drive).\n' +
+            'Clicca Annulla per tornare all\'editor.'
+        );
+        if (scelta) disconnectDrive(false);
+    }
+
+    // ── Connetti a Google Drive ────────────────────────────────────────────
+    function connectToDrive() {
+        if (typeof google === 'undefined' || !google.accounts) {
+            alert('Le librerie Google non sono ancora caricate. Riprova tra qualche secondo.');
+            return;
+        }
+        const client = google.accounts.oauth2.initTokenClient({
+            client_id: DRIVE_CLIENT_ID,
+            scope: DRIVE_SCOPE,
+            callback: (tokenResponse) => {
+                if (tokenResponse.error) {
+                    showDriveToast('❌ Autorizzazione negata: ' + tokenResponse.error);
+                    return;
+                }
+                driveState.accessToken = tokenResponse.access_token;
+                driveState.tokenExpiry = Date.now() + (tokenResponse.expires_in * 1000);
+                driveState.enabled     = true;
+                saveDriveStateConfig();
+                updateDriveButton('syncing');
+                initDriveConnection();
+            }
+        });
+        client.requestAccessToken({ prompt: 'consent' });
+    }
+
+    // ── Rinnovo silenzioso del token ──────────────────────────────────────
+    function trySilentAuth(retries = 6) {
+        if (typeof google === 'undefined' || !google.accounts) {
+            if (retries > 0) setTimeout(() => trySilentAuth(retries - 1), 1500);
+            else updateDriveButton('error');
+            return;
+        }
+        const client = google.accounts.oauth2.initTokenClient({
+            client_id: DRIVE_CLIENT_ID,
+            scope: DRIVE_SCOPE,
+            prompt: '',
+            callback: (tokenResponse) => {
+                if (tokenResponse.access_token) {
+                    driveState.accessToken = tokenResponse.access_token;
+                    driveState.tokenExpiry = Date.now() + (tokenResponse.expires_in * 1000);
+                    saveDriveStateConfig();
+                    updateDriveButton();
+                    syncFromDrive(false);
+                } else {
+                    updateDriveButton('error');
+                }
+            }
+        });
+        client.requestAccessToken({ prompt: '' });
+    }
+
+    // ── Prima connessione: cerca/crea cartella e file ─────────────────────
+    async function initDriveConnection() {
+        try {
+            const info = await driveApiFetch('https://www.googleapis.com/oauth2/v2/userinfo');
+            driveState.userEmail = info.email || '';
+            driveState.folderId  = await findOrCreateDriveFolder();
+            driveState.fileId    = await findDriveFile();
+            saveDriveStateConfig();
+
+            if (driveState.fileId) {
+                // File esiste su Drive: chiedi se caricare da Drive o sovrascrivere
+                const hasLocalData = sessionStorage.getItem('cvData_session');
+                if (hasLocalData) {
+                    const scelta = confirm(
+                        '⚠️ Hai dati in questa sessione E un CV salvato su Drive.\n\n' +
+                        'Clicca OK per SOVRASCRIVERE Drive con i dati attuali.\n' +
+                        'Clicca Annulla per CARICARE il CV da Drive (i dati attuali verranno persi).'
+                    );
+                    if (scelta) await syncToDrive();
+                    else await syncFromDrive(true);
+                } else {
+                    await syncFromDrive(true);
+                }
+            } else {
+                // Prima volta: salva il CV attuale su Drive
+                await syncToDrive();
+                showDriveToast('☁️ CV salvato su Drive per la prima volta');
+            }
+            updateDriveButton();
+        } catch(err) {
+            updateDriveButton('error');
+            showDriveToast('❌ Errore Drive: ' + err.message);
+        }
+    }
+
+    // ── Trova o crea la cartella CV-Editor-Dati su Drive ──────────────────
+    async function findOrCreateDriveFolder() {
+        const q = encodeURIComponent(`name='${DRIVE_FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
+        const resp = await driveApiFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`);
+        if (resp.files && resp.files.length > 0) return resp.files[0].id;
+        const created = await driveApiFetch(
+            'https://www.googleapis.com/drive/v3/files', 'POST',
+            { name: DRIVE_FOLDER_NAME, mimeType: 'application/vnd.google-apps.folder' }
+        );
+        return created.id;
+    }
+
+    // ── Trova il file cv-data.json su Drive ───────────────────────────────
+    async function findDriveFile() {
+        const q = encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
+        const resp = await driveApiFetch(
+            `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)&orderBy=modifiedTime%20desc`
+        );
+        if (resp.files && resp.files.length > 0) return resp.files[0].id;
+        return null;
+    }
+
+    // ── Carica dati da Drive ──────────────────────────────────────────────
+    async function syncFromDrive(showFeedback) {
+        if (!driveState.enabled || !driveState.accessToken || !driveState.fileId) return;
+        updateDriveButton('syncing');
+        try {
+            const resp = await fetch(
+                `https://www.googleapis.com/drive/v3/files/${driveState.fileId}?alt=media`,
+                { headers: { Authorization: 'Bearer ' + driveState.accessToken } }
+            );
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const data = await resp.json();
+            if (data && data.personal !== undefined) {
+                AppState.cvData = Object.assign(AppState.cvData, data);
+                sessionStorage.setItem('cvData_session', JSON.stringify(AppState.cvData));
+                // Aggiorna tutti i campi nel form
+                populateFormFromData();
+            }
+            updateDriveButton();
+            if (showFeedback) showDriveToast('☁️ CV caricato da Drive');
+            else showDriveToast('☁️ CV sincronizzato da Drive');
+        } catch(err) {
+            if (err.message.includes('401') || err.message.includes('403')) trySilentAuth();
+            else { updateDriveButton('error'); if (showFeedback) showDriveToast('❌ Errore lettura Drive: ' + err.message); }
+        }
+    }
+
+    // ── Salva dati su Drive ───────────────────────────────────────────────
+    async function syncToDrive() {
+        if (!driveState.enabled || !driveState.accessToken) return;
+        if (Date.now() > driveState.tokenExpiry) { updateDriveButton('error'); return; }
+        updateDriveButton('syncing');
+        const payload = JSON.stringify(Object.assign({}, AppState.cvData, { lastSync: new Date().toISOString() }));
+        try {
+            if (!driveState.folderId) driveState.folderId = await findOrCreateDriveFolder();
+            if (!driveState.fileId)   driveState.fileId   = await findDriveFile();
+            const boundary = 'cvpwa_' + Date.now();
+            let body = '';
+            if (!driveState.fileId) {
+                body = `--${boundary}\r\nContent-Type: application/json\r\n\r\n` +
+                    JSON.stringify({ name: DRIVE_FILE_NAME, parents: [driveState.folderId] }) +
+                    `\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${payload}\r\n--${boundary}--`;
+            } else {
+                body = `--${boundary}\r\nContent-Type: application/json\r\n\r\n{}\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n${payload}\r\n--${boundary}--`;
+            }
+            const url    = driveState.fileId
+                ? `https://www.googleapis.com/upload/drive/v3/files/${driveState.fileId}?uploadType=multipart`
+                : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+            const method = driveState.fileId ? 'PATCH' : 'POST';
+            const result = await fetch(url, {
+                method,
+                headers: { Authorization: 'Bearer ' + driveState.accessToken, 'Content-Type': 'multipart/related; boundary=' + boundary },
+                body
+            });
+            if (!result.ok) throw new Error('HTTP ' + result.status);
+            const json = await result.json();
+            if (!driveState.fileId) driveState.fileId = json.id;
+            saveDriveStateConfig();
+            updateDriveButton();
+            showDriveToast('☁️ CV salvato su Drive');
+        } catch(err) {
+            updateDriveButton('error');
+        }
+    }
+
+    // ── Helper fetch autenticato Drive ────────────────────────────────────
+    async function driveApiFetch(url, method = 'GET', body = null) {
+        const opts = {
+            method,
+            headers: { Authorization: 'Bearer ' + driveState.accessToken, 'Content-Type': 'application/json' }
+        };
+        if (body) opts.body = JSON.stringify(body);
+        const resp = await fetch(url, opts);
+        if (!resp.ok) throw new Error('Drive API error ' + resp.status + ' on ' + url);
+        return resp.json();
+    }
+
+    // ── Disconnetti Drive ─────────────────────────────────────────────────
+    function disconnectDrive(silent) {
+        if (!silent && !confirm('Disconnetto Drive. I dati rimangono al sicuro sul tuo Drive. Confermi?')) return;
+        if (driveState.accessToken && typeof google !== 'undefined' && google.accounts) {
+            try { google.accounts.oauth2.revoke(driveState.accessToken); } catch(e) {}
+        }
+        driveState = { enabled: false, accessToken: null, tokenExpiry: 0, fileId: null, folderId: null, userEmail: '' };
+        saveDriveStateConfig();
+        updateDriveButton();
+        if (!silent) showDriveToast('☁️ Drive disconnesso');
+    }
+
+    // ── Toast Drive ───────────────────────────────────────────────────────
+    function showDriveToast(msg) {
+        const toast = document.getElementById('driveToast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._t);
+        toast._t = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    // ── Popola tutti i campi del form dai dati AppState (usato dopo load da Drive) ──
+    function populateFormFromData() {
+        const d = AppState.cvData;
+        // Campi personali
+        ['fullName','nationality','birthDate','phone','email','address','website'].forEach(field => {
+            const el = document.getElementById(field);
+            if (el && d.personal[field] !== undefined) el.value = d.personal[field];
+        });
+        if (d.personal.photo) {
+            AppState.cvData.personal.photo = d.personal.photo;
+            const prev = document.getElementById('photoPreview');
+            if (prev) { prev.src = d.personal.photo; prev.style.display = 'block'; }
+            const up = document.getElementById('photoUploadArea');
+            if (up) up.style.display = 'none';
+        }
+        // Profilo
+        const prof = document.getElementById('profileText');
+        if (prof) prof.value = d.profile.text || '';
+        // Competenze
+        if (d.skills) {
+            const aiEl = document.getElementById('aiSkills');
+            if (aiEl) aiEl.value = d.skills.ai ? d.skills.ai.content || '' : '';
+            const digEl = document.getElementById('digitalSkillsGeneric');
+            if (digEl) digEl.value = d.skills.digital ? d.skills.digital.genericContent || '' : '';
+            const platEl = document.getElementById('platforms');
+            if (platEl) platEl.value = d.skills.digital ? d.skills.digital.platformsContent || '' : '';
+        }
+        // Lingue
+        if (d.languages) {
+            const mtEl = document.getElementById('motherTongue');
+            if (mtEl) mtEl.value = d.languages.motherTongue || 'Italiano';
+        }
+        // Liste dinamiche
+        if (d.experience) renderExperienceList();
+        if (d.education)  renderEducationList();
+        if (d.formatore)  renderFormatoreList();
+        if (d.languages && d.languages.other) renderLanguagesList();
+        if (d.publications) renderPublicationsList();
+    }
+
   </script>
   
 </body>

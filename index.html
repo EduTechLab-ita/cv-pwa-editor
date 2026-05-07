@@ -271,7 +271,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        align-self: start;
       }
 
       .europass-vertical-logo {
@@ -279,11 +282,8 @@
         width: auto;
         transform: rotate(-90deg);
         transform-origin: center center;
-        opacity: 0.45;
-        filter: grayscale(15%);
         pointer-events: none;
         user-select: none;
-        white-space: nowrap;
       }
     }
     

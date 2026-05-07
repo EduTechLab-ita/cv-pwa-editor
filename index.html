@@ -1314,6 +1314,32 @@
       font-weight: 600;
     }
     
+    /* Template Professionale - due colonne */
+    .professional-template .cv-header {
+      background: #003d7a;
+      color: white;
+      padding: 24px 28px;
+      margin: -20px -20px 20px -20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .professional-template .cv-name { color: white; font-size: 1.6rem; }
+    .professional-template .cv-contact-grid { color: rgba(255,255,255,0.85); }
+    .professional-template .cv-contact-item { color: rgba(255,255,255,0.85); font-size: 0.8rem; }
+    .professional-template .cv-address { color: rgba(255,255,255,0.85); }
+    .professional-template .cv-section-title {
+      background: #003d7a;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .professional-template .page-bar { background: #ffa500; height: 3px; margin: 0 -20px 16px; }
+    .professional-template .cv-profile-photo { border-radius: 50%; border: 3px solid rgba(255,255,255,0.5); }
+
     /* Default per template senza classe specifica mantiene gli stili esistenti */
     .cv-preview:not(.modern-template):not(.europass-template) {
       /* Stili di default già definiti sopra */
@@ -1397,7 +1423,7 @@
           <div class="online-indicator"></div>
           <span>Online</span>
           <span>•</span>
-          <span>Agg. 04/09/2025</span>
+          <span id="lastSaveDateLabel">CV: non salvato</span>
         </div>
       </div>
       
@@ -1469,6 +1495,11 @@
           <span class="nav-icon">👁️</span>
           Anteprima
         </button>
+        <div style="border-top: 1px solid #e2e8f0; margin: 8px 0;"></div>
+        <button class="nav-section" onclick="openInfoModal()">
+          <span class="nav-icon">ℹ️</span>
+          Info App
+        </button>
       </nav>
     </aside>
     
@@ -1509,12 +1540,23 @@
             
             <div class="form-group">
               <label class="form-label" for="birthDate">Data di Nascita</label>
-              <input 
-                type="text" 
-                id="birthDate" 
-                class="form-input"
-                placeholder="GG/MM/AAAA"
-              >
+              <div style="display:flex; gap:8px; align-items:center;">
+                <input
+                  type="text"
+                  id="birthDate"
+                  class="form-input"
+                  placeholder="GG/MM/AAAA"
+                  style="flex:1;"
+                >
+                <button type="button" onclick="document.getElementById('birthDatePicker').showPicker ? document.getElementById('birthDatePicker').showPicker() : document.getElementById('birthDatePicker').click()"
+                  style="padding:10px 12px; border:1px solid #d1d5db; border-radius:6px; background:white; cursor:pointer; font-size:1rem;" title="Scegli dal calendario">📅</button>
+                <input type="date" id="birthDatePicker" style="display:none;" onchange="
+                  const d = new Date(this.value + 'T00:00:00');
+                  const formatted = String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+                  document.getElementById('birthDate').value = formatted;
+                  AppState.updateField('personal', 'birthDate', formatted);
+                ">
+              </div>
             </div>
             
             <div class="form-group">
@@ -1572,8 +1614,23 @@
                 </div>
                 
                 <div class="photo-preview-container" id="photoPreview" style="display: none;">
-                  <img id="photoImg" class="photo-preview" alt="Anteprima foto">
-                  <div class="photo-controls">
+                  <div style="overflow:hidden; width:140px; height:140px; border-radius:4px; border:2px solid #e2e8f0; position:relative; cursor:move;" id="photoFrame">
+                    <img id="photoImg" class="photo-preview" alt="Anteprima foto"
+                         style="position:absolute; transform-origin:center; user-select:none;"
+                         draggable="false">
+                  </div>
+                  <div style="margin-top:10px;">
+                    <label style="font-size:0.75rem; color:#6b7280; display:block; margin-bottom:2px;">🔍 Zoom</label>
+                    <input type="range" id="photoScale" min="50" max="200" value="100" style="width:140px;"
+                           oninput="applyPhotoAdjust()">
+                    <label style="font-size:0.75rem; color:#6b7280; display:block; margin:6px 0 2px;">↔️ Sposta X</label>
+                    <input type="range" id="photoX" min="-70" max="70" value="0" style="width:140px;"
+                           oninput="applyPhotoAdjust()">
+                    <label style="font-size:0.75rem; color:#6b7280; display:block; margin:6px 0 2px;">↕️ Sposta Y</label>
+                    <input type="range" id="photoY" min="-70" max="70" value="0" style="width:140px;"
+                           oninput="applyPhotoAdjust()">
+                  </div>
+                  <div class="photo-controls" style="margin-top:8px;">
                     <button type="button" class="photo-btn" onclick="removePhoto()">🗑️ Rimuovi</button>
                     <button type="button" class="photo-btn" onclick="document.getElementById('photoInput').click()">🔄 Cambia</button>
                   </div>
@@ -1866,6 +1923,11 @@
           <!-- Tab: Export & Condivisione -->
           <div class="settings-tab-content active" id="settings-export">
             <h4 style="color: #003d7a; margin-bottom: 15px;">📤 Export e Condivisione</h4>
+            <div style="background:#eff6ff; border:1px solid #003d7a; border-radius:8px; padding:14px; margin-bottom:20px;">
+              <p style="margin:0; font-size:0.875rem; color:#1e3a5f;">
+                ☁️ <strong>Il CV è salvato automaticamente sul tuo Google Drive</strong> ogni volta che apporti modifiche (pulsante Drive connesso in alto). Il backup .json è opzionale e utile come copia di sicurezza aggiuntiva.
+              </p>
+            </div>
             
             <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
               <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
@@ -1958,7 +2020,7 @@
           <div class="settings-tab-content" id="settings-templates">
             <h4 style="color: #003d7a; margin-bottom: 15px;">🎨 Template Disponibili</h4>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
               <!-- Template Europass -->
               <div class="template-card active" data-template="europass" onclick="selectTemplate('europass')" 
                    style="padding: 20px; border: 2px solid #2563eb; border-radius: 8px; cursor: pointer; background: #eff6ff;">
@@ -1975,13 +2037,28 @@
               </div>
 
               <!-- Template Moderno -->
-              <div class="template-card" data-template="modern" onclick="selectTemplate('modern')" 
+              <div class="template-card" data-template="modern" onclick="selectTemplate('modern')"
                    style="padding: 20px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
                 <div style="display: flex; align-items: center; gap: 16px;">
                   <div style="font-size: 48px;">✨</div>
                   <div>
                     <h6 style="color: #374151; margin-bottom: 4px;">Moderno</h6>
                     <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">Design pulito e contemporaneo</p>
+                    <span style="background: #f3f4f6; color: #6b7280; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                      Disponibile
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Template Professionale -->
+              <div class="template-card" data-template="professional" onclick="selectTemplate('professional')"
+                   style="padding: 20px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="font-size: 48px;">🏛️</div>
+                  <div>
+                    <h6 style="color: #374151; margin-bottom: 4px;">Professionale</h6>
+                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">Due colonne, sidebar laterale, layout compatto</p>
                     <span style="background: #f3f4f6; color: #6b7280; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
                       Disponibile
                     </span>
@@ -2045,23 +2122,12 @@
             <h4 style="color: #003d7a; margin-bottom: 15px;">❓ Aiuto & Assistenza</h4>
             
             <div style="background: #f0fdf4; border: 1px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-              <h5 style="color: #15803d; margin-bottom: 12px;">🆘 Hai bisogno di aiuto?</h5>
-              <p style="color: #15803d; margin-bottom: 16px;">Per supporto tecnico o domande sull'utilizzo dell'app:</p>
-              
-              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <a href="https://github.com/EduTechLab-ita/cv-pwa-editor/issues" target="_blank" class="header-btn" 
-                   style="background: #059669; color: white; text-decoration: none;">
-                  🐛 Segnala Bug
-                </a>
-                <a href="https://github.com/EduTechLab-ita/cv-pwa-editor" target="_blank" class="header-btn" 
-                   style="background: #0891b2; color: white; text-decoration: none;">
-                  📖 Documentazione
-                </a>
-                <a href="mailto:info@edutechlab.it" class="header-btn" 
-                   style="background: #7c3aed; color: white; text-decoration: none;">
-                  ✉️ Contatta Supporto
-                </a>
-              </div>
+              <h5 style="color: #15803d; margin-bottom: 12px;">✉️ Contatta il supporto</h5>
+              <p style="color: #15803d; margin-bottom: 16px;">Per domande, suggerimenti o problemi tecnici, scrivici direttamente:</p>
+              <a href="mailto:info@edutechlab.it?subject=CV%20PWA%20Editor%20-%20Supporto" class="header-btn"
+                 style="background: #7c3aed; color: white; text-decoration: none; display:inline-block;">
+                ✉️ Scrivi a EduTechLab Italia
+              </a>
             </div>
 
             <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
@@ -2114,14 +2180,75 @@
   <!-- Footer -->
   <footer class="app-footer">
     <div class="footer-links">
-      <a href="#" class="footer-link">Info & Assistenza</a>
-      <a href="#" class="footer-link">Privacy & Cookie</a>
-      <a href="#" class="footer-link">GitHub</a>
+      <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
+      <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
     <p><strong>CV PWA Editor v5.5</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
+  <!-- Modal Privacy -->
+  <div id="privacyModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:32px; max-width:520px; width:90%; max-height:85vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h3 style="color:#003d7a; margin:0;">🔒 Privacy & Cookie</h3>
+        <button onclick="closePrivacyModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6b7280;">×</button>
+      </div>
+      <h5 style="color:#003d7a; margin:0 0 8px;">Dati trattati</h5>
+      <p style="font-size:0.875rem; color:#374151; margin-bottom:12px;">
+        Questa applicazione tratta esclusivamente i dati che l'utente inserisce volontariamente (dati anagrafici, esperienze professionali, foto). <strong>Nessun dato viene trasmesso a server di terze parti.</strong>
+      </p>
+      <h5 style="color:#003d7a; margin:12px 0 8px;">Dove sono salvati i dati</h5>
+      <ul style="font-size:0.875rem; color:#374151; padding-left:20px; margin-bottom:12px;">
+        <li style="margin-bottom:6px;"><strong>Dati del CV</strong>: esclusivamente nel Google Drive personale dell'utente (se connesso), oppure solo nella sessione corrente del browser (si cancellano alla chiusura della finestra)</li>
+        <li style="margin-bottom:6px;"><strong>Stato connessione Drive</strong>: token OAuth e ID file nel localStorage del browser (nessun contenuto del CV)</li>
+        <li style="margin-bottom:6px;"><strong>Cookie</strong>: nessun cookie di profilazione o tracciamento</li>
+      </ul>
+      <h5 style="color:#003d7a; margin:12px 0 8px;">Google Drive</h5>
+      <p style="font-size:0.875rem; color:#374151; margin-bottom:16px;">
+        La connessione Drive utilizza lo scope <em>drive.file</em> (OAuth 2.0), che permette l'accesso ai soli file creati da questa applicazione. L'app non può leggere altri file presenti nel Drive dell'utente. Il provider OAuth è Google LLC, soggetto alla propria informativa privacy.
+      </p>
+      <div style="text-align:center; padding-top:8px; border-top:1px solid #e2e8f0;">
+        <p style="font-size:0.8rem; color:#9ca3af; margin:0;">© 2025 EduTechLab Italia — <a href="mailto:info@edutechlab.it" style="color:#003d7a;">info@edutechlab.it</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Info App -->
+  <div id="infoModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:32px; max-width:520px; width:90%; max-height:85vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h3 style="color:#003d7a; margin:0;">ℹ️ CV PWA Editor — Info</h3>
+        <button onclick="closeInfoModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6b7280;">×</button>
+      </div>
+      <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
+        <p style="margin:0; color:#1e40af; font-size:0.95rem;">
+          <strong>CV PWA Editor v5.5</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+        </p>
+      </div>
+      <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
+      <p style="font-size:0.875rem; color:#374151; margin-bottom:12px;">
+        I dati del tuo CV <strong>non vengono mai salvati nel browser</strong>. Cliccando il pulsante ☁️ Drive in alto puoi collegare il tuo account Google: il CV verrà salvato automaticamente nel tuo Drive privato (cartella <em>CV-Editor-Dati</em>) ogni volta che apporti una modifica.
+      </p>
+      <h5 style="color:#003d7a; margin:16px 0 8px;">📄 Come usare l'app</h5>
+      <ol style="font-size:0.875rem; color:#374151; padding-left:20px; margin-bottom:12px;">
+        <li style="margin-bottom:6px;">Collega Google Drive con il pulsante ☁️ in alto a destra</li>
+        <li style="margin-bottom:6px;">Compila le sezioni dalla sidebar di sinistra</li>
+        <li style="margin-bottom:6px;">Il CV viene salvato automaticamente su Drive ad ogni modifica</li>
+        <li style="margin-bottom:6px;">Usa <strong>Anteprima</strong> per vedere il risultato e <strong>Stampa PDF</strong> per esportarlo</li>
+        <li style="margin-bottom:6px;">In <strong>Impostazioni → Export</strong> puoi scaricare un backup .json</li>
+      </ol>
+      <h5 style="color:#003d7a; margin:16px 0 8px;">🔒 Privacy</h5>
+      <p style="font-size:0.875rem; color:#374151; margin-bottom:16px;">
+        Nessun dato viene trasmesso a server esterni. Tutto rimane nel tuo Google Drive personale, accessibile solo da te. L'app utilizza le API Google con scope <em>drive.file</em> (accesso limitato ai soli file creati da questa app).
+      </p>
+      <div style="text-align:center; padding-top:8px; border-top:1px solid #e2e8f0;">
+        <p style="font-size:0.8rem; color:#9ca3af; margin:0;">© 2025 EduTechLab Italia (Fabio Rizzotto) — Licenza MIT</p>
+        <a href="mailto:info@edutechlab.it" style="font-size:0.85rem; color:#003d7a;">info@edutechlab.it</a>
+      </div>
+    </div>
+  </div>
+
   <!-- Save Indicator -->
   <div class="save-indicator" id="saveIndicator">
     ✅ Salvato automaticamente
@@ -2149,7 +2276,8 @@
           email: '',
           address: '',
           website: '',
-          photo: null // base64 string
+          photo: null, // base64 string
+          photoAdjust: { scale: 100, x: 0, y: 0 }
         },
         profile: {
           text: ''
@@ -2252,6 +2380,8 @@
           preview.classList.add('modern-template');
         } else if (data.settings.templateStyle === 'europass') {
           preview.classList.add('europass-template');
+        } else if (data.settings.templateStyle === 'professional') {
+          preview.classList.add('professional-template');
         }
         
         // Se non ci sono dati, mostra empty state
@@ -2608,10 +2738,20 @@
       uploadArea.style.display = 'none';
       previewContainer.style.display = 'block';
       photoImg.src = photoData;
+      // Ripristina i cursori dell'editor
+      const adj = AppState.cvData.personal.photoAdjust || { scale: 100, x: 0, y: 0 };
+      const scaleEl = document.getElementById('photoScale');
+      const xEl = document.getElementById('photoX');
+      const yEl = document.getElementById('photoY');
+      if (scaleEl) scaleEl.value = adj.scale;
+      if (xEl) xEl.value = adj.x;
+      if (yEl) yEl.value = adj.y;
+      applyPhotoAdjust();
     }
     
     // Rimuove foto
     function removePhoto() {
+      AppState.cvData.personal.photoAdjust = { scale: 100, x: 0, y: 0 };
       AppState.cvData.personal.photo = null;
       AppState.saveData();
       
@@ -2622,6 +2762,29 @@
       previewContainer.style.display = 'none';
     }
     
+    // === EDITOR FOTO ===
+    function applyPhotoAdjust() {
+      const img = document.getElementById('photoImg');
+      if (!img) return;
+      const scale = parseInt(document.getElementById('photoScale')?.value || 100) / 100;
+      const x = parseInt(document.getElementById('photoX')?.value || 0);
+      const y = parseInt(document.getElementById('photoY')?.value || 0);
+      img.style.transform = `scale(${scale}) translate(${x}px, ${y}px)`;
+      img.style.left = '50%';
+      img.style.top = '50%';
+      img.style.marginLeft = '-50%';
+      img.style.marginTop = '-50%';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      // Salva
+      if (!AppState.cvData.personal.photoAdjust) AppState.cvData.personal.photoAdjust = {};
+      AppState.cvData.personal.photoAdjust.scale = Math.round(scale * 100);
+      AppState.cvData.personal.photoAdjust.x = x;
+      AppState.cvData.personal.photoAdjust.y = y;
+      AppState.saveData();
+    }
+
     // === LISTE DINAMICHE ===
     
     // Esperienza lavorativa
@@ -3111,9 +3274,10 @@
       // Aggiorna le informazioni
       const templateNames = {
         'europass': 'Europass Standard',
-        'modern': 'Moderno'
+        'modern': 'Moderno',
+        'professional': 'Professionale'
       };
-      
+
       const currentTemplateEl = document.getElementById('currentTemplate');
       if (currentTemplateEl) currentTemplateEl.textContent = templateNames[templateId];
       
@@ -3149,9 +3313,10 @@
       // Aggiorna informazioni
       const templateNames = {
         'europass': 'Europass Standard',
-        'modern': 'Moderno'
+        'modern': 'Moderno',
+        'professional': 'Professionale'
       };
-      
+
       const currentTemplateSpan = document.getElementById('currentTemplate');
       if (currentTemplateSpan) currentTemplateSpan.textContent = templateNames[settings.templateStyle] || 'Europass Standard';
       
@@ -3808,6 +3973,10 @@
             updateDriveButton();
             if (showFeedback) showDriveToast('☁️ CV caricato da Drive');
             else showDriveToast('☁️ CV sincronizzato da Drive');
+            // Leggi modifiedTime dal Drive per aggiornare il label
+            driveApiFetch(`https://www.googleapis.com/drive/v3/files/${driveState.fileId}?fields=modifiedTime`)
+                .then(meta => updateLastSaveDate(meta.modifiedTime))
+                .catch(() => updateLastSaveDate(new Date().toISOString()));
         } catch(err) {
             if (err.message.includes('401') || err.message.includes('403')) trySilentAuth();
             else { updateDriveButton('error'); if (showFeedback) showDriveToast('❌ Errore lettura Drive: ' + err.message); }
@@ -3847,6 +4016,7 @@
             saveDriveStateConfig();
             updateDriveButton();
             showDriveToast('☁️ CV salvato su Drive');
+            updateLastSaveDate(new Date().toISOString());
         } catch(err) {
             updateDriveButton('error');
         }
@@ -3884,6 +4054,18 @@
         toast.classList.add('show');
         clearTimeout(toast._t);
         toast._t = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    function updateLastSaveDate(isoDateStr) {
+        const el = document.getElementById('lastSaveDateLabel');
+        if (!el || !isoDateStr) return;
+        const d = new Date(isoDateStr);
+        const dd = String(d.getDate()).padStart(2,'0');
+        const mm = String(d.getMonth()+1).padStart(2,'0');
+        const yy = d.getFullYear();
+        const hh = String(d.getHours()).padStart(2,'0');
+        const min = String(d.getMinutes()).padStart(2,'0');
+        el.textContent = `CV: ${dd}/${mm}/${yy} ${hh}:${min}`;
     }
 
     // ── Popola tutti i campi del form dai dati AppState (usato dopo load da Drive) ──
@@ -3926,7 +4108,19 @@
         if (d.publications) renderPublicationsList();
     }
 
+    function openInfoModal() {
+        document.getElementById('infoModal').style.display = 'flex';
+    }
+    function closeInfoModal() {
+        document.getElementById('infoModal').style.display = 'none';
+    }
+    function openPrivacyModal() {
+        document.getElementById('privacyModal').style.display = 'flex';
+    }
+    function closePrivacyModal() {
+        document.getElementById('privacyModal').style.display = 'none';
+    }
   </script>
-  
+
 </body>
 </html>

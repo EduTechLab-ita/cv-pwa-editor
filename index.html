@@ -131,9 +131,11 @@
     
     .app-title {
       color: #003d7a;
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-size: 1.9rem;
+      font-weight: 800;
       margin: 0;
+      letter-spacing: -0.5px;
+      line-height: 1;
     }
     
     .app-version {
@@ -254,10 +256,34 @@
       grid-template-columns: 1fr;
       gap: 20px;
     }
-    
+
+    /* Colonna logo Europass verticale — solo desktop */
+    .europass-side {
+      display: none;
+    }
+
     @media (min-width: 768px) {
       .main-container {
-        grid-template-columns: 280px 1fr;
+        grid-template-columns: 46px 280px 1fr;
+      }
+
+      .europass-side {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .europass-vertical-logo {
+        height: 36px;
+        width: auto;
+        transform: rotate(-90deg);
+        transform-origin: center center;
+        opacity: 0.45;
+        filter: grayscale(15%);
+        pointer-events: none;
+        user-select: none;
+        white-space: nowrap;
       }
     }
     
@@ -1419,7 +1445,7 @@
     <div class="app-header-content">
       <div class="app-logo-section">
         <div class="app-logo">
-          <img src="CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
+          <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
             <span class="app-version">v5.5</span>
@@ -1450,7 +1476,12 @@
   
   <!-- Main Container -->
   <div class="main-container">
-    
+
+    <!-- Colonna Europass verticale (solo desktop) -->
+    <div class="europass-side no-print">
+      <img src="CV-EUropass.png" alt="Europass" class="europass-vertical-logo">
+    </div>
+
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">

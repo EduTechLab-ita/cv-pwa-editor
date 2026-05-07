@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV PWA Editor v5.5 - EduTechLab Italia</title>
+  <title>VitaeLab v5.5 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
   <meta name="theme-color" content="#003d7a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="CV Editor">
+  <meta name="apple-mobile-web-app-title" content="VitaeLab">
   
   <!-- PWA Manifest -->
   <link rel="manifest" href="./manifest.json">
@@ -1383,7 +1383,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con CV PWA Editor v5.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1414,7 +1414,7 @@
         <div class="app-logo">
           <img src="CV-EUropass.png" alt="Europass" class="europass-logo-img" style="height: 40px; width: auto;">
           <div>
-            <h1 class="app-title">CV PWA Editor</h1>
+            <h1 class="app-title">VitaeLab</h1>
             <span class="app-version">v5.5</span>
           </div>
         </div>
@@ -1423,7 +1423,7 @@
           <div class="online-indicator"></div>
           <span>Online</span>
           <span>•</span>
-          <span id="lastSaveDateLabel">CV: non salvato</span>
+          <span id="lastSaveDateLabel">Ultima modifica CV: —</span>
         </div>
       </div>
       
@@ -2124,7 +2124,7 @@
             <div style="background: #f0fdf4; border: 1px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
               <h5 style="color: #15803d; margin-bottom: 12px;">✉️ Contatta il supporto</h5>
               <p style="color: #15803d; margin-bottom: 16px;">Per domande, suggerimenti o problemi tecnici, scrivici direttamente:</p>
-              <button type="button" class="header-btn" onclick="window.open('mailto:info@edutechlab.it?subject=CV%20PWA%20Editor%20-%20Supporto')"
+              <button type="button" class="header-btn" onclick="window.open('mailto:info@edutechlab.it?subject=VitaeLab%20-%20Supporto')"
                  style="background: #7c3aed; color: white; border-color:#7c3aed;">
                 ✉️ Scrivi a EduTechLab Italia
               </button>
@@ -2144,7 +2144,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>CV PWA Editor v5.5</strong><br>
+                <strong>VitaeLab v5.5</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -2183,7 +2183,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>CV PWA Editor v5.5</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.5</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -2218,17 +2218,17 @@
   <div id="infoModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; align-items:center; justify-content:center;">
     <div style="background:white; border-radius:12px; padding:32px; max-width:520px; width:90%; max-height:85vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 style="color:#003d7a; margin:0;">ℹ️ CV PWA Editor — Info</h3>
+        <h3 style="color:#003d7a; margin:0;">ℹ️ VitaeLab — Info</h3>
         <button onclick="closeInfoModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#6b7280;">×</button>
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>CV PWA Editor v5.5</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.5</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
       <p style="font-size:0.875rem; color:#374151; margin-bottom:12px;">
-        I dati del tuo CV <strong>non vengono mai salvati nel browser</strong>. Cliccando il pulsante ☁️ Drive in alto puoi collegare il tuo account Google: il CV verrà salvato automaticamente nel tuo Drive privato (cartella <em>CV-Editor-Dati</em>) ogni volta che apporti una modifica.
+        I dati del tuo CV <strong>non vengono mai salvati nel browser</strong>. Cliccando il pulsante ☁️ Drive in alto puoi collegare il tuo account Google: il CV verrà salvato automaticamente nel tuo Drive privato (cartella <em>VitaeLab-Dati</em>) ogni volta che apporti una modifica.
       </p>
       <h5 style="color:#003d7a; margin:16px 0 8px;">📄 Come usare l'app</h5>
       <ol style="font-size:0.875rem; color:#374151; padding-left:20px; margin-bottom:12px;">
@@ -3388,7 +3388,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 CV PWA Editor v5.3 con template e stampa corretti inizializzato');
+      console.log('🚀 VitaeLab v5.5 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -3771,7 +3771,7 @@
 
     const DRIVE_CLIENT_ID   = '374342529488-c123a5j5v8hnfs241udbl55fos5thfq6.apps.googleusercontent.com';
     const DRIVE_SCOPE       = 'https://www.googleapis.com/auth/drive.file email profile';
-    const DRIVE_FOLDER_NAME = 'CV-Editor-Dati';
+    const DRIVE_FOLDER_NAME = 'VitaeLab-Dati';
     const DRIVE_FILE_NAME   = 'cv-data.json';
 
     // Stato Drive — solo metadati di connessione (nessun dato CV), salvato in localStorage
@@ -3931,7 +3931,7 @@
         }
     }
 
-    // ── Trova o crea la cartella CV-Editor-Dati su Drive ──────────────────
+    // ── Trova o crea la cartella VitaeLab-Dati su Drive ──────────────────
     async function findOrCreateDriveFolder() {
         const q = encodeURIComponent(`name='${DRIVE_FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
         const resp = await driveApiFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`);
@@ -4065,7 +4065,7 @@
         const yy = d.getFullYear();
         const hh = String(d.getHours()).padStart(2,'0');
         const min = String(d.getMinutes()).padStart(2,'0');
-        el.textContent = `CV: ${dd}/${mm}/${yy} ${hh}:${min}`;
+        el.textContent = `☁️ Ultima modifica CV: ${dd}/${mm}/${yy} ${hh}:${min}`;
     }
 
     // ── Popola tutti i campi del form dai dati AppState (usato dopo load da Drive) ──

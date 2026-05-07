@@ -1,9 +1,9 @@
-// Service Worker per CV PWA Editor - EduTechLab Italia
+// Service Worker per VitaeLab - EduTechLab Italia
 // Per forzare aggiornamenti PWA: incrementare i numeri di versione qui sotto
 
-const CACHE_NAME = 'cv-pwa-editor-v5.5.0';
-const STATIC_CACHE = 'cv-static-v5.5.0';
-const DYNAMIC_CACHE = 'cv-dynamic-v5.5.0';
+const CACHE_NAME = 'vitaelab-v5.5.1';
+const STATIC_CACHE = 'vitaelab-static-v5.5.1';
+const DYNAMIC_CACHE = 'vitaelab-dynamic-v5.5.1';
 
 // File da cachare immediatamente (cache statica)
 const STATIC_FILES = [
@@ -194,7 +194,7 @@ async function fallbackResponse(request) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CV Editor - Offline</title>
+        <title>VitaeLab - Offline</title>
         <style>
           body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -242,7 +242,7 @@ async function fallbackResponse(request) {
       <body>
         <div class="offline-container">
           <div class="offline-icon">📄</div>
-          <h1>CV Editor Offline</h1>
+          <h1>VitaeLab Offline</h1>
           <p>Sei attualmente offline, ma puoi continuare a lavorare sul tuo CV. I tuoi dati sono salvati localmente.</p>
           <button onclick="window.location.reload()">Riprova connessione</button>
         </div>

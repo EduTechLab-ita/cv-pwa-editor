@@ -1,7 +1,7 @@
 {
-  "name": "CV PWA Editor - EduTechLab Italia",
-  "short_name": "CV Editor",
-  "description": "Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia",
+  "name": "VitaeLab - EduTechLab Italia",
+  "short_name": "VitaeLab",
+  "description": "Editor professionale per Curriculum Vitae Europass con Google Drive sync e funzionalità offline - Sviluppato da EduTechLab Italia",
   "version": "5.5.0",
   "start_url": "./index.html",
   "display": "standalone",
@@ -74,7 +74,7 @@
       "sizes": "1280x720",
       "type": "image/svg+xml",
       "form_factor": "wide",
-      "label": "Screenshot dell'app CV Editor in modalità desktop"
+      "label": "Screenshot di VitaeLab in modalità desktop"
     }
   ],
   "shortcuts": [

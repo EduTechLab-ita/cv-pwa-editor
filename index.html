@@ -906,6 +906,7 @@
       height: 120px;
       border-radius: 50% !important;
       object-fit: cover;
+      overflow: hidden;
       border: 3px solid #003d7a;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       position: absolute;
@@ -1614,20 +1615,24 @@
                 </div>
                 
                 <div class="photo-preview-container" id="photoPreview" style="display: none;">
-                  <div style="overflow:hidden; width:140px; height:140px; border-radius:4px; border:2px solid #e2e8f0; position:relative; cursor:move;" id="photoFrame">
-                    <img id="photoImg" class="photo-preview" alt="Anteprima foto"
-                         style="position:absolute; transform-origin:center; user-select:none;"
+                  <!-- Crop editor: mostra la foto intera con overlay scuro fuori dalla zona di ritaglio -->
+                  <div style="position:relative; width:220px; height:220px; background:#333; overflow:hidden; border-radius:6px; cursor:move;" id="photoCropWrapper">
+                    <img id="photoImg" alt="Anteprima foto"
+                         style="position:absolute; left:50%; top:50%; transform-origin:center; user-select:none; max-width:none; max-height:none;"
                          draggable="false">
+                    <!-- Overlay scuro con finestra trasparente = area visibile nel CV -->
+                    <div style="position:absolute; top:40px; left:40px; width:140px; height:140px; box-shadow:0 0 0 500px rgba(0,0,0,0.5); border:2px dashed rgba(255,255,255,0.85); pointer-events:none; box-sizing:border-box; border-radius:2px;"></div>
+                    <div style="position:absolute; bottom:4px; left:50%; transform:translateX(-50%); font-size:0.6rem; color:rgba(255,255,255,0.55); white-space:nowrap; pointer-events:none;">parte visibile nel CV</div>
                   </div>
                   <div style="margin-top:10px;">
                     <label style="font-size:0.75rem; color:#6b7280; display:block; margin-bottom:2px;">🔍 Zoom</label>
-                    <input type="range" id="photoScale" min="100" max="200" value="100" style="width:140px;"
+                    <input type="range" id="photoScale" min="100" max="200" value="100" style="width:220px;"
                            oninput="applyPhotoAdjust()">
                     <label style="font-size:0.75rem; color:#6b7280; display:block; margin:6px 0 2px;">↔️ Sposta X</label>
-                    <input type="range" id="photoX" min="-70" max="70" value="0" style="width:140px;"
+                    <input type="range" id="photoX" min="-80" max="80" value="0" style="width:220px;"
                            oninput="applyPhotoAdjust()">
                     <label style="font-size:0.75rem; color:#6b7280; display:block; margin:6px 0 2px;">↕️ Sposta Y</label>
-                    <input type="range" id="photoY" min="-70" max="70" value="0" style="width:140px;"
+                    <input type="range" id="photoY" min="-80" max="80" value="0" style="width:220px;"
                            oninput="applyPhotoAdjust()">
                   </div>
                   <div class="photo-controls" style="margin-top:8px;">
@@ -2407,8 +2412,14 @@
           <div class="page-bar"></div>
           
           <div class="cv-header" style="position: relative;">
-            ${data.personal.photo && data.settings.showPhoto ? 
-              `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">` : ''}
+            ${data.personal.photo && data.settings.showPhoto ? (() => {
+              const adj = data.personal.photoAdjust;
+              if (adj && adj.baseScale) {
+                const actualScale = adj.baseScale * (adj.scale || 100) / 100;
+                return `<div class="cv-profile-photo"><img src="${data.personal.photo}" style="position:absolute; left:50%; top:50%; transform-origin:center; max-width:none; max-height:none; transform:translate(calc(-50% + ${adj.x||0}px), calc(-50% + ${adj.y||0}px)) scale(${actualScale});" alt="Foto profilo"></div>`;
+              }
+              return `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">`;
+            })() : ''}
             
             <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto ? 'style="padding-right:140px;"' : ''}>${data.personal.fullName || 'Il Tuo Nome'}</h1>
             
@@ -2734,25 +2745,35 @@
       const uploadArea = document.getElementById('photoUpload');
       const previewContainer = document.getElementById('photoPreview');
       const photoImg = document.getElementById('photoImg');
-      
+
       uploadArea.style.display = 'none';
       previewContainer.style.display = 'block';
+
+      photoImg.onload = function() {
+        const w = photoImg.naturalWidth;
+        const h = photoImg.naturalHeight;
+        // Scala base: la minima per coprire il crop area 140×140
+        const coverScale = Math.max(140 / w, 140 / h);
+        photoImg.dataset.baseScale = coverScale;
+        // Ripristina slider
+        const adj = AppState.cvData.personal.photoAdjust || { scale: 100, x: 0, y: 0 };
+        const scaleEl = document.getElementById('photoScale');
+        const xEl = document.getElementById('photoX');
+        const yEl = document.getElementById('photoY');
+        if (scaleEl) scaleEl.value = adj.scale;
+        if (xEl) xEl.value = adj.x;
+        if (yEl) yEl.value = adj.y;
+        applyPhotoAdjust();
+      };
       photoImg.src = photoData;
-      // Ripristina i cursori dell'editor
-      const adj = AppState.cvData.personal.photoAdjust || { scale: 100, x: 0, y: 0 };
-      const scaleEl = document.getElementById('photoScale');
-      const xEl = document.getElementById('photoX');
-      const yEl = document.getElementById('photoY');
-      if (scaleEl) scaleEl.value = adj.scale;
-      if (xEl) xEl.value = adj.x;
-      if (yEl) yEl.value = adj.y;
-      applyPhotoAdjust();
     }
     
     // Rimuove foto
     function removePhoto() {
-      AppState.cvData.personal.photoAdjust = { scale: 100, x: 0, y: 0 };
+      AppState.cvData.personal.photoAdjust = { scale: 100, x: 0, y: 0, baseScale: 1 };
       AppState.cvData.personal.photo = null;
+      const photoImg = document.getElementById('photoImg');
+      if (photoImg) { photoImg.dataset.baseScale = 1; photoImg.src = ''; }
       AppState.saveData();
       
       const uploadArea = document.getElementById('photoUpload');
@@ -2766,22 +2787,18 @@
     function applyPhotoAdjust() {
       const img = document.getElementById('photoImg');
       if (!img) return;
-      const scale = parseInt(document.getElementById('photoScale')?.value || 100) / 100;
+      const sliderPct = parseInt(document.getElementById('photoScale')?.value || 100) / 100;
       const x = parseInt(document.getElementById('photoX')?.value || 0);
       const y = parseInt(document.getElementById('photoY')?.value || 0);
-      img.style.transform = `scale(${scale}) translate(${x}px, ${y}px)`;
-      img.style.left = '50%';
-      img.style.top = '50%';
-      img.style.marginLeft = '-50%';
-      img.style.marginTop = '-50%';
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.objectFit = 'cover';
-      // Salva
+      const baseScale = parseFloat(img.dataset.baseScale || 1);
+      const actualScale = baseScale * sliderPct;
+      img.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${actualScale})`;
+      // Salva (% slider + baseScale per ripristino)
       if (!AppState.cvData.personal.photoAdjust) AppState.cvData.personal.photoAdjust = {};
-      AppState.cvData.personal.photoAdjust.scale = Math.round(scale * 100);
+      AppState.cvData.personal.photoAdjust.scale = Math.round(sliderPct * 100);
       AppState.cvData.personal.photoAdjust.x = x;
       AppState.cvData.personal.photoAdjust.y = y;
+      AppState.cvData.personal.photoAdjust.baseScale = baseScale;
       AppState.saveData();
     }
 

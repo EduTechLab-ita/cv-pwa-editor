@@ -1347,15 +1347,16 @@
       font-weight: 600;
     }
     
-    /* Template Professionale - due colonne */
+    /* Template Professionale - grid: foto a sinistra, testo a destra */
     .professional-template .cv-header {
       background: #003d7a;
       color: white;
       padding: 24px 28px;
       margin: -20px -20px 20px -20px;
-      display: flex;
+      display: grid !important;
+      grid-template-columns: 150px 1fr;
       align-items: center;
-      gap: 20px;
+      gap: 6px 20px;
     }
     .professional-template .cv-name { color: white; font-size: 1.6rem; }
     .professional-template .cv-contact-grid { color: rgba(255,255,255,0.85); }
@@ -1373,11 +1374,13 @@
     .professional-template .page-bar { background: #ffa500; height: 3px; margin: 0 -20px 16px; }
     .professional-template .cv-profile-photo {
       position: relative !important;
-      flex-shrink: 0;
-      order: -1;
+      grid-column: 1;
+      grid-row: 1 / 5;
+      align-self: center;
+      justify-self: center;
       width: 130px !important;
       height: 130px !important;
-      margin-right: 20px;
+      margin: 0;
       border: 3px solid rgba(255,255,255,0.5);
       border-radius: 50%;
       overflow: hidden !important;
@@ -2511,9 +2514,9 @@
               return `<img src="${data.personal.photo}" class="cv-profile-photo" alt="Foto profilo">`;
             })() : ''}
             
-            <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'style="padding-right:140px;"' : ''}>${[data.personal.firstName, data.personal.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome'}</h1>
+            <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'style="padding-right:140px;"' : ''}>${[data.personal.firstName, data.personal.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome'}</h1>
 
-            <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'margin-right: 140px;' : ''}">
+            <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'margin-right: 140px;' : ''}">
               ${data.personal.nationality ? `<div class="cv-contact-item">🌍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
               ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
@@ -2521,7 +2524,7 @@
               ${data.personal.website ? `<div class="cv-contact-item">🌐 ${this.linkifyText(data.personal.website)}</div>` : ''}
             </div>
             
-            ${data.personal.address ? `<div class="cv-address" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'style="padding-right:140px;"' : ''}>📍 ${data.personal.address}</div>` : ''}
+            ${data.personal.address ? `<div class="cv-address" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'style="padding-right:140px;"' : ''}>📍 ${data.personal.address}</div>` : ''}
           </div>
         `;
         

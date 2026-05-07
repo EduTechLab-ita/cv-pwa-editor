@@ -1372,7 +1372,7 @@
     }
     .professional-template .page-bar { background: #ffa500; height: 3px; margin: 0 -20px 16px; }
     .professional-template .cv-profile-photo {
-      position: static !important;
+      position: relative !important;
       flex-shrink: 0;
       order: -1;
       width: 130px !important;
@@ -2514,7 +2514,7 @@
             <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'style="padding-right:140px;"' : ''}>${[data.personal.firstName, data.personal.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome'}</h1>
 
             <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'margin-right: 140px;' : ''}">
-              ${data.personal.nationality ? `<div class="cv-contact-item">📍 ${data.personal.nationality}</div>` : ''}
+              ${data.personal.nationality ? `<div class="cv-contact-item">🌍 ${data.personal.nationality}</div>` : ''}
               ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
               ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
               ${data.personal.email ? `<div class="cv-contact-item">✉️ ${this.linkifyText(data.personal.email)}</div>` : ''}

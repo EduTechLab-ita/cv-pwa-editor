@@ -1184,12 +1184,12 @@
     }
 
     .modern-template .cv-profile-photo {
-      position: static !important;
-      float: right !important;
-      margin-left: 20px !important;
-      margin-bottom: 10px !important;
-      top: auto !important;
-      right: auto !important;
+      position: absolute !important;
+      top: 10px !important;
+      right: 20px !important;
+      float: none !important;
+      margin-left: 0 !important;
+      margin-bottom: 0 !important;
       border: 3px solid #3b82f6;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
@@ -1371,7 +1371,16 @@
       text-transform: uppercase;
     }
     .professional-template .page-bar { background: #ffa500; height: 3px; margin: 0 -20px 16px; }
-    .professional-template .cv-profile-photo { border-radius: 50%; border: 3px solid rgba(255,255,255,0.5); }
+    .professional-template .cv-profile-photo {
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.5);
+      position: static !important;
+      flex-shrink: 0;
+      order: -1;
+      width: 80px !important;
+      height: 80px !important;
+      margin-right: 16px;
+    }
 
     /* Default per template senza classe specifica mantiene gli stili esistenti */
     .cv-preview:not(.modern-template):not(.europass-template) {
@@ -1424,6 +1433,21 @@
       html, body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
+      }
+
+      /* Fix spazio eccessivo sopra nel template standard (europass) */
+      .cv-preview.europass-template {
+        padding: 10px 20px !important;
+      }
+      .cv-preview .europass-header {
+        margin-bottom: 8px !important;
+        padding: 4px 0 !important;
+      }
+      .cv-preview .cv-title {
+        margin: 8px 0 8px 0 !important;
+      }
+      .cv-preview .page-bar {
+        margin-bottom: 12px !important;
       }
     }
     
@@ -2486,7 +2510,7 @@
               ${data.personal.website ? `<div class="cv-contact-item">🌐 ${this.linkifyText(data.personal.website)}</div>` : ''}
             </div>
             
-            ${data.personal.address ? `<div class="cv-address">📍 ${data.personal.address}</div>` : ''}
+            ${data.personal.address ? `<div class="cv-address" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle !== 'modern' ? 'style="padding-right:140px;"' : ''}>📍 ${data.personal.address}</div>` : ''}
           </div>
         `;
         

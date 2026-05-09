@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.7.1 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1819,7 +1819,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.7.1 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1879,7 +1879,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.7.1</span>
+            <span class="app-version">v5.8</span>
           </div>
         </div>
         
@@ -1896,11 +1896,11 @@
           <span>☁️</span><span id="drive-btn-label">Drive</span>
         </button>
         <select class="header-template-select no-print" id="headerTemplateSelect" onchange="selectTemplate(this.value)" title="Scegli il template del CV">
-          <option value="europass">📄 Europass Std</option>
-          <option value="modern">✨ Moderno</option>
-          <option value="professional">🏛️ Professionale</option>
-          <option value="europass-official">📋 EP Ufficiale</option>
-          <option value="twocolumn">📐 Bicolonna</option>
+          <option value="europass-official">Europass Ufficiale</option>
+          <option value="europass">Europass Standard</option>
+          <option value="modern">Moderno</option>
+          <option value="professional">Professionale</option>
+          <option value="twocolumn">Bicolonna</option>
         </select>
         <button class="header-btn" onclick="switchSection('preview')">
           👁️ Anteprima
@@ -2095,7 +2095,7 @@
                 <span>Foto Profilo (opzionale)</span>
                 <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; font-weight:500; cursor:pointer; margin:0;">
                   <input type="checkbox" id="showPhotoInCV" style="transform:scale(1.2);" onchange="syncShowPhoto(this.checked)">
-                  Mostra nel CV
+                  Mostra foto nel CV
                 </label>
               </label>
               <div class="photo-upload-container">
@@ -2751,7 +2751,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h5 style="margin-bottom: 8px;">📊 Informazioni CV</h5>
               <div style="font-size: 14px; color: #6b7280;">
-                <p><strong>Versione App:</strong> v5.7.1</p>
+                <p><strong>Versione App:</strong> v5.8</p>
                 <p><strong>Template:</strong> <span id="currentTemplate">Europass Standard</span></p>
                 <p><strong>Ultima Modifica:</strong> <span id="lastModified">-</span></p>
               </div>
@@ -2785,7 +2785,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.7.1</strong><br>
+                <strong>VitaeLab v5.8</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -2813,7 +2813,7 @@
                  style="padding: 12px; border: 2px solid #2563eb; border-radius: 8px; cursor: pointer; background: #eff6ff; position:relative;">
               <!-- Badge Europass -->
               <div style="position:absolute; top:8px; right:8px; z-index:2; background:white; border-radius:4px; padding:1px 3px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
-                <img src=".\CV-EUropass.png" alt="Europass" style="height:16px; width:auto; display:block;">
+                <img src="./CV-EUropass.png" alt="Europass" style="height:16px; width:auto; display:block;">
               </div>
               <!-- Mockup CSS Europass Standard -->
               <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
@@ -2852,7 +2852,7 @@
                  style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb; position:relative;">
               <!-- Badge Europass -->
               <div style="position:absolute; top:8px; right:8px; z-index:2; background:white; border-radius:4px; padding:1px 3px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
-                <img src=".\CV-EUropass.png" alt="Europass" style="height:16px; width:auto; display:block;">
+                <img src="./CV-EUropass.png" alt="Europass" style="height:16px; width:auto; display:block;">
               </div>
               <!-- Mockup CSS Europass Ufficiale -->
               <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
@@ -2902,7 +2902,11 @@
 
             <!-- Template Moderno -->
             <div class="template-card" data-template="modern" onclick="selectTemplate('modern')"
-                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb; position:relative;">
+              <!-- Badge Europass piccolo -->
+              <div style="position:absolute; top:6px; right:6px; z-index:2; background:white; border-radius:4px; padding:1px 3px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+                <img src="./CV-EUropass.png" style="height:14px; width:auto; display:block;" alt="Europass">
+              </div>
               <!-- Mockup CSS Moderno -->
               <div style="width:120px; height:165px; background:linear-gradient(135deg,#f8fafc,#e2e8f0); border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1); border-left:4px solid #3b82f6;">
                 <div style="height:28px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:0 6px 6px 0; margin:4px 4px 4px 0; position:relative; padding:3px 6px; display:flex; align-items:center; justify-content:flex-end;">
@@ -2935,7 +2939,11 @@
 
             <!-- Template Professionale -->
             <div class="template-card" data-template="professional" onclick="selectTemplate('professional')"
-                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb; position:relative;">
+              <!-- Badge Europass piccolo -->
+              <div style="position:absolute; top:6px; right:6px; z-index:2; background:white; border-radius:4px; padding:1px 3px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+                <img src="./CV-EUropass.png" style="height:14px; width:auto; display:block;" alt="Europass">
+              </div>
               <!-- Mockup CSS Professionale -->
               <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
                 <div style="height:40px; background:#003d7a; display:grid; grid-template-columns:32px 1fr; gap:4px; padding:4px 5px; align-items:center;">
@@ -3039,7 +3047,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.7.1</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3079,7 +3087,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.7.1</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3549,7 +3557,7 @@
             <div class="eo-header-info">
               <h1>${name}</h1>
             </div>
-            <img src=".\CV-EUropass.png" alt="Europass" style="height: 30px; width: auto;">
+            <img src="./CV-EUropass.png" alt="Europass" style="height: 30px; width: auto;">
           </div>
           ${contacts ? `<div class="eo-contacts">${contacts}</div>` : ''}
           <div class="eo-body">
@@ -4532,7 +4540,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.7.1 inizializzato');
+      console.log('🚀 VitaeLab v5.8 inizializzato');
       
       // Carica dati
       AppState.loadData();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.5 - EduTechLab Italia</title>
+  <title>VitaeLab v5.6 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -294,6 +294,63 @@
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       height: fit-content;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 80px;
+      max-height: calc(100vh - 100px);
+    }
+
+    .sidebar-nav {
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .sidebar-sticky-bottom {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      border-top: 2px solid #e2e8f0;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.07);
+      z-index: 10;
+    }
+
+    .sidebar-sticky-bottom select {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1px solid #003d7a;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #003d7a;
+      font-weight: 500;
+      background: #eff6ff;
+      cursor: pointer;
+    }
+
+    .sidebar-sticky-bottom .btn-anteprima {
+      width: 100%;
+      padding: 9px 10px;
+      background: #003d7a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .sidebar-sticky-bottom .btn-anteprima:hover {
+      background: #002c5f;
     }
     
     .sidebar-header {
@@ -311,8 +368,11 @@
     
     .sidebar-nav {
       padding: 12px 0;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
     }
-    
+
     .nav-section {
       display: flex;
       align-items: center;
@@ -1391,6 +1451,317 @@
     .cv-preview:not(.modern-template):not(.europass-template) {
       /* Stili di default già definiti sopra */
     }
+
+    /* === TEMPLATE EUROPASS UFFICIALE === */
+    .cv-preview.europass-official-template {
+      background: white;
+      color: #222;
+      font-family: 'Calibri', 'Arial', sans-serif;
+      padding: 0;
+      border: none;
+    }
+
+    .europass-official-template .eo-header {
+      background: #003d7a;
+      color: white;
+      padding: 18px 30px 14px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .europass-official-template .eo-header-info h1 {
+      font-size: 1.8em;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .europass-official-template .eo-header-info .eo-subtitle {
+      font-size: 0.95em;
+      color: rgba(255,255,255,0.75);
+      font-style: italic;
+      margin: 0;
+    }
+
+    .europass-official-template .eo-header-logo {
+      height: 32px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.85;
+    }
+
+    .europass-official-template .eo-contacts {
+      background: #f0f4f8;
+      padding: 8px 30px;
+      border-bottom: 2px solid #003d7a;
+      font-size: 0.85em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 20px;
+      color: #333;
+    }
+
+    .europass-official-template .eo-contacts .eo-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .europass-official-template .eo-contacts .eo-contact-item strong {
+      color: #003d7a;
+    }
+
+    .europass-official-template .eo-body {
+      padding: 16px 30px;
+    }
+
+    .europass-official-template .eo-section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 22px 0 8px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #c0c8d0;
+    }
+
+    .europass-official-template .eo-section-title::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #003d7a;
+      flex-shrink: 0;
+    }
+
+    .europass-official-template .eo-section-title span {
+      font-size: 1em;
+      font-weight: 700;
+      color: #003d7a;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .europass-official-template .eo-entry {
+      margin-bottom: 14px;
+      padding-left: 4px;
+    }
+
+    .europass-official-template .eo-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3px;
+    }
+
+    .europass-official-template .eo-entry-title {
+      font-weight: 700;
+      color: #003d7a;
+      font-size: 0.95em;
+    }
+
+    .europass-official-template .eo-entry-date {
+      color: #666;
+      font-size: 0.85em;
+      font-style: italic;
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+
+    .europass-official-template .eo-entry-sub {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 3px;
+    }
+
+    .europass-official-template .eo-entry-desc {
+      font-size: 0.88em;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .europass-official-template .eo-privacy {
+      margin-top: 24px;
+      padding: 10px 16px;
+      border-top: 1px solid #ccc;
+      font-size: 0.78em;
+      color: #777;
+      font-style: italic;
+    }
+
+    /* === TEMPLATE BICOLONNA === */
+    .cv-preview.twocolumn-template {
+      background: white;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      min-height: 600px;
+      border: none;
+    }
+
+    .twocolumn-template .tc-sidebar {
+      width: 32%;
+      background: #1a3a5c;
+      color: white;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      flex-shrink: 0;
+    }
+
+    .twocolumn-template .tc-main {
+      flex: 1;
+      padding: 24px 24px;
+      background: white;
+      color: #222;
+      overflow: hidden;
+    }
+
+    .twocolumn-template .tc-photo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .twocolumn-template .tc-photo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.5);
+      overflow: hidden;
+    }
+
+    .twocolumn-template .tc-name {
+      color: white;
+      font-size: 1.1em;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .twocolumn-template .tc-jobtitle {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8em;
+      text-align: center;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    .twocolumn-template .tc-sidebar-section {
+      margin-top: 14px;
+    }
+
+    .twocolumn-template .tc-sidebar-section-title {
+      background: #2d5a8e;
+      color: white;
+      font-size: 0.75em;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 4px 8px;
+      border-radius: 3px;
+      margin-bottom: 8px;
+    }
+
+    .twocolumn-template .tc-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .twocolumn-template .tc-contact-item svg {
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+
+    .twocolumn-template .tc-skills-item {
+      font-size: 0.78em;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 5px;
+      padding: 2px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .twocolumn-template .tc-main-title {
+      font-size: 1.9em;
+      font-weight: 300;
+      color: #1a3a5c;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .twocolumn-template .tc-main-divider {
+      height: 3px;
+      background: #1a3a5c;
+      width: 60px;
+      margin-bottom: 18px;
+    }
+
+    .twocolumn-template .tc-section-title {
+      font-size: 0.95em;
+      font-weight: 700;
+      color: #1a3a5c;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 2px solid #1a3a5c;
+      padding-bottom: 4px;
+      margin: 18px 0 10px 0;
+    }
+
+    .twocolumn-template .tc-entry {
+      margin-bottom: 12px;
+    }
+
+    .twocolumn-template .tc-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2px;
+    }
+
+    .twocolumn-template .tc-entry-title {
+      font-weight: 700;
+      color: #1a3a5c;
+      font-size: 0.92em;
+    }
+
+    .twocolumn-template .tc-entry-date {
+      color: #888;
+      font-size: 0.82em;
+      font-style: italic;
+      white-space: nowrap;
+      margin-left: 8px;
+    }
+
+    .twocolumn-template .tc-entry-sub {
+      font-size: 0.87em;
+      color: #555;
+      margin-bottom: 2px;
+    }
+
+    .twocolumn-template .tc-entry-desc {
+      font-size: 0.85em;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .twocolumn-template .tc-privacy {
+      margin-top: 20px;
+      padding: 10px 0 0;
+      border-top: 1px solid #ddd;
+      font-size: 0.76em;
+      color: #888;
+      font-style: italic;
+    }
     
     /* === STILI STAMPA PDF - Dal backup v4.5 funzionante === */
     @media print {
@@ -1431,7 +1802,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1444,6 +1815,19 @@
       /* Fix spazio eccessivo sopra nel template standard (europass) */
       .cv-preview.europass-template {
         padding: 10px 20px !important;
+      }
+
+      /* Print fix per template Europass Ufficiale */
+      .cv-preview.europass-official-template {
+        padding: 0 !important;
+        box-shadow: none !important;
+      }
+
+      /* Print fix per template Bicolonna */
+      .cv-preview.twocolumn-template {
+        padding: 0 !important;
+        box-shadow: none !important;
+        min-height: auto !important;
       }
       .cv-preview .europass-header {
         margin-bottom: 8px !important;
@@ -1465,7 +1849,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.5!</strong> Google Drive sync, nessun dato nel browser, aggiornamento automatico, nuova icona</span>
+      <span><strong>Aggiornato alla versione 5.6!</strong> Sidebar sticky, 2 nuovi template (Europass Ufficiale e Bicolonna), fix foto, SVG icons, anteprime grafiche template</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -1478,7 +1862,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.5</span>
+            <span class="app-version">v5.6</span>
           </div>
         </div>
         
@@ -1569,6 +1953,19 @@
           Info App
         </button>
       </nav>
+      <!-- Sticky bottom: selettore template + anteprima -->
+      <div class="sidebar-sticky-bottom no-print">
+        <select id="sidebarTemplateSelect" onchange="selectTemplate(this.value)" title="Seleziona template">
+          <option value="europass">🇪🇺 Europass Standard</option>
+          <option value="modern">✨ Moderno</option>
+          <option value="professional">🏛️ Professionale</option>
+          <option value="europass-official">📋 Europass Ufficiale</option>
+          <option value="twocolumn">📐 Bicolonna</option>
+        </select>
+        <button class="btn-anteprima" onclick="switchSection('preview')">
+          👁️ Anteprima
+        </button>
+      </div>
     </aside>
     
     <!-- Main Content -->
@@ -1679,7 +2076,13 @@
             
             <!-- Upload Foto Profilo -->
             <div class="form-group full-width">
-              <label class="form-label">Foto Profilo (opzionale)</label>
+              <label class="form-label" style="display:flex; align-items:center; justify-content:space-between;">
+                <span>Foto Profilo (opzionale)</span>
+                <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; font-weight:500; cursor:pointer; margin:0;">
+                  <input type="checkbox" id="showPhotoInCV" style="transform:scale(1.2);" onchange="syncShowPhoto(this.checked)">
+                  Mostra nel CV
+                </label>
+              </label>
               <div class="photo-upload-container">
                 <div class="photo-upload-area" id="photoUpload">
                   <div class="photo-upload-content">
@@ -2101,52 +2504,193 @@
           <!-- Tab: Template -->
           <div class="settings-tab-content" id="settings-templates">
             <h4 style="color: #003d7a; margin-bottom: 15px;">🎨 Template Disponibili</h4>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
-              <!-- Template Europass -->
-              <div class="template-card active" data-template="europass" onclick="selectTemplate('europass')" 
-                   style="padding: 20px; border: 2px solid #2563eb; border-radius: 8px; cursor: pointer; background: #eff6ff;">
-                <div style="display: flex; align-items: center; gap: 16px;">
-                  <div style="font-size: 48px;">🇪🇺</div>
-                  <div>
-                    <h6 style="color: #1e40af; margin-bottom: 4px;">Europass Standard</h6>
-                    <p style="color: #3730a3; font-size: 14px; margin-bottom: 8px;">Template ufficiale Europass EU</p>
-                    <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
-                      ✓ Attivo
-                    </span>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+
+              <!-- Template Europass Standard -->
+              <div class="template-card active" data-template="europass" onclick="selectTemplate('europass')"
+                   style="padding: 12px; border: 2px solid #2563eb; border-radius: 8px; cursor: pointer; background: #eff6ff;">
+                <!-- Mockup CSS Europass Standard -->
+                <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
+                  <div style="height:6px; background:linear-gradient(90deg,#003d7a,#0066cc); width:100%;"></div>
+                  <div style="padding:4px 5px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                      <div style="flex:1;">
+                        <div style="height:3px; background:#003d7a; width:60%; margin:3px 0 2px;"></div>
+                        <div style="height:2px; background:#ccc; width:80%; margin-bottom:2px;"></div>
+                        <div style="height:2px; background:#ccc; width:70%; margin-bottom:2px;"></div>
+                        <div style="height:2px; background:#ccc; width:55%; margin-bottom:2px;"></div>
+                      </div>
+                      <div style="width:22px; height:22px; border-radius:50%; background:#d1d5db; border:1px solid #003d7a; margin-left:3px; flex-shrink:0;"></div>
+                    </div>
+                    <div style="height:2px; background:#003d7a; width:100%; margin:4px 0 2px;"></div>
+                    <div style="height:2px; background:#ddd; width:90%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:80%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#003d7a; width:100%; margin:4px 0 2px;"></div>
+                    <div style="height:2px; background:#ddd; width:85%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:75%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:65%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#003d7a; width:100%; margin:4px 0 2px;"></div>
+                    <div style="height:2px; background:#ddd; width:80%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:70%; margin-bottom:2px;"></div>
                   </div>
+                </div>
+                <div style="text-align:center;">
+                  <h6 style="color: #1e40af; margin-bottom: 4px; font-size:12px;">Europass Standard</h6>
+                  <p style="color: #3730a3; font-size: 11px; margin-bottom: 6px;">Template ufficiale Europass EU</p>
+                  <span style="background: #dbeafe; color: #1e40af; padding: 3px 7px; border-radius: 4px; font-size: 11px;">✓ Attivo</span>
                 </div>
               </div>
 
               <!-- Template Moderno -->
               <div class="template-card" data-template="modern" onclick="selectTemplate('modern')"
-                   style="padding: 20px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
-                <div style="display: flex; align-items: center; gap: 16px;">
-                  <div style="font-size: 48px;">✨</div>
-                  <div>
-                    <h6 style="color: #374151; margin-bottom: 4px;">Moderno</h6>
-                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">Design pulito e contemporaneo</p>
-                    <span style="background: #f3f4f6; color: #6b7280; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
-                      Disponibile
-                    </span>
+                   style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                <!-- Mockup CSS Moderno -->
+                <div style="width:120px; height:165px; background:linear-gradient(135deg,#f8fafc,#e2e8f0); border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1); border-left:4px solid #3b82f6;">
+                  <div style="height:28px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:0 6px 6px 0; margin:4px 4px 4px 0; position:relative; padding:3px 6px; display:flex; align-items:center; justify-content:flex-end;">
+                    <div style="width:20px; height:20px; border-radius:50%; background:#60a5fa; border:2px solid white; position:absolute; right:4px; bottom:-8px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.6); width:50%;"></div>
                   </div>
+                  <div style="padding:10px 5px 4px;">
+                    <div style="height:6px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:3px; width:80%; margin:0 auto 6px;"></div>
+                    <div style="background:rgba(255,255,255,0.8); border-radius:4px; padding:3px 4px; margin-bottom:4px; border-left:2px solid #3b82f6;">
+                      <div style="height:2px; background:#94a3b8; width:90%; margin-bottom:1px;"></div>
+                      <div style="height:2px; background:#94a3b8; width:70%;"></div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.8); border-radius:4px; padding:3px 4px; margin-bottom:4px; border-left:2px solid #3b82f6;">
+                      <div style="height:2px; background:#94a3b8; width:85%; margin-bottom:1px;"></div>
+                      <div style="height:2px; background:#94a3b8; width:60%;"></div>
+                    </div>
+                    <div style="height:6px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:3px; width:80%; margin:4px auto 6px;"></div>
+                    <div style="background:rgba(255,255,255,0.8); border-radius:4px; padding:3px 4px; border-left:2px solid #3b82f6;">
+                      <div style="height:2px; background:#94a3b8; width:80%; margin-bottom:1px;"></div>
+                      <div style="height:2px; background:#94a3b8; width:65%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="text-align:center;">
+                  <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Moderno</h6>
+                  <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Design pulito e contemporaneo</p>
+                  <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
                 </div>
               </div>
 
               <!-- Template Professionale -->
               <div class="template-card" data-template="professional" onclick="selectTemplate('professional')"
-                   style="padding: 20px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
-                <div style="display: flex; align-items: center; gap: 16px;">
-                  <div style="font-size: 48px;">🏛️</div>
-                  <div>
-                    <h6 style="color: #374151; margin-bottom: 4px;">Professionale</h6>
-                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">Due colonne, sidebar laterale, layout compatto</p>
-                    <span style="background: #f3f4f6; color: #6b7280; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
-                      Disponibile
-                    </span>
+                   style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                <!-- Mockup CSS Professionale -->
+                <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
+                  <div style="height:40px; background:#003d7a; display:grid; grid-template-columns:32px 1fr; gap:4px; padding:4px 5px; align-items:center;">
+                    <div style="width:24px; height:24px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(255,255,255,0.5);"></div>
+                    <div>
+                      <div style="height:3px; background:rgba(255,255,255,0.85); width:80%; margin-bottom:2px;"></div>
+                      <div style="height:2px; background:rgba(255,255,255,0.5); width:60%;"></div>
+                    </div>
+                  </div>
+                  <div style="height:2px; background:#ffa500; margin:0;"></div>
+                  <div style="padding:4px 5px;">
+                    <div style="height:6px; background:#003d7a; border-radius:2px; width:70%; margin-bottom:4px;"></div>
+                    <div style="height:2px; background:#ddd; width:90%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:80%; margin-bottom:4px;"></div>
+                    <div style="height:6px; background:#003d7a; border-radius:2px; width:70%; margin-bottom:4px;"></div>
+                    <div style="height:2px; background:#ddd; width:85%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:70%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:60%; margin-bottom:4px;"></div>
+                    <div style="height:6px; background:#003d7a; border-radius:2px; width:70%; margin-bottom:4px;"></div>
+                    <div style="height:2px; background:#ddd; width:75%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ddd; width:65%;"></div>
                   </div>
                 </div>
+                <div style="text-align:center;">
+                  <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Professionale</h6>
+                  <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Header blu scuro, layout formale</p>
+                  <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+                </div>
               </div>
+
+              <!-- Template Europass Ufficiale -->
+              <div class="template-card" data-template="europass-official" onclick="selectTemplate('europass-official')"
+                   style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                <!-- Mockup CSS Europass Ufficiale -->
+                <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
+                  <div style="height:32px; background:#003d7a; display:flex; align-items:center; justify-content:space-between; padding:0 6px;">
+                    <div>
+                      <div style="height:3px; background:rgba(255,255,255,0.9); width:60px; margin-bottom:2px;"></div>
+                      <div style="height:2px; background:rgba(255,255,255,0.5); width:40px;"></div>
+                    </div>
+                    <div style="width:18px; height:12px; background:rgba(255,255,255,0.2); border-radius:1px;"></div>
+                  </div>
+                  <div style="padding:4px 5px;">
+                    <div style="height:2px; background:#ccc; width:90%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ccc; width:80%; margin-bottom:4px;"></div>
+                    <div style="display:flex; align-items:center; gap:2px; margin-bottom:3px;">
+                      <div style="width:5px; height:5px; border-radius:50%; background:#003d7a; flex-shrink:0;"></div>
+                      <div style="height:5px; background:#003d7a; flex:1; opacity:0.3;"></div>
+                      <div style="height:2px; background:#ccc; width:60%; margin-left:2px;"></div>
+                    </div>
+                    <div style="margin-left:8px; margin-bottom:3px;">
+                      <div style="height:2px; background:#ddd; width:80%; margin-bottom:1px;"></div>
+                      <div style="height:2px; background:#ddd; width:70%; margin-bottom:1px;"></div>
+                      <div style="height:2px; background:#ddd; width:60%;"></div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:2px; margin-bottom:3px;">
+                      <div style="width:5px; height:5px; border-radius:50%; background:#003d7a; flex-shrink:0;"></div>
+                      <div style="height:5px; background:#003d7a; flex:1; opacity:0.3;"></div>
+                      <div style="height:2px; background:#ccc; width:60%; margin-left:2px;"></div>
+                    </div>
+                    <div style="margin-left:8px;">
+                      <div style="height:2px; background:#ddd; width:75%; margin-bottom:1px;"></div>
+                      <div style="height:2px; background:#ddd; width:65%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div style="text-align:center;">
+                  <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Europass Ufficiale</h6>
+                  <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Formato ufficiale attuale EU</p>
+                  <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+                </div>
+              </div>
+
+              <!-- Template Bicolonna -->
+              <div class="template-card" data-template="twocolumn" onclick="selectTemplate('twocolumn')"
+                   style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+                <!-- Mockup CSS Bicolonna -->
+                <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1); display:flex;">
+                  <div style="width:36px; background:#1a3a5c; padding:5px 3px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:3px;">
+                    <div style="width:22px; height:22px; border-radius:50%; background:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.5); margin-bottom:3px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.7); width:26px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.4); width:22px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.4); width:24px;"></div>
+                    <div style="height:4px; background:#2d5a8e; width:30px; margin-top:4px; border-radius:1px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.4); width:26px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.4); width:22px;"></div>
+                    <div style="height:4px; background:#2d5a8e; width:30px; margin-top:4px; border-radius:1px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.4); width:26px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.4); width:20px;"></div>
+                  </div>
+                  <div style="flex:1; padding:5px 4px;">
+                    <div style="height:3px; background:#1a3a5c; width:80%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:#ccc; width:70%; margin-bottom:4px;"></div>
+                    <div style="height:2px; background:#1a3a5c; width:60%; margin-bottom:3px;"></div>
+                    <div style="height:2px; background:#ddd; width:90%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:80%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:70%; margin-bottom:4px;"></div>
+                    <div style="height:2px; background:#1a3a5c; width:60%; margin-bottom:3px;"></div>
+                    <div style="height:2px; background:#ddd; width:85%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:75%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:65%; margin-bottom:4px;"></div>
+                    <div style="height:2px; background:#1a3a5c; width:60%; margin-bottom:3px;"></div>
+                    <div style="height:2px; background:#ddd; width:80%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:60%;"></div>
+                  </div>
+                </div>
+                <div style="text-align:center;">
+                  <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Bicolonna</h6>
+                  <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Sidebar laterale colorata</p>
+                  <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -2192,7 +2736,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h5 style="margin-bottom: 8px;">📊 Informazioni CV</h5>
               <div style="font-size: 14px; color: #6b7280;">
-                <p><strong>Versione App:</strong> v5.5</p>
+                <p><strong>Versione App:</strong> v5.6</p>
                 <p><strong>Template:</strong> <span id="currentTemplate">Europass Standard</span></p>
                 <p><strong>Ultima Modifica:</strong> <span id="lastModified">-</span></p>
               </div>
@@ -2226,7 +2770,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.5</strong><br>
+                <strong>VitaeLab v5.6</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -2265,7 +2809,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.5</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.6</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -2305,7 +2849,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.5</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.6</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -2482,6 +3026,14 @@
           preview.classList.add('europass-template');
         } else if (data.settings.templateStyle === 'professional') {
           preview.classList.add('professional-template');
+        } else if (data.settings.templateStyle === 'europass-official') {
+          preview.classList.add('europass-official-template');
+          preview.innerHTML = AppState.renderEuropassOfficial(data);
+          return;
+        } else if (data.settings.templateStyle === 'twocolumn') {
+          preview.classList.add('twocolumn-template');
+          preview.innerHTML = AppState.renderTwocolumn(data);
+          return;
         }
         
         // Se non ci sono dati, mostra empty state
@@ -2519,14 +3071,14 @@
             <h1 class="cv-name" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'style="padding-right:140px;"' : ''}>${[data.personal.firstName, data.personal.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome'}</h1>
 
             <div class="cv-contact-grid" style="${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'margin-right: 140px;' : ''}">
-              ${data.personal.nationality ? `<div class="cv-contact-item">🌍 ${data.personal.nationality}</div>` : ''}
-              ${data.personal.birthDate ? `<div class="cv-contact-item">🎂 ${data.personal.birthDate}</div>` : ''}
-              ${data.personal.phone ? `<div class="cv-contact-item">📞 ${this.linkifyText(data.personal.phone)}</div>` : ''}
-              ${data.personal.email ? `<div class="cv-contact-item">✉️ ${this.linkifyText(data.personal.email)}</div>` : ''}
-              ${data.personal.website ? `<div class="cv-contact-item">🌐 ${this.linkifyText(data.personal.website)}</div>` : ''}
+              ${data.personal.nationality ? `<div class="cv-contact-item">${this.svgIcons.globe} ${data.personal.nationality}</div>` : ''}
+              ${data.personal.birthDate ? `<div class="cv-contact-item">${this.svgIcons.calendar} ${data.personal.birthDate}</div>` : ''}
+              ${data.personal.phone ? `<div class="cv-contact-item">${this.svgIcons.phone} ${this.linkifyText(data.personal.phone)}</div>` : ''}
+              ${data.personal.email ? `<div class="cv-contact-item">${this.svgIcons.mail} ${this.linkifyText(data.personal.email)}</div>` : ''}
+              ${data.personal.website ? `<div class="cv-contact-item">${this.svgIcons.link} ${this.linkifyText(data.personal.website)}</div>` : ''}
             </div>
-            
-            ${data.personal.address ? `<div class="cv-address" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'style="padding-right:140px;"' : ''}>📍 ${data.personal.address}</div>` : ''}
+
+            ${data.personal.address ? `<div class="cv-address" ${data.personal.photo && data.settings.showPhoto && data.settings.templateStyle === 'europass' ? 'style="padding-right:140px;"' : ''}>${this.svgIcons.mappin} ${data.personal.address}</div>` : ''}
           </div>
         `;
         
@@ -2728,13 +3280,238 @@
       // Link attivi
       linkifyText(text) {
         if (!text) return text;
-        
+
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
-        
+
         return text
           .replace(urlRegex, '<a href="$1" target="_blank" style="color: #0066cc; text-decoration: underline;">$1</a>')
           .replace(emailRegex, '<a href="mailto:$1" style="color: #0066cc; text-decoration: underline;">$1</a>');
+      },
+
+      // SVG icone contatti (Feather-style)
+      svgIcons: {
+        globe: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+        calendar: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+        phone: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.64 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+        mail: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+        link: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+        mappin: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`
+      },
+
+      // === RENDER EUROPASS UFFICIALE ===
+      renderEuropassOfficial(data) {
+        const p = data.personal;
+        const name = [p.firstName, p.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome';
+        const ic = this.svgIcons;
+        const lk = (t) => this.linkifyText(t);
+
+        let contacts = '';
+        if (p.birthDate) contacts += `<span class="eo-contact-item">${ic.calendar} <strong>Data di nascita:</strong> ${p.birthDate}</span>`;
+        if (p.nationality) contacts += `<span class="eo-contact-item">${ic.globe} <strong>Nazionalit&#224;:</strong> ${p.nationality}</span>`;
+        if (p.phone) contacts += `<span class="eo-contact-item">${ic.phone} <strong>Telefono:</strong> ${lk(p.phone)}</span>`;
+        if (p.email) contacts += `<span class="eo-contact-item">${ic.mail} <strong>Email:</strong> ${lk(p.email)}</span>`;
+        if (p.address) contacts += `<span class="eo-contact-item">${ic.mappin} <strong>Indirizzo:</strong> ${p.address}</span>`;
+        if (p.website) contacts += `<span class="eo-contact-item">${ic.link} <strong>Sito:</strong> ${lk(p.website)}</span>`;
+
+        let html = `
+          <div class="eo-header">
+            <div class="eo-header-info">
+              <h1>${name}</h1>
+            </div>
+            <img src="./CV-EUropass.png" alt="Europass" class="eo-header-logo">
+          </div>
+          ${contacts ? `<div class="eo-contacts">${contacts}</div>` : ''}
+          <div class="eo-body">
+        `;
+
+        const secTitle = (t) => `<div class="eo-section-title"><span>${t}</span></div>`;
+
+        if (data.profile && data.profile.text) {
+          html += secTitle('Profilo Professionale');
+          html += `<div class="eo-entry"><div class="eo-entry-desc">${lk(data.profile.text)}</div></div>`;
+        }
+
+        if (data.experience && data.experience.length > 0) {
+          html += secTitle('Esperienza Lavorativa');
+          data.experience.forEach(exp => {
+            html += `<div class="eo-entry">
+              <div class="eo-entry-header">
+                <div class="eo-entry-title">${exp.position || ''}</div>
+                <div class="eo-entry-date">${exp.startDate || ''} – ${exp.endDate || ''}</div>
+              </div>
+              <div class="eo-entry-sub">${exp.company || ''}</div>
+              ${exp.description ? `<div class="eo-entry-desc">${lk(exp.description)}</div>` : ''}
+            </div>`;
+          });
+        }
+
+        if (data.education && data.education.length > 0) {
+          html += secTitle('Istruzione e Formazione');
+          data.education.forEach(edu => {
+            html += `<div class="eo-entry">
+              <div class="eo-entry-header">
+                <div class="eo-entry-title">${edu.degree || ''}</div>
+                <div class="eo-entry-date">${edu.startDate || ''} – ${edu.endDate || ''}</div>
+              </div>
+              <div class="eo-entry-sub">${edu.institution || ''}</div>
+              ${edu.description ? `<div class="eo-entry-desc">${lk(edu.description)}</div>` : ''}
+            </div>`;
+          });
+        }
+
+        if (data.languages && (data.languages.motherTongue || (data.languages.otherLanguages && data.languages.otherLanguages.length > 0))) {
+          html += secTitle('Lingue');
+          if (data.languages.motherTongue) html += `<div class="eo-entry"><div class="eo-entry-desc"><strong>Madrelingua:</strong> ${data.languages.motherTongue}</div></div>`;
+          if (data.languages.otherLanguages && data.languages.otherLanguages.length > 0) {
+            data.languages.otherLanguages.forEach(lang => {
+              html += `<div class="eo-entry"><div class="eo-entry-desc">• ${lang.name}: ${lang.level}</div></div>`;
+            });
+          }
+        }
+
+        if ((data.skills.ai && data.skills.ai.content) || (data.skills.digital && (data.skills.digital.genericContent || data.skills.digital.useDigiCompEU))) {
+          html += secTitle('Competenze');
+          if (data.skills.ai && data.skills.ai.content) html += `<div class="eo-entry"><div class="eo-entry-desc"><strong>${data.skills.ai.title}:</strong> ${lk(data.skills.ai.content)}</div></div>`;
+          if (data.skills.digital && data.skills.digital.genericContent) html += `<div class="eo-entry"><div class="eo-entry-desc"><strong>Competenze Digitali:</strong> ${lk(data.skills.digital.genericContent)}</div></div>`;
+        }
+
+        if (data.other && data.other.skills) {
+          html += secTitle('Altre Competenze');
+          html += `<div class="eo-entry"><div class="eo-entry-desc">${lk(data.other.skills)}</div></div>`;
+        }
+
+        if (data.other && data.other.includePrivacy && data.other.privacyText) {
+          html += `<div class="eo-privacy">${data.other.privacyText}</div>`;
+        }
+
+        html += `</div>`;
+        return html;
+      },
+
+      // === RENDER BICOLONNA ===
+      renderTwocolumn(data) {
+        const p = data.personal;
+        const name = [p.firstName, p.lastName].filter(Boolean).join(' ') || 'Il Tuo Nome';
+        const ic = this.svgIcons;
+        const lk = (t) => this.linkifyText(t);
+        const showPhoto = p.photo && data.settings.showPhoto;
+
+        // Sidebar
+        let sidebarHtml = '';
+
+        if (showPhoto) {
+          const adj = p.photoAdjust;
+          let photoStyle = 'width:100%; height:100%; object-fit:cover;';
+          if (adj && adj.baseScale) {
+            const actualScale = adj.baseScale * (adj.scale || 100) / 100;
+            photoStyle = `position:absolute; left:50%; top:50%; transform-origin:center; max-width:none; max-height:none; transform:translate(calc(-50% + ${adj.x||0}px), calc(-50% + ${adj.y||0}px)) scale(${actualScale});`;
+          }
+          sidebarHtml += `<div class="tc-photo-wrap"><div style="width:90px;height:90px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.5);flex-shrink:0;position:relative;"><img src="${p.photo}" alt="Foto" style="${photoStyle}"></div></div>`;
+        } else {
+          sidebarHtml += `<div class="tc-photo-wrap"><div style="width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);flex-shrink:0;"></div></div>`;
+        }
+
+        sidebarHtml += `<div class="tc-name">${name}</div>`;
+
+        let contactsHtml = '';
+        if (p.phone) contactsHtml += `<div class="tc-contact-item">${ic.phone} ${lk(p.phone)}</div>`;
+        if (p.email) contactsHtml += `<div class="tc-contact-item">${ic.mail} ${lk(p.email)}</div>`;
+        if (p.address) contactsHtml += `<div class="tc-contact-item">${ic.mappin} ${p.address}</div>`;
+        if (p.birthDate) contactsHtml += `<div class="tc-contact-item">${ic.calendar} ${p.birthDate}</div>`;
+        if (p.nationality) contactsHtml += `<div class="tc-contact-item">${ic.globe} ${p.nationality}</div>`;
+        if (p.website) contactsHtml += `<div class="tc-contact-item">${ic.link} ${lk(p.website)}</div>`;
+
+        if (contactsHtml) {
+          sidebarHtml += `<div class="tc-sidebar-section"><div class="tc-sidebar-section-title">Contatti</div>${contactsHtml}</div>`;
+        }
+
+        if (data.profile && data.profile.text) {
+          sidebarHtml += `<div class="tc-sidebar-section"><div class="tc-sidebar-section-title">Profilo</div><div style="font-size:0.78em;color:rgba(255,255,255,0.85);line-height:1.5;">${lk(data.profile.text)}</div></div>`;
+        }
+
+        if (data.languages && data.languages.motherTongue) {
+          let langHtml = `<div class="tc-skills-item">Madrelingua: ${data.languages.motherTongue}</div>`;
+          if (data.languages.otherLanguages && data.languages.otherLanguages.length > 0) {
+            data.languages.otherLanguages.forEach(l => { langHtml += `<div class="tc-skills-item">${l.name}: ${l.level}</div>`; });
+          }
+          sidebarHtml += `<div class="tc-sidebar-section"><div class="tc-sidebar-section-title">Lingue</div>${langHtml}</div>`;
+        }
+
+        if (data.skills && data.skills.ai && data.skills.ai.content) {
+          sidebarHtml += `<div class="tc-sidebar-section"><div class="tc-sidebar-section-title">Competenze</div><div style="font-size:0.78em;color:rgba(255,255,255,0.85);">${lk(data.skills.ai.content)}</div></div>`;
+        }
+
+        // Colonna destra
+        let mainHtml = `<div class="tc-main-title">${name}</div><div class="tc-main-divider"></div>`;
+
+        if (data.experience && data.experience.length > 0) {
+          mainHtml += `<div class="tc-section-title">Esperienza Lavorativa</div>`;
+          data.experience.forEach(exp => {
+            mainHtml += `<div class="tc-entry">
+              <div class="tc-entry-header">
+                <div class="tc-entry-title">${exp.position || ''}</div>
+                <div class="tc-entry-date">${exp.startDate || ''} – ${exp.endDate || ''}</div>
+              </div>
+              <div class="tc-entry-sub">${exp.company || ''}</div>
+              ${exp.description ? `<div class="tc-entry-desc">${lk(exp.description)}</div>` : ''}
+            </div>`;
+          });
+        }
+
+        if (data.education && data.education.length > 0) {
+          mainHtml += `<div class="tc-section-title">Istruzione e Formazione</div>`;
+          data.education.forEach(edu => {
+            mainHtml += `<div class="tc-entry">
+              <div class="tc-entry-header">
+                <div class="tc-entry-title">${edu.degree || ''}</div>
+                <div class="tc-entry-date">${edu.startDate || ''} – ${edu.endDate || ''}</div>
+              </div>
+              <div class="tc-entry-sub">${edu.institution || ''}</div>
+              ${edu.description ? `<div class="tc-entry-desc">${lk(edu.description)}</div>` : ''}
+            </div>`;
+          });
+        }
+
+        if (data.formatore && data.formatore.length > 0) {
+          mainHtml += `<div class="tc-section-title">Esperienza come Formatore</div>`;
+          data.formatore.forEach(form => {
+            mainHtml += `<div class="tc-entry">
+              <div class="tc-entry-header">
+                <div class="tc-entry-title">${form.title || ''}</div>
+                <div class="tc-entry-date">${form.period || ''}</div>
+              </div>
+              ${form.institutions ? `<div class="tc-entry-sub">${form.institutions}</div>` : ''}
+              ${form.topics ? `<div class="tc-entry-desc">${lk(form.topics)}</div>` : ''}
+            </div>`;
+          });
+        }
+
+        if (data.skills && data.skills.digital && (data.skills.digital.genericContent || data.skills.digital.useDigiCompEU)) {
+          mainHtml += `<div class="tc-section-title">Competenze Digitali</div>`;
+          if (data.skills.digital.genericContent) mainHtml += `<div class="tc-entry"><div class="tc-entry-desc">${lk(data.skills.digital.genericContent)}</div></div>`;
+        }
+
+        if (data.publications && data.publications.length > 0 && data.settings.showPublications) {
+          mainHtml += `<div class="tc-section-title">Pubblicazioni</div>`;
+          data.publications.forEach(pub => {
+            mainHtml += `<div class="tc-entry">
+              <div class="tc-entry-title">${pub.title || ''}</div>
+              <div class="tc-entry-sub">${pub.authors || ''} (${pub.year || ''})</div>
+              ${pub.journal ? `<div class="tc-entry-desc"><strong>In:</strong> ${pub.journal}</div>` : ''}
+            </div>`;
+          });
+        }
+
+        if (data.other && data.other.skills) {
+          mainHtml += `<div class="tc-section-title">Altre Competenze</div><div class="tc-entry"><div class="tc-entry-desc">${lk(data.other.skills)}</div></div>`;
+        }
+
+        if (data.other && data.other.includePrivacy && data.other.privacyText) {
+          mainHtml += `<div class="tc-privacy">${data.other.privacyText}</div>`;
+        }
+
+        return `<div class="tc-sidebar">${sidebarHtml}</div><div class="tc-main">${mainHtml}</div>`;
       }
     };
     
@@ -2895,6 +3672,17 @@
       AppState.cvData.personal.photoAdjust.y = y;
       AppState.cvData.personal.photoAdjust.baseScale = baseScale;
       AppState.saveData();
+    }
+
+    // === TOGGLE FOTO - sincronizza tra sezione personale e impostazioni ===
+    function syncShowPhoto(checked) {
+      AppState.cvData.settings.showPhoto = checked;
+      AppState.saveData();
+      // Sincronizza l'altro checkbox (Impostazioni)
+      const settingsCheckbox = document.getElementById('showPhoto');
+      if (settingsCheckbox) settingsCheckbox.checked = checked;
+      // Aggiorna anteprima se visibile
+      if (AppState.currentSection === 'preview') AppState.updatePreview();
     }
 
     // === LISTE DINAMICHE ===
@@ -3387,21 +4175,27 @@
       const templateNames = {
         'europass': 'Europass Standard',
         'modern': 'Moderno',
-        'professional': 'Professionale'
+        'professional': 'Professionale',
+        'europass-official': 'Europass Ufficiale',
+        'twocolumn': 'Bicolonna'
       };
 
       const currentTemplateEl = document.getElementById('currentTemplate');
-      if (currentTemplateEl) currentTemplateEl.textContent = templateNames[templateId];
+      if (currentTemplateEl) currentTemplateEl.textContent = templateNames[templateId] || templateId;
       
       // Salva la preferenza
       if (typeof AppState !== 'undefined') {
         AppState.cvData.settings.templateStyle = templateId;
         AppState.saveData();
-        
+
         // SEMPRE aggiorna l'anteprima quando cambia template
         AppState.updatePreview();
       }
-      
+
+      // Sincronizza selettore sidebar
+      const sidebarSel = document.getElementById('sidebarTemplateSelect');
+      if (sidebarSel) sidebarSel.value = templateId;
+
       console.log(`Template selezionato: ${templateId}`);
     }
     
@@ -3426,11 +4220,17 @@
       const templateNames = {
         'europass': 'Europass Standard',
         'modern': 'Moderno',
-        'professional': 'Professionale'
+        'professional': 'Professionale',
+        'europass-official': 'Europass Ufficiale',
+        'twocolumn': 'Bicolonna'
       };
 
       const currentTemplateSpan = document.getElementById('currentTemplate');
       if (currentTemplateSpan) currentTemplateSpan.textContent = templateNames[settings.templateStyle] || 'Europass Standard';
+
+      // Sincronizza selettore sidebar
+      const sidebarSel = document.getElementById('sidebarTemplateSelect');
+      if (sidebarSel) sidebarSel.value = settings.templateStyle || 'europass';
       
       const lastModifiedSpan = document.getElementById('lastModified');
       if (lastModifiedSpan) {
@@ -3484,7 +4284,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.5');
+      localStorage.setItem('lastSeenVersion_v5', '5.6');
     }
     
     // Stampa CV
@@ -3500,7 +4300,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.5 inizializzato');
+      console.log('🚀 VitaeLab v5.6 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -3656,6 +4456,11 @@
           checkbox.addEventListener('change', function(e) {
             AppState.cvData.settings[settingId] = e.target.checked;
             AppState.saveData();
+            // Sincronizza checkbox showPhotoInCV nella sezione Info Personali
+            if (settingId === 'showPhoto') {
+              const photoCV = document.getElementById('showPhotoInCV');
+              if (photoCV) photoCV.checked = e.target.checked;
+            }
           });
         }
       });
@@ -3744,6 +4549,9 @@
       // Carica impostazioni con controlli di sicurezza
       const showPhotoEl = document.getElementById('showPhoto');
       if (showPhotoEl) showPhotoEl.checked = AppState.cvData.settings.showPhoto;
+      // Inizializza checkbox "Mostra nel CV" nella sezione Info Personali
+      const showPhotoInCVEl = document.getElementById('showPhotoInCV');
+      if (showPhotoInCVEl) showPhotoInCVEl.checked = AppState.cvData.settings.showPhoto;
       
       const showPublicationsEl = document.getElementById('showPublications');
       if (showPublicationsEl) showPublicationsEl.checked = AppState.cvData.settings.showPublications;
@@ -3758,7 +4566,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.5') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.6') {
         document.getElementById('versionBanner').classList.add('show');
       }
 
@@ -4207,10 +5015,21 @@
         });
         if (d.personal.photo) {
             AppState.cvData.personal.photo = d.personal.photo;
-            const prev = document.getElementById('photoPreview');
-            if (prev) { prev.src = d.personal.photo; prev.style.display = 'block'; }
-            const up = document.getElementById('photoUploadArea');
-            if (up) up.style.display = 'none';
+            // Usa showPhotoPreview per nascondere l'uploader e mostrare il photo editor
+            if (typeof showPhotoPreview === 'function') {
+                showPhotoPreview(d.personal.photo);
+            } else {
+                const uploadArea = document.getElementById('photoUpload');
+                const previewContainer = document.getElementById('photoPreview');
+                if (uploadArea) uploadArea.style.display = 'none';
+                if (previewContainer) previewContainer.style.display = 'block';
+            }
+        } else {
+            // Nessuna foto: mostra solo l'uploader
+            const uploadArea = document.getElementById('photoUpload');
+            const previewContainer = document.getElementById('photoPreview');
+            if (uploadArea) uploadArea.style.display = '';
+            if (previewContainer) previewContainer.style.display = 'none';
         }
         // Profilo
         const prof = document.getElementById('profileText');

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.6 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.7 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1823,7 +1823,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.7 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1888,7 +1888,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.6/span>
+            <span class="app-version">v5.8.7/span>
           </div>
         </div>
         
@@ -2794,7 +2794,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.6</strong><br>
+                <strong>VitaeLab v5.8.7</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3056,7 +3056,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.6</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.7</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3096,7 +3096,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.6</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.7</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3345,11 +3345,11 @@
             <div class="cv-section">
               <h2 class="cv-section-title">Esperienza Lavorativa</h2>
               <div class="cv-content">
-                ${data.experience.map(exp => `
+                ${sortByDateDesc(data.experience).map(exp => `
                   <div style="margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
                       <span>${exp.position}</span>
-                      <span>${exp.startDate} - ${exp.endDate}</span>
+                      <span>${exp.startDate} - ${displayEndDate(exp.endDate)}</span>
                     </div>
                     <div style="font-weight: 500; margin: 5px 0;">${exp.company}</div>
                     ${exp.description ? `<div style="margin-top: 8px;">${this.linkifyText(exp.description)}</div>` : ''}
@@ -3366,11 +3366,11 @@
             <div class="cv-section">
               <h2 class="cv-section-title">Istruzione e Formazione</h2>
               <div class="cv-content">
-                ${data.education.map(edu => `
+                ${sortByDateDesc(data.education).map(edu => `
                   <div style="margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
                       <span>${edu.degree}</span>
-                      <span>${edu.startDate} - ${edu.endDate}</span>
+                      <span>${edu.startDate} - ${displayEndDate(edu.endDate)}</span>
                     </div>
                     <div style="font-weight: 500; margin: 5px 0;">${edu.institution}</div>
                     ${edu.description ? `<div style="margin-top: 8px;">${this.linkifyText(edu.description)}</div>` : ''}
@@ -3387,7 +3387,7 @@
             <div class="cv-section">
               <h2 class="cv-section-title">Esperienza come Formatore</h2>
               <div class="cv-content">
-                ${data.formatore.map(form => `
+                ${sortByDateDesc(data.formatore).map(form => `
                   <div style="margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; font-weight: 600; color: #003d7a;">
                       <span>${form.title}</span>
@@ -3582,11 +3582,11 @@
 
         if (data.experience && data.experience.length > 0) {
           html += secTitle('Esperienza Lavorativa');
-          data.experience.forEach(exp => {
+          sortByDateDesc(data.experience).forEach(exp => {
             html += `<div class="eo-entry">
               <div class="eo-entry-header">
                 <div class="eo-entry-title">${exp.position || ''}</div>
-                <div class="eo-entry-date">${exp.startDate || ''} – ${exp.endDate || ''}</div>
+                <div class="eo-entry-date">${exp.startDate || ''} – ${displayEndDate(exp.endDate)}</div>
               </div>
               <div class="eo-entry-sub">${exp.company || ''}</div>
               ${exp.description ? `<div class="eo-entry-desc">${lk(exp.description)}</div>` : ''}
@@ -3596,11 +3596,11 @@
 
         if (data.education && data.education.length > 0) {
           html += secTitle('Istruzione e Formazione');
-          data.education.forEach(edu => {
+          sortByDateDesc(data.education).forEach(edu => {
             html += `<div class="eo-entry">
               <div class="eo-entry-header">
                 <div class="eo-entry-title">${edu.degree || ''}</div>
-                <div class="eo-entry-date">${edu.startDate || ''} – ${edu.endDate || ''}</div>
+                <div class="eo-entry-date">${edu.startDate || ''} – ${displayEndDate(edu.endDate)}</div>
               </div>
               <div class="eo-entry-sub">${edu.institution || ''}</div>
               ${edu.description ? `<div class="eo-entry-desc">${lk(edu.description)}</div>` : ''}
@@ -3693,11 +3693,11 @@
 
         if (data.experience && data.experience.length > 0) {
           mainHtml += `<div class="tc-section-title">Esperienza Lavorativa</div>`;
-          data.experience.forEach(exp => {
+          sortByDateDesc(data.experience).forEach(exp => {
             mainHtml += `<div class="tc-entry">
               <div class="tc-entry-header">
                 <div class="tc-entry-title">${exp.position || ''}</div>
-                <div class="tc-entry-date">${exp.startDate || ''} – ${exp.endDate || ''}</div>
+                <div class="tc-entry-date">${exp.startDate || ''} – ${displayEndDate(exp.endDate)}</div>
               </div>
               <div class="tc-entry-sub">${exp.company || ''}</div>
               ${exp.description ? `<div class="tc-entry-desc">${lk(exp.description)}</div>` : ''}
@@ -3707,11 +3707,11 @@
 
         if (data.education && data.education.length > 0) {
           mainHtml += `<div class="tc-section-title">Istruzione e Formazione</div>`;
-          data.education.forEach(edu => {
+          sortByDateDesc(data.education).forEach(edu => {
             mainHtml += `<div class="tc-entry">
               <div class="tc-entry-header">
                 <div class="tc-entry-title">${edu.degree || ''}</div>
-                <div class="tc-entry-date">${edu.startDate || ''} – ${edu.endDate || ''}</div>
+                <div class="tc-entry-date">${edu.startDate || ''} – ${displayEndDate(edu.endDate)}</div>
               </div>
               <div class="tc-entry-sub">${edu.institution || ''}</div>
               ${edu.description ? `<div class="tc-entry-desc">${lk(edu.description)}</div>` : ''}
@@ -3721,7 +3721,7 @@
 
         if (data.formatore && data.formatore.length > 0) {
           mainHtml += `<div class="tc-section-title">Esperienza come Formatore</div>`;
-          data.formatore.forEach(form => {
+          sortByDateDesc(data.formatore).forEach(form => {
             mainHtml += `<div class="tc-entry">
               <div class="tc-entry-header">
                 <div class="tc-entry-title">${form.title || ''}</div>
@@ -3762,7 +3762,34 @@
     };
     
     // === FUNZIONI GLOBALI ===
-    
+
+    // Ordina array di voci CV per data decrescente (più recente prima)
+    // Supporta formato MM/YYYY, YYYY, stringa vuota o assente (= in corso → va prima)
+    function parseCVDate(dateStr) {
+      if (!dateStr || dateStr.trim() === '') return new Date(9999, 11); // vuoto = in corso
+      const s = dateStr.trim().toLowerCase();
+      if (s === 'current' || s === 'presente' || s === 'oggi' || s === 'now') return new Date(9999, 11);
+      const parts = dateStr.trim().split('/');
+      if (parts.length === 2) return new Date(parseInt(parts[1]), parseInt(parts[0]) - 1);
+      if (parts.length === 1 && !isNaN(parts[0])) return new Date(parseInt(parts[0]), 11);
+      return new Date(0);
+    }
+
+    function sortByDateDesc(arr) {
+      if (!arr || arr.length === 0) return arr;
+      return [...arr].sort((a, b) => {
+        const endDiff = parseCVDate(b.endDate) - parseCVDate(a.endDate);
+        if (endDiff !== 0) return endDiff;
+        return parseCVDate(b.startDate) - parseCVDate(a.startDate);
+      });
+    }
+
+    // Restituisce la data formattata, o "ad oggi" se vuota/assente
+    function displayEndDate(dateStr) {
+      if (!dateStr || dateStr.trim() === '') return 'ad oggi';
+      return dateStr.trim();
+    }
+
     // Utility function for creating clickable links
     function linkifyText(text) {
       if (!text) return text;
@@ -4532,7 +4559,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.6');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.7');
     }
     
     // Stampa CV
@@ -4548,7 +4575,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.6 inizializzato');
+      console.log('🚀 VitaeLab v5.8.7 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4814,7 +4841,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.6') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.7') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

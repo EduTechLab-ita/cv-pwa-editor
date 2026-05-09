@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.5 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.6 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -611,6 +611,7 @@
     .cv-content {
       line-height: 1.6;
       color: #374151;
+      text-align: justify;
     }
     
     .empty-state {
@@ -1598,6 +1599,7 @@
       font-size: 0.88em;
       color: #444;
       line-height: 1.5;
+      text-align: justify;
     }
 
     .europass-official-template .eo-privacy {
@@ -1770,6 +1772,7 @@
       font-size: 0.85em;
       color: #444;
       line-height: 1.5;
+      text-align: justify;
     }
 
     .twocolumn-template .tc-privacy {
@@ -1820,7 +1823,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8.5 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1858,6 +1861,10 @@
       .cv-preview .page-bar {
         margin-bottom: 12px !important;
       }
+      /* Nasconde il contatore a schermo (rimane solo quello @page in basso a sinistra) */
+      .page-counter {
+        display: none !important;
+      }
     }
     
   </style>
@@ -1881,7 +1888,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.5/span>
+            <span class="app-version">v5.8.6/span>
           </div>
         </div>
         
@@ -2787,7 +2794,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.5</strong><br>
+                <strong>VitaeLab v5.8.6</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3049,7 +3056,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.5</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.6</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3089,7 +3096,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.5</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.6</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3493,11 +3500,12 @@
           `;
         }
         
-        // Privacy
+        // Privacy — sezione separata a fondo CV
         if (data.other.includePrivacy && data.other.privacyText) {
           html += `
-            <div class="cv-section" style="margin-top: 30px; font-size: 0.8rem; color: #6b7280;">
-              <div class="cv-content">${data.other.privacyText}</div>
+            <div class="cv-section" style="margin-top: 40px; padding-top: 15px; border-top: 2px solid #d1d5db;">
+              <h2 class="cv-section-title" style="font-size: 0.9rem; margin-bottom: 8px;">Trattamento Dati Personali</h2>
+              <div class="cv-content" style="font-size: 0.8rem; color: #6b7280;">${data.other.privacyText}</div>
             </div>
           `;
         }
@@ -3622,7 +3630,7 @@
         }
 
         if (data.other && data.other.includePrivacy && data.other.privacyText) {
-          html += `<div class="eo-privacy">${data.other.privacyText}</div>`;
+          html += `<div class="eo-privacy"><div style="font-weight:bold;font-size:0.9em;margin-bottom:5px;">Trattamento Dati Personali</div>${data.other.privacyText}</div>`;
         }
 
         html += `</div>`;
@@ -3746,7 +3754,7 @@
         }
 
         if (data.other && data.other.includePrivacy && data.other.privacyText) {
-          mainHtml += `<div class="tc-privacy">${data.other.privacyText}</div>`;
+          mainHtml += `<div class="tc-privacy"><div class="tc-section-title">Trattamento Dati Personali</div>${data.other.privacyText}</div>`;
         }
 
         return `<div class="tc-sidebar">${sidebarHtml}</div><div class="tc-main">${mainHtml}</div>`;
@@ -4524,7 +4532,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.5');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.6');
     }
     
     // Stampa CV
@@ -4540,7 +4548,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.5 inizializzato');
+      console.log('🚀 VitaeLab v5.8.6 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4806,7 +4814,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.5') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.6') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

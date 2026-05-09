@@ -2,8 +2,8 @@
 // Per forzare aggiornamenti PWA: incrementare i numeri di versione qui sotto
 
 const CACHE_NAME = 'vitaelab-v5.8.2';
-const STATIC_CACHE = 'vitaelab-static-v5.7';
-const DYNAMIC_CACHE = 'vitaelab-dynamic-v5.7';
+const STATIC_CACHE = 'vitaelab-static-v5.8.2';
+const DYNAMIC_CACHE = 'vitaelab-dynamic-v5.8.2';
 
 // File da cachare immediatamente (cache statica)
 const STATIC_FILES = [

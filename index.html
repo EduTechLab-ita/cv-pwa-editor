@@ -1347,22 +1347,22 @@
       font-weight: 600;
     }
     
-    /* Template Professionale - grid: foto a sinistra, testo a destra */
+    /* Template Professionale - grid: foto+contatti a sinistra, nome+indirizzo a destra */
     .professional-template .cv-header {
       background: #003d7a;
       color: white;
       padding: 20px 28px;
       margin: -20px -20px 20px -20px;
       display: grid !important;
-      grid-template-columns: 150px 1fr;
+      grid-template-columns: 200px 1fr;
       align-items: center;
-      gap: 4px 20px;
+      gap: 16px 24px;
       min-height: 160px;
     }
-    .professional-template .cv-name { color: white; font-size: 1.6rem; }
-    .professional-template .cv-contact-grid { color: rgba(255,255,255,0.85); }
+    .professional-template .cv-name { color: white; font-size: 1.6rem; grid-column: 2; grid-row: 1; align-self: center; }
+    .professional-template .cv-contact-grid { color: rgba(255,255,255,0.85); grid-column: 1; grid-row: 2; grid-template-columns: 1fr !important; }
     .professional-template .cv-contact-item { color: rgba(255,255,255,0.85); font-size: 0.8rem; }
-    .professional-template .cv-address { color: rgba(255,255,255,0.85); }
+    .professional-template .cv-address { color: rgba(255,255,255,0.85); grid-column: 2; grid-row: 2; align-self: start; }
     .professional-template .cv-section-title {
       background: #003d7a;
       color: white;
@@ -1376,7 +1376,7 @@
     .professional-template .cv-profile-photo {
       position: relative !important;
       grid-column: 1;
-      grid-row: 1 / -1;
+      grid-row: 1;
       align-self: center;
       justify-self: center;
       width: 130px !important;

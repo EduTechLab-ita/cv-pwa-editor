@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.7 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.8 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1823,7 +1823,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8.7 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.8 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1888,7 +1888,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.7/span>
+            <span class="app-version">v5.8.8/span>
           </div>
         </div>
         
@@ -2794,7 +2794,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.7</strong><br>
+                <strong>VitaeLab v5.8.8</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3056,7 +3056,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.7</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.8</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3096,7 +3096,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.7</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.8</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3353,13 +3353,14 @@
                     </div>
                     <div style="font-weight: 500; margin: 5px 0;">${exp.company}</div>
                     ${exp.description ? `<div style="margin-top: 8px;">${this.linkifyText(exp.description)}</div>` : ''}
+                    ${exp.link ? `<div style="margin-top: 8px;"><a href="${exp.link}" target="_blank" style="color: #0066cc; text-decoration: underline; font-size: 0.85em;">🔗 ${exp.linkLabel || exp.link}</a></div>` : ''}
                   </div>
                 `).join('')}
               </div>
             </div>
           `;
         }
-        
+
         // Formazione
         if (data.education.length > 0) {
           html += `
@@ -3374,6 +3375,7 @@
                     </div>
                     <div style="font-weight: 500; margin: 5px 0;">${edu.institution}</div>
                     ${edu.description ? `<div style="margin-top: 8px;">${this.linkifyText(edu.description)}</div>` : ''}
+                    ${edu.link ? `<div style="margin-top: 8px;"><a href="${edu.link}" target="_blank" style="color: #0066cc; text-decoration: underline; font-size: 0.85em;">🔗 ${edu.linkLabel || edu.link}</a></div>` : ''}
                   </div>
                 `).join('')}
               </div>
@@ -3404,6 +3406,7 @@
                         </ul>
                       </div>
                     ` : ''}
+                    ${form.link ? `<div style="margin-top: 8px;"><a href="${form.link}" target="_blank" style="color: #0066cc; text-decoration: underline; font-size: 0.85em;">🔗 ${form.linkLabel || form.link}</a></div>` : ''}
                   </div>
                 `).join('')}
               </div>
@@ -3590,6 +3593,7 @@
               </div>
               <div class="eo-entry-sub">${exp.company || ''}</div>
               ${exp.description ? `<div class="eo-entry-desc">${lk(exp.description)}</div>` : ''}
+              ${exp.link ? `<div style="margin-top:6px;"><a href="${exp.link}" target="_blank" style="color:#0066cc;text-decoration:underline;font-size:0.82em;">🔗 ${exp.linkLabel || exp.link}</a></div>` : ''}
             </div>`;
           });
         }
@@ -3604,6 +3608,7 @@
               </div>
               <div class="eo-entry-sub">${edu.institution || ''}</div>
               ${edu.description ? `<div class="eo-entry-desc">${lk(edu.description)}</div>` : ''}
+              ${edu.link ? `<div style="margin-top:6px;"><a href="${edu.link}" target="_blank" style="color:#0066cc;text-decoration:underline;font-size:0.82em;">🔗 ${edu.linkLabel || edu.link}</a></div>` : ''}
             </div>`;
           });
         }
@@ -3701,6 +3706,7 @@
               </div>
               <div class="tc-entry-sub">${exp.company || ''}</div>
               ${exp.description ? `<div class="tc-entry-desc">${lk(exp.description)}</div>` : ''}
+              ${exp.link ? `<div style="margin-top:5px;"><a href="${exp.link}" target="_blank" style="color:#0066cc;text-decoration:underline;font-size:0.82em;">🔗 ${exp.linkLabel || exp.link}</a></div>` : ''}
             </div>`;
           });
         }
@@ -3715,6 +3721,7 @@
               </div>
               <div class="tc-entry-sub">${edu.institution || ''}</div>
               ${edu.description ? `<div class="tc-entry-desc">${lk(edu.description)}</div>` : ''}
+              ${edu.link ? `<div style="margin-top:5px;"><a href="${edu.link}" target="_blank" style="color:#0066cc;text-decoration:underline;font-size:0.82em;">🔗 ${edu.linkLabel || edu.link}</a></div>` : ''}
             </div>`;
           });
         }
@@ -3729,6 +3736,7 @@
               </div>
               ${form.institutions ? `<div class="tc-entry-sub">${form.institutions}</div>` : ''}
               ${form.topics ? `<div class="tc-entry-desc">${lk(form.topics)}</div>` : ''}
+              ${form.link ? `<div style="margin-top:5px;"><a href="${form.link}" target="_blank" style="color:#0066cc;text-decoration:underline;font-size:0.82em;">🔗 ${form.linkLabel || form.link}</a></div>` : ''}
             </div>`;
           });
         }
@@ -3969,7 +3977,9 @@
         current: false,
         position: '',
         company: '',
-        description: ''
+        description: '',
+        link: '',
+        linkLabel: ''
       };
       AppState.cvData.experience.push(newExp);
       AppState.saveData();
@@ -4021,14 +4031,24 @@
             </div>
             <div class="form-group full-width">
               <label class="form-label">Descrizione</label>
-              <textarea class="form-textarea" placeholder="Descrivi le tue responsabilità e risultati" 
+              <textarea class="form-textarea" placeholder="Descrivi le tue responsabilità e risultati"
                         onchange="updateExperience(${exp.id}, 'description', this.value)">${exp.description}</textarea>
+            </div>
+            <div class="form-group full-width" style="border-top: 1px solid #e5e7eb; padding-top: 10px; margin-top: 4px;">
+              <label class="form-label" style="color: #0066cc;">🔗 Link allegato (opzionale)</label>
+              <input type="url" class="form-input" placeholder="https://..." value="${exp.link || ''}"
+                     onchange="updateExperience(${exp.id}, 'link', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" style="color: #0066cc;">Testo del link</label>
+              <input type="text" class="form-input" placeholder="Es. Visualizza certificazione, Graduatoria pubblica..." value="${exp.linkLabel || ''}"
+                     onchange="updateExperience(${exp.id}, 'linkLabel', this.value)">
             </div>
           </div>
         </div>
       `).join('');
     }
-    
+
     function updateExperience(id, field, value) {
       const exp = AppState.cvData.experience.find(e => e.id === id);
       if (exp) {
@@ -4045,7 +4065,9 @@
         endDate: '',
         degree: '',
         institution: '',
-        description: ''
+        description: '',
+        link: '',
+        linkLabel: ''
       };
       AppState.cvData.education.push(newEdu);
       AppState.saveData();
@@ -4100,11 +4122,21 @@
               <textarea class="form-textarea" placeholder="Materie principali, voto, progetti, etc."
                         onchange="updateEducation(${edu.id}, 'description', this.value)">${edu.description}</textarea>
             </div>
+            <div class="form-group full-width" style="border-top: 1px solid #e5e7eb; padding-top: 10px; margin-top: 4px;">
+              <label class="form-label" style="color: #0066cc;">🔗 Link allegato (opzionale)</label>
+              <input type="url" class="form-input" placeholder="https://..." value="${edu.link || ''}"
+                     onchange="updateEducation(${edu.id}, 'link', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" style="color: #0066cc;">Testo del link</label>
+              <input type="text" class="form-input" placeholder="Es. Visualizza certificazione, Diploma digitale..." value="${edu.linkLabel || ''}"
+                     onchange="updateEducation(${edu.id}, 'linkLabel', this.value)">
+            </div>
           </div>
         </div>
       `).join('');
     }
-    
+
     function updateEducation(id, field, value) {
       const edu = AppState.cvData.education.find(e => e.id === id);
       if (edu) {
@@ -4122,7 +4154,9 @@
         title: '',
         institutions: '',
         topics: '',
-        details: []
+        details: [],
+        link: '',
+        linkLabel: ''
       };
       AppState.cvData.formatore.push(newForm);
       AppState.saveData();
@@ -4182,11 +4216,21 @@
               <textarea class="form-textarea" placeholder="Esempio: I.C. di Roma: 20 ore - Coding e Robotica&#10;Formazione Milano: 15 ore - Intelligenza Artificiale"
                         onchange="updateFormatore(${form.id}, 'details', this.value.split('\\n').filter(line => line.trim()))">${Array.isArray(form.details) ? form.details.join('\\n') : ''}</textarea>
             </div>
+            <div class="form-group full-width" style="border-top: 1px solid #e5e7eb; padding-top: 10px; margin-top: 4px;">
+              <label class="form-label" style="color: #0066cc;">🔗 Link allegato (opzionale)</label>
+              <input type="url" class="form-input" placeholder="https://..." value="${form.link || ''}"
+                     onchange="updateFormatore(${form.id}, 'link', this.value)">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label" style="color: #0066cc;">Testo del link</label>
+              <input type="text" class="form-input" placeholder="Es. Decreto ministeriale, Attestato formatore..." value="${form.linkLabel || ''}"
+                     onchange="updateFormatore(${form.id}, 'linkLabel', this.value)">
+            </div>
           </div>
         </div>
       `).join('');
     }
-    
+
     function updateFormatore(id, field, value) {
       const form = AppState.cvData.formatore.find(f => f.id === id);
       if (form) {
@@ -4559,7 +4603,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.7');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.8');
     }
     
     // Stampa CV
@@ -4575,7 +4619,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.7 inizializzato');
+      console.log('🚀 VitaeLab v5.8.8 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4841,7 +4885,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.7') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.8') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

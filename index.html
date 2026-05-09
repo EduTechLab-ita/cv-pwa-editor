@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.1 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -901,19 +901,20 @@
     /* === Settings Tabs Styles === */
     .settings-tabs {
       display: flex;
+      flex-wrap: wrap;
       border-bottom: 2px solid #e5e7eb;
       margin-bottom: 24px;
-      overflow-x: auto;
+      gap: 2px;
     }
 
     .settings-tab-btn {
       display: flex;
       align-items: center;
-      padding: 12px 16px;
+      padding: 10px 12px;
       border: none;
       background: none;
       color: #6b7280;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       border-bottom: 2px solid transparent;
@@ -1819,7 +1820,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.1 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -2765,7 +2766,7 @@
             <div style="background: #f0fdf4; border: 1px solid #22c55e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
               <h5 style="color: #15803d; margin-bottom: 12px;">✉️ Contatta il supporto</h5>
               <p style="color: #15803d; margin-bottom: 16px;">Per domande, suggerimenti o problemi tecnici, scrivici direttamente:</p>
-              <button type="button" class="header-btn" onclick="window.open('mailto:info@edutechlab.it?subject=VitaeLab%20-%20Supporto')"
+              <button type="button" class="header-btn" onclick="window.open('https://mail.google.com/mail/?view=cm&to=info@edutechlab.it&subject=VitaeLab%20-%20Supporto', '_blank')"
                  style="background: #7c3aed; color: white; border-color:#7c3aed;">
                 ✉️ Scrivi a EduTechLab Italia
               </button>
@@ -2785,7 +2786,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8</strong><br>
+                <strong>VitaeLab v5.8.1</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3047,7 +3048,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.1</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3087,7 +3088,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.1</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3645,7 +3646,7 @@
             const actualScale = adj.baseScale * (adj.scale || 100) / 100;
             photoStyle = `position:absolute; left:50%; top:50%; transform-origin:center; max-width:none; max-height:none; transform:translate(calc(-50% + ${adj.x||0}px), calc(-50% + ${adj.y||0}px)) scale(${actualScale});`;
           }
-          sidebarHtml += `<div class="tc-photo-wrap"><div style="width:90px;height:90px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.5);flex-shrink:0;position:relative;"><img src="${p.photo}" alt="Foto" style="${photoStyle}"></div></div>`;
+          sidebarHtml += `<div class="tc-photo-wrap"><div style="width:130px;height:130px;border-radius:50%;overflow:hidden;border:3px solid rgba(255,255,255,0.5);flex-shrink:0;position:relative;"><img src="${p.photo}" alt="Foto" style="${photoStyle}"></div></div>`;
         } else {
           sidebarHtml += `<div class="tc-photo-wrap"><div style="width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);flex-shrink:0;"></div></div>`;
         }
@@ -4540,7 +4541,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8 inizializzato');
+      console.log('🚀 VitaeLab v5.8.1 inizializzato');
       
       // Carica dati
       AppState.loadData();

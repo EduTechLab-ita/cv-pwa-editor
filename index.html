@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.6 - EduTechLab Italia</title>
+  <title>VitaeLab v5.7 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -208,6 +208,23 @@
     
     .header-btn.success:hover {
       background: #15803d;
+    }
+
+    /* Template selector nell'header */
+    .header-template-select {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #003d7a;
+      font-weight: 500;
+      background: #eff6ff;
+      cursor: pointer;
+      min-width: 130px;
+      transition: border-color 0.2s;
+    }
+    .header-template-select:hover {
+      border-color: #003d7a;
     }
 
     /* Drive Button */
@@ -1802,7 +1819,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.6 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.7 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1849,7 +1866,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.6!</strong> Sidebar sticky, 2 nuovi template (Europass Ufficiale e Bicolonna), fix foto, SVG icons, anteprime grafiche template</span>
+      <span><strong>Aggiornato alla versione 5.7!</strong> Fix logo Europass Ufficiale, selettore template nell'header, sezione Template in sidebar, card riordinate con badge Europass</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -1862,7 +1879,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.6</span>
+            <span class="app-version">v5.7</span>
           </div>
         </div>
         
@@ -1878,6 +1895,13 @@
         <button class="drive-button no-print" id="drive-btn" onclick="connectToDrive()" title="Collega Google Drive per salvare il CV in modo sicuro">
           <span>☁️</span><span id="drive-btn-label">Drive</span>
         </button>
+        <select class="header-template-select no-print" id="headerTemplateSelect" onchange="selectTemplate(this.value)" title="Scegli il template del CV">
+          <option value="europass">📄 Europass Std</option>
+          <option value="modern">✨ Moderno</option>
+          <option value="professional">🏛️ Professionale</option>
+          <option value="europass-official">📋 EP Ufficiale</option>
+          <option value="twocolumn">📐 Bicolonna</option>
+        </select>
         <button class="header-btn" onclick="switchSection('preview')">
           👁️ Anteprima
         </button>
@@ -1943,9 +1967,9 @@
           <span class="nav-icon">⚙️</span>
           Impostazioni
         </button>
-        <button class="nav-section" data-section="preview" onclick="switchSection('preview')">
-          <span class="nav-icon">👁️</span>
-          Anteprima
+        <button class="nav-section" data-section="template" onclick="switchSection('template')">
+          <span class="nav-icon">🎨</span>
+          Template
         </button>
         <div style="border-top: 1px solid #e2e8f0; margin: 8px 0;"></div>
         <button class="nav-section" onclick="openInfoModal()">
@@ -1953,19 +1977,6 @@
           Info App
         </button>
       </nav>
-      <!-- Sticky bottom: selettore template + anteprima -->
-      <div class="sidebar-sticky-bottom no-print">
-        <select id="sidebarTemplateSelect" onchange="selectTemplate(this.value)" title="Seleziona template">
-          <option value="europass">🇪🇺 Europass Standard</option>
-          <option value="modern">✨ Moderno</option>
-          <option value="professional">🏛️ Professionale</option>
-          <option value="europass-official">📋 Europass Ufficiale</option>
-          <option value="twocolumn">📐 Bicolonna</option>
-        </select>
-        <button class="btn-anteprima" onclick="switchSection('preview')">
-          👁️ Anteprima
-        </button>
-      </div>
     </aside>
     
     <!-- Main Content -->
@@ -2736,7 +2747,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h5 style="margin-bottom: 8px;">📊 Informazioni CV</h5>
               <div style="font-size: 14px; color: #6b7280;">
-                <p><strong>Versione App:</strong> v5.6</p>
+                <p><strong>Versione App:</strong> v5.7</p>
                 <p><strong>Template:</strong> <span id="currentTemplate">Europass Standard</span></p>
                 <p><strong>Ultima Modifica:</strong> <span id="lastModified">-</span></p>
               </div>
@@ -2770,12 +2781,227 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.6</strong><br>
+                <strong>VitaeLab v5.7</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Template -->
+      <div class="section" id="template">
+        <div class="content-header">
+          <h2 class="section-title">
+            <span>🎨</span>
+            Scegli il Template
+          </h2>
+        </div>
+        <div class="content-body">
+          <!-- Formato Europass -->
+          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#003d7a; border-bottom:2px solid #003d7a; padding-bottom:4px; margin-bottom:14px;">Formato Europass</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px;">
+
+            <!-- Template Europass Standard -->
+            <div class="template-card active" data-template="europass" onclick="selectTemplate('europass')"
+                 style="padding: 12px; border: 2px solid #2563eb; border-radius: 8px; cursor: pointer; background: #eff6ff; position:relative;">
+              <!-- Badge Europass -->
+              <div style="position:absolute; top:8px; right:8px; z-index:2; background:white; border-radius:4px; padding:1px 3px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+                <img src=".\CV-EUropass.png" alt="Europass" style="height:16px; width:auto; display:block;">
+              </div>
+              <!-- Mockup CSS Europass Standard -->
+              <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
+                <div style="height:6px; background:linear-gradient(90deg,#003d7a,#0066cc); width:100%;"></div>
+                <div style="padding:4px 5px;">
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div style="flex:1;">
+                      <div style="height:3px; background:#003d7a; width:60%; margin:3px 0 2px;"></div>
+                      <div style="height:2px; background:#ccc; width:80%; margin-bottom:2px;"></div>
+                      <div style="height:2px; background:#ccc; width:70%; margin-bottom:2px;"></div>
+                      <div style="height:2px; background:#ccc; width:55%; margin-bottom:2px;"></div>
+                    </div>
+                    <div style="width:22px; height:22px; border-radius:50%; background:#d1d5db; border:1px solid #003d7a; margin-left:3px; flex-shrink:0;"></div>
+                  </div>
+                  <div style="height:2px; background:#003d7a; width:100%; margin:4px 0 2px;"></div>
+                  <div style="height:2px; background:#ddd; width:90%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:80%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#003d7a; width:100%; margin:4px 0 2px;"></div>
+                  <div style="height:2px; background:#ddd; width:85%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:75%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:65%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#003d7a; width:100%; margin:4px 0 2px;"></div>
+                  <div style="height:2px; background:#ddd; width:80%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:70%; margin-bottom:2px;"></div>
+                </div>
+              </div>
+              <div style="text-align:center;">
+                <h6 style="color: #1e40af; margin-bottom: 4px; font-size:12px;">Europass Standard</h6>
+                <p style="color: #3730a3; font-size: 11px; margin-bottom: 6px;">Template ufficiale Europass EU</p>
+                <span style="background: #dbeafe; color: #1e40af; padding: 3px 7px; border-radius: 4px; font-size: 11px;">✓ Attivo</span>
+              </div>
+            </div>
+
+            <!-- Template Europass Ufficiale -->
+            <div class="template-card" data-template="europass-official" onclick="selectTemplate('europass-official')"
+                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb; position:relative;">
+              <!-- Badge Europass -->
+              <div style="position:absolute; top:8px; right:8px; z-index:2; background:white; border-radius:4px; padding:1px 3px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">
+                <img src=".\CV-EUropass.png" alt="Europass" style="height:16px; width:auto; display:block;">
+              </div>
+              <!-- Mockup CSS Europass Ufficiale -->
+              <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
+                <div style="height:32px; background:#003d7a; display:flex; align-items:center; justify-content:space-between; padding:0 6px;">
+                  <div>
+                    <div style="height:3px; background:rgba(255,255,255,0.9); width:60px; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.5); width:40px;"></div>
+                  </div>
+                  <div style="width:18px; height:12px; background:rgba(255,255,255,0.2); border-radius:1px;"></div>
+                </div>
+                <div style="padding:4px 5px;">
+                  <div style="height:2px; background:#ccc; width:90%; margin-bottom:1px;"></div>
+                  <div style="height:2px; background:#ccc; width:80%; margin-bottom:4px;"></div>
+                  <div style="display:flex; align-items:center; gap:2px; margin-bottom:3px;">
+                    <div style="width:5px; height:5px; border-radius:50%; background:#003d7a; flex-shrink:0;"></div>
+                    <div style="height:5px; background:#003d7a; flex:1; opacity:0.3;"></div>
+                    <div style="height:2px; background:#ccc; width:60%; margin-left:2px;"></div>
+                  </div>
+                  <div style="margin-left:8px; margin-bottom:3px;">
+                    <div style="height:2px; background:#ddd; width:80%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:70%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:60%;"></div>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:2px; margin-bottom:3px;">
+                    <div style="width:5px; height:5px; border-radius:50%; background:#003d7a; flex-shrink:0;"></div>
+                    <div style="height:5px; background:#003d7a; flex:1; opacity:0.3;"></div>
+                    <div style="height:2px; background:#ccc; width:60%; margin-left:2px;"></div>
+                  </div>
+                  <div style="margin-left:8px;">
+                    <div style="height:2px; background:#ddd; width:75%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#ddd; width:65%;"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align:center;">
+                <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Europass Ufficiale</h6>
+                <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Formato ufficiale attuale EU</p>
+                <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Formato Libero -->
+          <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#003d7a; border-bottom:2px solid #003d7a; padding-bottom:4px; margin-bottom:14px;">Formato Libero</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+
+            <!-- Template Moderno -->
+            <div class="template-card" data-template="modern" onclick="selectTemplate('modern')"
+                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+              <!-- Mockup CSS Moderno -->
+              <div style="width:120px; height:165px; background:linear-gradient(135deg,#f8fafc,#e2e8f0); border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1); border-left:4px solid #3b82f6;">
+                <div style="height:28px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:0 6px 6px 0; margin:4px 4px 4px 0; position:relative; padding:3px 6px; display:flex; align-items:center; justify-content:flex-end;">
+                  <div style="width:20px; height:20px; border-radius:50%; background:#60a5fa; border:2px solid white; position:absolute; right:4px; bottom:-8px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.6); width:50%;"></div>
+                </div>
+                <div style="padding:10px 5px 4px;">
+                  <div style="height:6px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:3px; width:80%; margin:0 auto 6px;"></div>
+                  <div style="background:rgba(255,255,255,0.8); border-radius:4px; padding:3px 4px; margin-bottom:4px; border-left:2px solid #3b82f6;">
+                    <div style="height:2px; background:#94a3b8; width:90%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#94a3b8; width:70%;"></div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.8); border-radius:4px; padding:3px 4px; margin-bottom:4px; border-left:2px solid #3b82f6;">
+                    <div style="height:2px; background:#94a3b8; width:85%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#94a3b8; width:60%;"></div>
+                  </div>
+                  <div style="height:6px; background:linear-gradient(135deg,#3b82f6,#1e40af); border-radius:3px; width:80%; margin:4px auto 6px;"></div>
+                  <div style="background:rgba(255,255,255,0.8); border-radius:4px; padding:3px 4px; border-left:2px solid #3b82f6;">
+                    <div style="height:2px; background:#94a3b8; width:80%; margin-bottom:1px;"></div>
+                    <div style="height:2px; background:#94a3b8; width:65%;"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="text-align:center;">
+                <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Moderno</h6>
+                <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Design pulito e contemporaneo</p>
+                <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+              </div>
+            </div>
+
+            <!-- Template Professionale -->
+            <div class="template-card" data-template="professional" onclick="selectTemplate('professional')"
+                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+              <!-- Mockup CSS Professionale -->
+              <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1);">
+                <div style="height:40px; background:#003d7a; display:grid; grid-template-columns:32px 1fr; gap:4px; padding:4px 5px; align-items:center;">
+                  <div style="width:24px; height:24px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(255,255,255,0.5);"></div>
+                  <div>
+                    <div style="height:3px; background:rgba(255,255,255,0.85); width:80%; margin-bottom:2px;"></div>
+                    <div style="height:2px; background:rgba(255,255,255,0.5); width:60%;"></div>
+                  </div>
+                </div>
+                <div style="height:2px; background:#ffa500; margin:0;"></div>
+                <div style="padding:4px 5px;">
+                  <div style="height:6px; background:#003d7a; border-radius:2px; width:70%; margin-bottom:4px;"></div>
+                  <div style="height:2px; background:#ddd; width:90%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:80%; margin-bottom:4px;"></div>
+                  <div style="height:6px; background:#003d7a; border-radius:2px; width:70%; margin-bottom:4px;"></div>
+                  <div style="height:2px; background:#ddd; width:85%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:70%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:60%; margin-bottom:4px;"></div>
+                  <div style="height:6px; background:#003d7a; border-radius:2px; width:70%; margin-bottom:4px;"></div>
+                  <div style="height:2px; background:#ddd; width:75%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ddd; width:65%;"></div>
+                </div>
+              </div>
+              <div style="text-align:center;">
+                <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Professionale</h6>
+                <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Header blu scuro, layout formale</p>
+                <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+              </div>
+            </div>
+
+            <!-- Template Bicolonna -->
+            <div class="template-card" data-template="twocolumn" onclick="selectTemplate('twocolumn')"
+                 style="padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; cursor: pointer; background: #f9fafb;">
+              <!-- Mockup CSS Bicolonna -->
+              <div style="width:120px; height:165px; background:white; border:1px solid #e5e7eb; border-radius:3px; margin:0 auto 10px; overflow:hidden; position:relative; box-shadow:0 1px 4px rgba(0,0,0,0.1); display:flex;">
+                <div style="width:36px; background:#1a3a5c; padding:5px 3px; flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:3px;">
+                  <div style="width:22px; height:22px; border-radius:50%; background:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.5); margin-bottom:3px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.7); width:26px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.4); width:22px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.4); width:24px;"></div>
+                  <div style="height:4px; background:#2d5a8e; width:30px; margin-top:4px; border-radius:1px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.4); width:26px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.4); width:22px;"></div>
+                  <div style="height:4px; background:#2d5a8e; width:30px; margin-top:4px; border-radius:1px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.4); width:26px;"></div>
+                  <div style="height:2px; background:rgba(255,255,255,0.4); width:20px;"></div>
+                </div>
+                <div style="flex:1; padding:5px 4px;">
+                  <div style="height:3px; background:#1a3a5c; width:80%; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#ccc; width:70%; margin-bottom:4px;"></div>
+                  <div style="height:2px; background:#1a3a5c; width:60%; margin-bottom:3px;"></div>
+                  <div style="height:2px; background:#ddd; width:90%; margin-bottom:1px;"></div>
+                  <div style="height:2px; background:#ddd; width:80%; margin-bottom:1px;"></div>
+                  <div style="height:2px; background:#ddd; width:70%; margin-bottom:4px;"></div>
+                  <div style="height:2px; background:#1a3a5c; width:60%; margin-bottom:3px;"></div>
+                  <div style="height:2px; background:#ddd; width:85%; margin-bottom:1px;"></div>
+                  <div style="height:2px; background:#ddd; width:75%; margin-bottom:1px;"></div>
+                  <div style="height:2px; background:#ddd; width:65%; margin-bottom:4px;"></div>
+                  <div style="height:2px; background:#1a3a5c; width:60%; margin-bottom:3px;"></div>
+                  <div style="height:2px; background:#ddd; width:80%; margin-bottom:1px;"></div>
+                  <div style="height:2px; background:#ddd; width:60%;"></div>
+                </div>
+              </div>
+              <div style="text-align:center;">
+                <h6 style="color: #374151; margin-bottom: 4px; font-size:12px;">Bicolonna</h6>
+                <p style="color: #6b7280; font-size: 11px; margin-bottom: 6px;">Sidebar laterale colorata</p>
+                <span style="background: #f3f4f6; color: #6b7280; padding: 3px 7px; border-radius: 4px; font-size: 11px;">Disponibile</span>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -2809,7 +3035,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.6</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.7</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -2849,7 +3075,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.6</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.7</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3319,7 +3545,7 @@
             <div class="eo-header-info">
               <h1>${name}</h1>
             </div>
-            <img src="./CV-EUropass.png" alt="Europass" class="eo-header-logo">
+            <img src=".\CV-EUropass.png" alt="Europass" style="height: 30px; width: auto;">
           </div>
           ${contacts ? `<div class="eo-contacts">${contacts}</div>` : ''}
           <div class="eo-body">
@@ -4150,12 +4376,13 @@
         card.style.background = '#f9fafb';
       });
       
-      // Aggiungi active alla card selezionata
-      const selectedCard = document.querySelector(`[data-template="${templateId}"]`);
-      selectedCard.classList.add('active');
-      selectedCard.style.border = '2px solid #2563eb';
-      selectedCard.style.background = '#eff6ff';
-      
+      // Aggiungi active a tutte le card con quel template (duplicati in sezione template + settings)
+      document.querySelectorAll(`[data-template="${templateId}"]`).forEach(card => {
+        card.classList.add('active');
+        card.style.border = '2px solid #2563eb';
+        card.style.background = '#eff6ff';
+      });
+
       // Aggiorna le spans di stato
       document.querySelectorAll('.template-card span').forEach(span => {
         if (span.textContent.includes('✓ Attivo')) {
@@ -4164,12 +4391,13 @@
           span.style.color = '#6b7280';
         }
       });
-      
-      // Aggiorna la span della card attiva
-      const activeSpan = selectedCard.querySelector('span');
-      activeSpan.textContent = '✓ Attivo';
-      activeSpan.style.background = '#dbeafe';
-      activeSpan.style.color = '#1e40af';
+
+      // Aggiorna le span di tutte le card attive
+      document.querySelectorAll(`[data-template="${templateId}"] span`).forEach(activeSpan => {
+        activeSpan.textContent = '✓ Attivo';
+        activeSpan.style.background = '#dbeafe';
+        activeSpan.style.color = '#1e40af';
+      });
       
       // Aggiorna le informazioni
       const templateNames = {
@@ -4192,9 +4420,9 @@
         AppState.updatePreview();
       }
 
-      // Sincronizza selettore sidebar
-      const sidebarSel = document.getElementById('sidebarTemplateSelect');
-      if (sidebarSel) sidebarSel.value = templateId;
+      // Sincronizza selettore header
+      const headerSel = document.getElementById('headerTemplateSelect');
+      if (headerSel) headerSel.value = templateId;
 
       console.log(`Template selezionato: ${templateId}`);
     }
@@ -4228,9 +4456,9 @@
       const currentTemplateSpan = document.getElementById('currentTemplate');
       if (currentTemplateSpan) currentTemplateSpan.textContent = templateNames[settings.templateStyle] || 'Europass Standard';
 
-      // Sincronizza selettore sidebar
-      const sidebarSel = document.getElementById('sidebarTemplateSelect');
-      if (sidebarSel) sidebarSel.value = settings.templateStyle || 'europass';
+      // Sincronizza selettore header
+      const headerSel = document.getElementById('headerTemplateSelect');
+      if (headerSel) headerSel.value = settings.templateStyle || 'europass';
       
       const lastModifiedSpan = document.getElementById('lastModified');
       if (lastModifiedSpan) {
@@ -4284,7 +4512,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.6');
+      localStorage.setItem('lastSeenVersion_v5', '5.7');
     }
     
     // Stampa CV
@@ -4300,7 +4528,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.6 inizializzato');
+      console.log('🚀 VitaeLab v5.7 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4566,7 +4794,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.6') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.7') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

@@ -1868,7 +1868,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.7!</strong> Fix logo Europass Ufficiale, selettore template nell'header, sezione Template in sidebar, card riordinate con badge Europass</span>
+      <span><strong>Aggiornato alla versione 5.8!</strong> Nuovi template (Europass Ufficiale, Bicolonna), card anteprima template, icone SVG, fix stampa, fix foto bicolonna</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -4524,7 +4524,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.7.1');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.3');
     }
     
     // Stampa CV
@@ -4806,7 +4806,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.7') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.3') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

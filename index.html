@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.9 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.10 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1823,7 +1823,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8.9 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.10 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1888,7 +1888,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.9/span>
+            <span class="app-version">v5.8.10/span>
           </div>
         </div>
         
@@ -2794,7 +2794,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.9</strong><br>
+                <strong>VitaeLab v5.8.10</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3056,7 +3056,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.9</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.10</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3096,7 +3096,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.9</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.10</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -4603,7 +4603,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.9');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.10');
     }
     
     // Stampa CV
@@ -4619,7 +4619,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.9 inizializzato');
+      console.log('🚀 VitaeLab v5.8.10 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4823,11 +4823,15 @@
           if (e.target.files[0]) {
             const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = async function(event) {
               try {
                 const importedData = JSON.parse(event.target.result);
                 AppState.cvData = { ...AppState.cvData, ...importedData };
                 AppState.saveData();
+                // Salva su Drive PRIMA del reload, così la sync successiva trova i dati corretti
+                if (typeof syncToDrive === 'function' && driveState.enabled && driveState.accessToken) {
+                  await syncToDrive();
+                }
                 location.reload(); // Ricarica per mostrare tutti i dati
               } catch (error) {
                 alert('Errore nel file JSON: ' + error.message);
@@ -4885,7 +4889,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.9') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.10') {
         document.getElementById('versionBanner').classList.add('show');
       }
 
@@ -5182,9 +5186,10 @@
         return created.id;
     }
 
-    // ── Trova il file cv-data.json su Drive ───────────────────────────────
+    // ── Trova il file cv-data.json su Drive (solo nella cartella VitaeLab-Dati) ──
     async function findDriveFile() {
-        const q = encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false`);
+        const folderFilter = driveState.folderId ? ` and '${driveState.folderId}' in parents` : '';
+        const q = encodeURIComponent(`name='${DRIVE_FILE_NAME}' and trashed=false${folderFilter}`);
         const resp = await driveApiFetch(
             `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)&orderBy=modifiedTime%20desc`
         );

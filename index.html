@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.14 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.15 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1888,14 +1888,14 @@
       
       /* Nasconde header e footer del browser e aggiunge il nostro */
       @page {
-        margin: 1.5cm;
+        margin: 0.5in;
         size: A4;
         /* Rimuove header e footer del browser */
         @top-left { content: ""; }
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8.14 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.15 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1933,12 +1933,9 @@
       .cv-preview .page-bar {
         margin-bottom: 12px !important;
       }
-      /* Contatore pagine: visibile in stampa in basso a destra */
+      /* Nasconde il contatore a schermo (il footer è gestito da @page @bottom-left) */
       .page-counter {
-        display: block !important;
-        position: fixed !important;
-        bottom: 10px !important;
-        right: 10px !important;
+        display: none !important;
       }
     }
     
@@ -1963,7 +1960,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.14</span>
+            <span class="app-version">v5.8.15</span>
           </div>
         </div>
         
@@ -2877,7 +2874,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.14</strong><br>
+                <strong>VitaeLab v5.8.15</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3139,7 +3136,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.14</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.15</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3179,7 +3176,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.14</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.15</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -4702,7 +4699,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.14 inizializzato');
+      console.log('🚀 VitaeLab v5.8.15 inizializzato');
       
       // Carica dati
       AppState.loadData();

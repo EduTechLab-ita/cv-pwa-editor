@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.10 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.11 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -96,12 +96,11 @@
     .app-header-content {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 12px 20px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
+      gap: 10px;
     }
     
     .app-logo-section {
@@ -245,6 +244,84 @@
     .drive-button.connected { background: #eff6ff; border-color: #003d7a; color: #003d7a; font-weight: 500; }
     .drive-button.syncing { background: #fefce8; border-color: #ca8a04; color: #92400e; }
     .drive-button.error { background: #fef2f2; border-color: #dc2626; color: #dc2626; }
+
+    /* Drive FAB */
+    .drive-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 0;
+      overflow: visible;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .drive-fab:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.28); transform: scale(1.05); }
+    .drive-fab-photo {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .drive-fab-initials {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #003d7a;
+      color: white;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      pointer-events: none;
+    }
+    .drive-fab-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      pointer-events: none;
+      transition: border-color 0.3s;
+    }
+    .drive-fab-ring.syncing {
+      border-color: #dc2626;
+      border-top-color: transparent;
+      animation: drive-fab-spin 0.9s linear infinite;
+    }
+    .drive-fab-ring.synced { border-color: #16a34a; }
+    .drive-fab-ring.error  { border-color: #f97316; }
+    .drive-fab-check {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 19px;
+      height: 19px;
+      background: #16a34a;
+      border-radius: 50%;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      border: 2px solid white;
+    }
+    .drive-fab-check.visible { opacity: 1; }
+    @keyframes drive-fab-spin { to { transform: rotate(360deg); } }
 
     /* Drive Toast */
     .drive-toast {
@@ -875,15 +952,10 @@
     
     /* Responsive */
     @media (max-width: 767px) {
-      .app-header-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 12px;
-      }
-      
       .header-actions {
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
       }
       
       .main-container {
@@ -1823,7 +1895,7 @@
         @top-center { content: ""; }
         @top-right { content: ""; }
         @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-        @bottom-center { content: "Creato con VitaeLab v5.8.10 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+        @bottom-center { content: "Creato con VitaeLab v5.8.11 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
         @bottom-right { content: ""; }
       }
       
@@ -1888,7 +1960,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.10</span>
+            <span class="app-version">v5.8.11</span>
           </div>
         </div>
         
@@ -1920,7 +1992,15 @@
       </div>
     </div>
   </header>
-  
+
+  <!-- Drive FAB - icona profilo in basso a destra -->
+  <button class="drive-fab no-print" id="drive-fab" onclick="showDriveMenu()" title="Google Drive connesso">
+    <div class="drive-fab-ring" id="drive-fab-ring"></div>
+    <img class="drive-fab-photo" id="drive-fab-photo" src="" alt="Profilo" style="display:none">
+    <div class="drive-fab-initials" id="drive-fab-initials"></div>
+    <div class="drive-fab-check" id="drive-fab-check">✓</div>
+  </button>
+
   <!-- Main Container -->
   <div class="main-container">
 
@@ -2794,7 +2874,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.10</strong><br>
+                <strong>VitaeLab v5.8.11</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3056,7 +3136,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.10</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.11</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3096,7 +3176,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.10</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.11</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -4603,7 +4683,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.10');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.11');
     }
     
     // Stampa CV
@@ -4619,7 +4699,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.10 inizializzato');
+      console.log('🚀 VitaeLab v5.8.11 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4889,7 +4969,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.10') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.11') {
         document.getElementById('versionBanner').classList.add('show');
       }
 
@@ -5024,7 +5104,8 @@
         tokenExpiry: 0,
         fileId:      null,
         folderId:    null,
-        userEmail:   ''
+        userEmail:   '',
+        userPhoto:   ''
     };
 
     // Debounce auto-save: salva su Drive 2 secondi dopo l'ultima modifica
@@ -5074,6 +5155,50 @@
         } else {
             label.textContent = 'Drive';
             btn.onclick = connectToDrive;
+        }
+        updateDriveFab(state);
+    }
+
+    // ── Aggiorna Drive FAB (pallino profilo in basso a destra) ────────────
+    function updateDriveFab(state) {
+        const fab      = document.getElementById('drive-fab');
+        const ring     = document.getElementById('drive-fab-ring');
+        const photo    = document.getElementById('drive-fab-photo');
+        const initials = document.getElementById('drive-fab-initials');
+        const check    = document.getElementById('drive-fab-check');
+        if (!fab) return;
+
+        if (!driveState.enabled || !driveState.accessToken) {
+            fab.style.display = 'none';
+            return;
+        }
+
+        fab.style.display = 'flex';
+
+        // Foto profilo o iniziali
+        if (driveState.userPhoto) {
+            photo.src = driveState.userPhoto;
+            photo.style.display = 'block';
+            initials.style.display = 'none';
+        } else {
+            photo.style.display = 'none';
+            const name = driveState.userEmail ? driveState.userEmail.split('@')[0] : 'U';
+            initials.textContent = name.charAt(0).toUpperCase();
+            initials.style.display = 'flex';
+        }
+
+        // Stato anello
+        ring.className = 'drive-fab-ring';
+        check.className = 'drive-fab-check';
+
+        if (state === 'syncing') {
+            ring.classList.add('syncing');
+        } else if (state === 'error') {
+            ring.classList.add('error');
+        } else if (driveState.enabled && driveState.accessToken) {
+            ring.classList.add('synced');
+            check.classList.add('visible');
+            setTimeout(() => check.classList.remove('visible'), 3000);
         }
     }
 
@@ -5144,6 +5269,7 @@
         try {
             const info = await driveApiFetch('https://www.googleapis.com/oauth2/v2/userinfo');
             driveState.userEmail = info.email || '';
+            driveState.userPhoto = info.picture || '';
             driveState.folderId  = await findOrCreateDriveFolder();
             driveState.fileId    = await findDriveFile();
             saveDriveStateConfig();
@@ -5301,7 +5427,7 @@
         if (driveState.accessToken && typeof google !== 'undefined' && google.accounts) {
             try { google.accounts.oauth2.revoke(driveState.accessToken); } catch(e) {}
         }
-        driveState = { enabled: false, accessToken: null, tokenExpiry: 0, fileId: null, folderId: null, userEmail: '' };
+        driveState = { enabled: false, accessToken: null, tokenExpiry: 0, fileId: null, folderId: null, userEmail: '', userPhoto: '' };
         saveDriveStateConfig();
         updateDriveButton();
         if (!silent) showDriveToast('☁️ Drive disconnesso');

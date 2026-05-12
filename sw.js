@@ -1,9 +1,9 @@
 // Service Worker per VitaeLab - EduTechLab Italia
 // Per forzare aggiornamenti PWA: incrementare i numeri di versione qui sotto
 
-const CACHE_NAME = 'vitaelab-v5.8.10';
-const STATIC_CACHE = 'vitaelab-static-v5.8.10';
-const DYNAMIC_CACHE = 'vitaelab-dynamic-v5.8.10';
+const CACHE_NAME = 'vitaelab-v5.8.11';
+const STATIC_CACHE = 'vitaelab-static-v5.8.11';
+const DYNAMIC_CACHE = 'vitaelab-dynamic-v5.8.11';
 
 // File da cachare immediatamente (cache statica)
 const STATIC_FILES = [

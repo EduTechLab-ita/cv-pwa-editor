@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.16 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.17 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1864,7 +1864,7 @@
       @top-center { content: ""; }
       @top-right { content: ""; }
       @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-      @bottom-center { content: "Creato con VitaeLab v5.8.16 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+      @bottom-center { content: "Creato con VitaeLab v5.8.17 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
       @bottom-right { content: ""; }
     }
 
@@ -1959,7 +1959,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.16</span>
+            <span class="app-version">v5.8.17</span>
           </div>
         </div>
         
@@ -2149,14 +2149,24 @@
             
             <div class="form-group">
               <label class="form-label required" for="email">Email</label>
-              <input 
-                type="email" 
-                id="email" 
+              <input
+                type="email"
+                id="email"
                 class="form-input"
                 placeholder="tua@email.com"
               >
             </div>
-            
+
+            <div class="form-group">
+              <label class="form-label" for="pec">PEC</label>
+              <input
+                type="email"
+                id="pec"
+                class="form-input"
+                placeholder="nome.cognome@pec.it"
+              >
+            </div>
+
             <div class="form-group full-width">
               <label class="form-label" for="address">Indirizzo</label>
               <input 
@@ -2873,7 +2883,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.16</strong><br>
+                <strong>VitaeLab v5.8.17</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3135,7 +3145,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.16</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.17</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3175,7 +3185,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.16</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.17</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3227,6 +3237,7 @@
           birthDate: '',
           phone: '',
           email: '',
+          pec: '',
           address: '',
           website: '',
           photo: null, // base64 string
@@ -3401,6 +3412,7 @@
               ${data.personal.birthDate ? `<div class="cv-contact-item">${this.svgIcons.calendar} ${data.personal.birthDate}</div>` : ''}
               ${data.personal.phone ? `<div class="cv-contact-item">${this.svgIcons.phone} ${this.linkifyText(data.personal.phone)}</div>` : ''}
               ${data.personal.email ? `<div class="cv-contact-item">${this.svgIcons.mail} ${this.linkifyText(data.personal.email)}</div>` : ''}
+              ${data.personal.pec ? `<div class="cv-contact-item">${this.svgIcons.mail} <strong>PEC:</strong> ${this.linkifyText(data.personal.pec)}</div>` : ''}
               ${data.personal.website ? `<div class="cv-contact-item">${this.svgIcons.link} ${this.linkifyText(data.personal.website)}</div>` : ''}
             </div>
 
@@ -3641,6 +3653,7 @@
         if (p.nationality) contacts += `<span class="eo-contact-item">${ic.globe} <strong>Nazionalit&#224;:</strong> ${p.nationality}</span>`;
         if (p.phone) contacts += `<span class="eo-contact-item">${ic.phone} <strong>Telefono:</strong> ${lk(p.phone)}</span>`;
         if (p.email) contacts += `<span class="eo-contact-item">${ic.mail} <strong>Email:</strong> ${lk(p.email)}</span>`;
+        if (p.pec) contacts += `<span class="eo-contact-item">${ic.mail} <strong>PEC:</strong> ${lk(p.pec)}</span>`;
         if (p.address) contacts += `<span class="eo-contact-item">${ic.mappin} <strong>Indirizzo:</strong> ${p.address}</span>`;
         if (p.website) contacts += `<span class="eo-contact-item">${ic.link} <strong>Sito:</strong> ${lk(p.website)}</span>`;
 
@@ -3747,6 +3760,7 @@
         let contactsHtml = '';
         if (p.phone) contactsHtml += `<div class="tc-contact-item">${ic.phone} ${lk(p.phone)}</div>`;
         if (p.email) contactsHtml += `<div class="tc-contact-item">${ic.mail} ${lk(p.email)}</div>`;
+        if (p.pec) contactsHtml += `<div class="tc-contact-item">${ic.mail} <strong>PEC:</strong> ${lk(p.pec)}</div>`;
         if (p.address) contactsHtml += `<div class="tc-contact-item">${ic.mappin} ${p.address}</div>`;
         if (p.birthDate) contactsHtml += `<div class="tc-contact-item">${ic.calendar} ${p.birthDate}</div>`;
         if (p.nationality) contactsHtml += `<div class="tc-contact-item">${ic.globe} ${p.nationality}</div>`;
@@ -4682,7 +4696,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.13');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.17');
     }
     
     // Stampa CV
@@ -4698,7 +4712,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.16 inizializzato');
+      console.log('🚀 VitaeLab v5.8.17 inizializzato');
       
       // Carica dati
       AppState.loadData();
@@ -4749,7 +4763,7 @@
       AppState.updatePreview();
       
       // Event listeners nativi per input
-      ['firstName', 'lastName', 'nationality', 'birthDate', 'phone', 'email', 'address', 'website'].forEach(fieldId => {
+      ['firstName', 'lastName', 'nationality', 'birthDate', 'phone', 'email', 'pec', 'address', 'website'].forEach(fieldId => {
         const input = document.getElementById(fieldId);
         if (input) {
           input.addEventListener('input', function(e) {
@@ -4968,7 +4982,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.13') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.17') {
         document.getElementById('versionBanner').classList.add('show');
       }
 
@@ -5479,7 +5493,7 @@
     function populateFormFromData() {
         const d = AppState.cvData;
         // Campi personali
-        ['firstName','lastName','nationality','birthDate','phone','email','address','website'].forEach(field => {
+        ['firstName','lastName','nationality','birthDate','phone','email','pec','address','website'].forEach(field => {
             const el = document.getElementById(field);
             if (el && d.personal[field] !== undefined) el.value = d.personal[field];
         });
@@ -5511,7 +5525,16 @@
             const digEl = document.getElementById('digitalSkillsGeneric');
             if (digEl) digEl.value = d.skills.digital ? d.skills.digital.genericContent || '' : '';
             const platEl = document.getElementById('platforms');
-            if (platEl) platEl.value = d.skills.digital ? d.skills.digital.platformsContent || '' : '';
+            if (platEl) platEl.value = d.skills.platforms || '';
+            // Ripristina checkbox DigiCompEU e sezione correlata
+            const digiCBEl = document.getElementById('useDigiCompEU');
+            if (digiCBEl) {
+                const checked = !!(d.skills.digital && d.skills.digital.useDigiCompEU);
+                digiCBEl.checked = checked;
+                const digiSec = document.getElementById('digiCompSection');
+                if (digiSec) digiSec.style.display = checked ? 'block' : 'none';
+                if (checked) renderDigiCompItems();
+            }
         }
         // Lingue
         if (d.languages) {
@@ -5522,7 +5545,7 @@
         if (d.experience) renderExperienceList();
         if (d.education)  renderEducationList();
         if (d.formatore)  renderFormatoreList();
-        if (d.languages && d.languages.other) renderLanguagesList();
+        if (d.languages && d.languages.otherLanguages) renderLanguagesList();
         if (d.publications) renderPublicationsList();
     }
 

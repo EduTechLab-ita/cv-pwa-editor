@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.17 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.18 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -889,7 +889,10 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 15px;
+      margin-top: 0;
+      position: sticky;
+      top: var(--add-btn-top, 80px);
+      z-index: 5;
     }
     
     .add-item-btn:hover {
@@ -1864,7 +1867,7 @@
       @top-center { content: ""; }
       @top-right { content: ""; }
       @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-      @bottom-center { content: "Creato con VitaeLab v5.8.17 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+      @bottom-center { content: "Creato con VitaeLab v5.8.18 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
       @bottom-right { content: ""; }
     }
 
@@ -1959,7 +1962,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.17</span>
+            <span class="app-version">v5.8.18</span>
           </div>
         </div>
         
@@ -2883,7 +2886,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.17</strong><br>
+                <strong>VitaeLab v5.8.18</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3145,7 +3148,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.17</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.18</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3185,7 +3188,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.17</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.18</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -4074,9 +4077,11 @@
         link: '',
         linkLabel: ''
       };
-      AppState.cvData.experience.push(newExp);
+      AppState.cvData.experience.unshift(newExp);
       AppState.saveData();
       renderExperienceList();
+      const fi = document.querySelector('#experienceList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
     }
     
     function removeExperience(id) {
@@ -4091,8 +4096,9 @@
         container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna esperienza aggiunta</div>';
         return;
       }
-      
-      container.innerHTML = AppState.cvData.experience.map(exp => `
+
+      const sorted = [...AppState.cvData.experience].sort(sortByDateDesc);
+      container.innerHTML = sorted.map(exp => `
         <div class="list-item">
           <div class="list-item-header">
             <div class="list-item-title">${exp.position || 'Posizione non specificata'}</div>
@@ -4162,9 +4168,11 @@
         link: '',
         linkLabel: ''
       };
-      AppState.cvData.education.push(newEdu);
+      AppState.cvData.education.unshift(newEdu);
       AppState.saveData();
       renderEducationList();
+      const fi = document.querySelector('#educationList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
     }
     
     function removeEducation(id) {
@@ -4179,8 +4187,9 @@
         container.innerHTML = '<div style="padding: 20px; text-align: center; color: #6b7280;">Nessuna formazione aggiunta</div>';
         return;
       }
-      
-      container.innerHTML = AppState.cvData.education.map(edu => `
+
+      const sorted = [...AppState.cvData.education].sort(sortByDateDesc);
+      container.innerHTML = sorted.map(edu => `
         <div class="list-item">
           <div class="list-item-header">
             <div class="list-item-title">${edu.degree || 'Titolo non specificato'}</div>
@@ -4251,9 +4260,11 @@
         link: '',
         linkLabel: ''
       };
-      AppState.cvData.formatore.push(newForm);
+      AppState.cvData.formatore.unshift(newForm);
       AppState.saveData();
       renderFormatoreList();
+      const fi = document.querySelector('#formatoreList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
     }
     
     function removeFormatore(id) {
@@ -4339,9 +4350,11 @@
         name: '',
         level: 'A1'
       };
-      AppState.cvData.languages.otherLanguages.push(newLang);
+      AppState.cvData.languages.otherLanguages.unshift(newLang);
       AppState.saveData();
       renderLanguagesList();
+      const fi = document.querySelector('#languagesList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
     }
     
     function removeLanguage(id) {
@@ -4408,9 +4421,11 @@
         link: '',
         description: ''
       };
-      AppState.cvData.publications.push(newPub);
+      AppState.cvData.publications.unshift(newPub);
       AppState.saveData();
       renderPublicationsList();
+      const fi = document.querySelector('#publicationsList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
     }
     
     function removePublication(id) {
@@ -4696,7 +4711,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.17');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.18');
     }
     
     // Stampa CV
@@ -4712,7 +4727,11 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.17 inizializzato');
+      console.log('🚀 VitaeLab v5.8.18 inizializzato');
+
+      // Sticky offset bottoni Aggiungi: calcola altezza header dinamicamente
+      const appHeader = document.querySelector('.app-header');
+      if (appHeader) document.documentElement.style.setProperty('--add-btn-top', (appHeader.offsetHeight + 6) + 'px');
       
       // Carica dati
       AppState.loadData();
@@ -4982,7 +5001,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.17') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.18') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

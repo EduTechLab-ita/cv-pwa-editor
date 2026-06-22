@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.21 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.22 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1868,7 +1868,7 @@
       @top-center { content: ""; }
       @top-right { content: ""; }
       @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-      @bottom-center { content: "Creato con VitaeLab v5.8.21 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+      @bottom-center { content: "Creato con VitaeLab v5.8.22 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
       @bottom-right { content: ""; }
     }
 
@@ -1950,7 +1950,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Novità v5.8.21!</strong> Bottone 📋 per duplicare voci simili, bottone Aggiungi sempre visibile durante lo scroll, nuove voci in cima alla lista con scroll automatico</span>
+      <span><strong>Novità v5.8.22!</strong> Fix stampa PDF: le sezioni di testo (Competenze, Profilo, ecc.) ora mantengono i ritorni a capo invece di apparire come testo continuo</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -1963,7 +1963,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.21</span>
+            <span class="app-version">v5.8.22</span>
           </div>
         </div>
         
@@ -2887,7 +2887,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.21</strong><br>
+                <strong>VitaeLab v5.8.22</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3149,7 +3149,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.21</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.22</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3189,7 +3189,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.21</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.22</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -3632,7 +3632,8 @@
 
         return text
           .replace(urlRegex, '<a href="$1" target="_blank" style="color: #0066cc; text-decoration: underline;">$1</a>')
-          .replace(emailRegex, '<a href="mailto:$1" style="color: #0066cc; text-decoration: underline;">$1</a>');
+          .replace(emailRegex, '<a href="mailto:$1" style="color: #0066cc; text-decoration: underline;">$1</a>')
+          .replace(/\n/g, '<br>');
       },
 
       // SVG icone contatti (Feather-style)
@@ -4767,7 +4768,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.21');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.22');
     }
     
     // Stampa CV
@@ -4783,7 +4784,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.21 inizializzato');
+      console.log('🚀 VitaeLab v5.8.22 inizializzato');
 
       // Sticky offset bottoni Aggiungi: calcola altezza header dinamicamente
       const appHeader = document.querySelector('.app-header');
@@ -5057,7 +5058,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.21') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.22') {
         document.getElementById('versionBanner').classList.add('show');
       }
 

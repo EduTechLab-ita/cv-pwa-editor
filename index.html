@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VitaeLab v5.8.18 - EduTechLab Italia</title>
+  <title>VitaeLab v5.8.19 - EduTechLab Italia</title>
   <meta name="description" content="Editor professionale per Curriculum Vitae Europass con funzionalità offline - Sviluppato da EduTechLab Italia">
   
   <!-- PWA Meta -->
@@ -1867,7 +1867,7 @@
       @top-center { content: ""; }
       @top-right { content: ""; }
       @bottom-left { content: "Pagina " counter(page) " di " counter(pages); font-size: 10px; color: #666; }
-      @bottom-center { content: "Creato con VitaeLab v5.8.18 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
+      @bottom-center { content: "Creato con VitaeLab v5.8.19 - © 2025 EduTechLab Italia (Fabio Rizzotto) - App gratuita"; font-size: 10px; color: #666; }
       @bottom-right { content: ""; }
     }
 
@@ -1949,7 +1949,7 @@
   <div class="version-banner" id="versionBanner">
     <div class="version-banner-content">
       <span>🎉</span>
-      <span><strong>Aggiornato alla versione 5.8!</strong> Nuovi template (Europass Ufficiale, Bicolonna), card anteprima template, icone SVG, fix stampa, fix foto bicolonna</span>
+      <span><strong>Novità v5.8.19!</strong> Bottone 📋 per duplicare voci simili, bottone Aggiungi sempre visibile durante lo scroll, nuove voci in cima alla lista con scroll automatico</span>
     </div>
     <button class="version-banner-close" onclick="closeVersionBanner()">×</button>
   </div>
@@ -1962,7 +1962,7 @@
           <img src="icon-96.png" alt="VitaeLab" style="height: 44px; width: 44px; border-radius: 10px;">
           <div>
             <h1 class="app-title">VitaeLab</h1>
-            <span class="app-version">v5.8.18</span>
+            <span class="app-version">v5.8.19</span>
           </div>
         </div>
         
@@ -2886,7 +2886,7 @@
             <div style="background: #f3f4f6; padding: 16px; border-radius: 8px;">
               <h6 style="margin-bottom: 8px;">ℹ️ Informazioni App</h6>
               <p style="color: #6b7280; font-size: 14px;">
-                <strong>VitaeLab v5.8.18</strong><br>
+                <strong>VitaeLab v5.8.19</strong><br>
                 Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)<br>
                 App gratuita per la creazione di CV formato Europass con Google Drive sync<br>
                 © 2025 EduTechLab Italia - Licenza MIT
@@ -3148,7 +3148,7 @@
       <a href="#" class="footer-link" onclick="openInfoModal(); return false;">Info & Assistenza</a>
       <a href="#" class="footer-link" onclick="openPrivacyModal(); return false;">Privacy & Cookie</a>
     </div>
-    <p><strong>VitaeLab v5.8.18</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
+    <p><strong>VitaeLab v5.8.19</strong> - Sviluppato da <strong>EduTechLab Italia</strong> (Fabio Rizzotto)</p>
     <p>© 2025 EduTechLab Italia - App gratuita per la creazione di CV Europass</p>
   </footer>
   
@@ -3188,7 +3188,7 @@
       </div>
       <div style="background:#eff6ff; border-radius:8px; padding:16px; margin-bottom:16px;">
         <p style="margin:0; color:#1e40af; font-size:0.95rem;">
-          <strong>VitaeLab v5.8.18</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
+          <strong>VitaeLab v5.8.19</strong> — Editor gratuito per Curriculum Vitae formato Europass, sviluppato da <strong>EduTechLab Italia</strong>.
         </p>
       </div>
       <h5 style="color:#003d7a; margin:16px 0 8px;">☁️ Salvataggio sicuro su Google Drive</h5>
@@ -4089,6 +4089,16 @@
       AppState.saveData();
       renderExperienceList();
     }
+
+    function duplicateExperience(id) {
+      const orig = AppState.cvData.experience.find(e => e.id === id);
+      if (!orig) return;
+      AppState.cvData.experience.unshift({ ...orig, id: Date.now() });
+      AppState.saveData();
+      renderExperienceList();
+      const fi = document.querySelector('#experienceList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
+    }
     
     function renderExperienceList() {
       const container = document.getElementById('experienceList');
@@ -4103,6 +4113,7 @@
           <div class="list-item-header">
             <div class="list-item-title">${exp.position || 'Posizione non specificata'}</div>
             <div class="list-item-controls">
+              <button class="list-btn" onclick="duplicateExperience(${exp.id})" title="Duplica">📋</button>
               <button class="list-btn danger" onclick="removeExperience(${exp.id})">🗑️</button>
             </div>
           </div>
@@ -4180,6 +4191,16 @@
       AppState.saveData();
       renderEducationList();
     }
+
+    function duplicateEducation(id) {
+      const orig = AppState.cvData.education.find(e => e.id === id);
+      if (!orig) return;
+      AppState.cvData.education.unshift({ ...orig, id: Date.now() });
+      AppState.saveData();
+      renderEducationList();
+      const fi = document.querySelector('#educationList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
+    }
     
     function renderEducationList() {
       const container = document.getElementById('educationList');
@@ -4194,6 +4215,7 @@
           <div class="list-item-header">
             <div class="list-item-title">${edu.degree || 'Titolo non specificato'}</div>
             <div class="list-item-controls">
+              <button class="list-btn" onclick="duplicateEducation(${edu.id})" title="Duplica">📋</button>
               <button class="list-btn danger" onclick="removeEducation(${edu.id})">🗑️</button>
             </div>
           </div>
@@ -4272,6 +4294,16 @@
       AppState.saveData();
       renderFormatoreList();
     }
+
+    function duplicateFormatore(id) {
+      const orig = AppState.cvData.formatore.find(e => e.id === id);
+      if (!orig) return;
+      AppState.cvData.formatore.unshift({ ...orig, id: Date.now(), details: [...(orig.details || [])] });
+      AppState.saveData();
+      renderFormatoreList();
+      const fi = document.querySelector('#formatoreList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
+    }
     
     function renderFormatoreList() {
       const container = document.getElementById('formatoreList');
@@ -4285,6 +4317,7 @@
           <div class="list-item-header">
             <div class="list-item-title">${form.title || 'Attività Formativa'}</div>
             <div class="list-item-controls">
+              <button class="list-btn" onclick="duplicateFormatore(${form.id})" title="Duplica">📋</button>
               <button class="list-btn danger" onclick="removeFormatore(${form.id})">🗑️</button>
             </div>
           </div>
@@ -4362,6 +4395,16 @@
       AppState.saveData();
       renderLanguagesList();
     }
+
+    function duplicateLanguage(id) {
+      const orig = AppState.cvData.languages.otherLanguages.find(e => e.id === id);
+      if (!orig) return;
+      AppState.cvData.languages.otherLanguages.unshift({ ...orig, id: Date.now() });
+      AppState.saveData();
+      renderLanguagesList();
+      const fi = document.querySelector('#languagesList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
+    }
     
     function renderLanguagesList() {
       const container = document.getElementById('languagesList');
@@ -4375,6 +4418,7 @@
           <div class="list-item-header">
             <div class="list-item-title">${lang.name || 'Lingua non specificata'}</div>
             <div class="list-item-controls">
+              <button class="list-btn" onclick="duplicateLanguage(${lang.id})" title="Duplica">📋</button>
               <button class="list-btn danger" onclick="removeLanguage(${lang.id})">🗑️</button>
             </div>
           </div>
@@ -4433,6 +4477,16 @@
       AppState.saveData();
       renderPublicationsList();
     }
+
+    function duplicatePublication(id) {
+      const orig = AppState.cvData.publications.find(e => e.id === id);
+      if (!orig) return;
+      AppState.cvData.publications.unshift({ ...orig, id: Date.now() });
+      AppState.saveData();
+      renderPublicationsList();
+      const fi = document.querySelector('#publicationsList .list-item input');
+      if (fi) { fi.scrollIntoView({ behavior: 'smooth', block: 'center' }); fi.focus(); }
+    }
     
     function renderPublicationsList() {
       const container = document.getElementById('publicationsList');
@@ -4446,6 +4500,7 @@
           <div class="list-item-header">
             <div class="list-item-title">${pub.title || 'Titolo non specificato'}</div>
             <div class="list-item-controls">
+              <button class="list-btn" onclick="duplicatePublication(${pub.id})" title="Duplica">📋</button>
               <button class="list-btn danger" onclick="removePublication(${pub.id})">🗑️</button>
             </div>
           </div>
@@ -4711,7 +4766,7 @@
     // Banner versione
     function closeVersionBanner() {
       document.getElementById('versionBanner').style.display = 'none';
-      localStorage.setItem('lastSeenVersion_v5', '5.8.18');
+      localStorage.setItem('lastSeenVersion_v5', '5.8.19');
     }
     
     // Stampa CV
@@ -4727,7 +4782,7 @@
     // === INIZIALIZZAZIONE ===
     
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 VitaeLab v5.8.18 inizializzato');
+      console.log('🚀 VitaeLab v5.8.19 inizializzato');
 
       // Sticky offset bottoni Aggiungi: calcola altezza header dinamicamente
       const appHeader = document.querySelector('.app-header');
@@ -5001,7 +5056,7 @@
       
       // Controlla banner versione
       const lastSeenVersion = localStorage.getItem('lastSeenVersion_v5');
-      if (!lastSeenVersion || lastSeenVersion !== '5.8.18') {
+      if (!lastSeenVersion || lastSeenVersion !== '5.8.19') {
         document.getElementById('versionBanner').classList.add('show');
       }
 
